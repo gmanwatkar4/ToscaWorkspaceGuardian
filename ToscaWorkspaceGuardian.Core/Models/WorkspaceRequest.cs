@@ -1,0 +1,16 @@
+﻿namespace ToscaWorkspaceGuardian.Core.Models;
+
+public class WorkspaceRequest
+{
+    public string WorkspacePath { get; set; } = string.Empty;
+
+    public string Username { get; set; } = string.Empty;
+
+    public string Password { get; set; } = string.Empty;
+
+    public string ClientId { get; set; } = string.Empty;
+
+    public string ClientSecret { get; set; } = string.Empty;
+
+    public bool IsManagedRepository { get; set; }
+}
