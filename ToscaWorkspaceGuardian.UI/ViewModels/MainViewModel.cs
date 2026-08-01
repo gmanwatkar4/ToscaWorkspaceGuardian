@@ -1,10 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
+using System.Windows;
 using ToscaWorkspaceGuardian.Common.Interfaces;
 using ToscaWorkspaceGuardian.Core.Interfaces;
 using ToscaWorkspaceGuardian.Core.Models;
 using ToscaWorkspaceGuardian.Core.TCShell;
+using System.Windows;
 
 namespace ToscaWorkspaceGuardian.UI.ViewModels;
 
@@ -160,9 +162,13 @@ public partial class MainViewModel : ObservableObject
     // Analyze
     //====================================================
 
+
     [RelayCommand]
+
+
     private async Task Analyze()
     {
+
         if (string.IsNullOrWhiteSpace(WorkspacePath))
         {
             StatusMessage = "Please select a workspace.";

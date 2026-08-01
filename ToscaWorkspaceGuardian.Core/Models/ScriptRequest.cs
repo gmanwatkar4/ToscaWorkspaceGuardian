@@ -6,7 +6,5 @@ public class ScriptRequest
 
     public WorkspaceRequest WorkspaceRequest { get; set; } = new();
 
-    public string Query { get; set; } = string.Empty;
-
-    public string OutputDirectory { get; set; } = string.Empty;
+    public List<string> Queries { get; set; } = new();
 }

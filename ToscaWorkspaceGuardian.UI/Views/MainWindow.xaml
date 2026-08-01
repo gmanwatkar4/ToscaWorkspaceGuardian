@@ -236,8 +236,9 @@
                         VerticalAlignment="Center"
                         Text="Password"/>
 
-                    <PasswordBox
-                        Grid.Column="1"/>
+                    <TextBox
+                        Grid.Column="1"
+                            Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}"/>
 
                 </Grid>
 
@@ -284,8 +285,9 @@
                         VerticalAlignment="Center"
                         Text="Client Secret"/>
 
-                    <PasswordBox
-                        Grid.Column="1"/>
+                    <TextBox
+                        Grid.Column="1"
+                            Text="{Binding ClientSecret, UpdateSourceTrigger=PropertyChanged}"/>
 
                 </Grid>
 

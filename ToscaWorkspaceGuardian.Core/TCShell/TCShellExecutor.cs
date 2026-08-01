@@ -7,16 +7,19 @@ public class TCShellExecutor
 {
     private readonly IToscaInstallationService _installationService;
     private readonly IProcessRunner _processRunner;
+    private readonly OutputWriter _outputWriter;
 
     public TCShellExecutor(
         IToscaInstallationService installationService,
-        IProcessRunner processRunner)
+        IProcessRunner processRunner,
+        OutputWriter outputWriter)
     {
         _installationService = installationService;
         _processRunner = processRunner;
+        _outputWriter = outputWriter;
     }
 
-    public async Task<TCShellResponse> ExecuteAsync(
+    public async Task<ExecutionResult> ExecuteAsync(
         string scriptFile,
         WorkspaceRequest request)
     {
@@ -24,29 +27,60 @@ public class TCShellExecutor
 
         if (!installation.IsInstalled)
         {
-            return new TCShellResponse
+            return new ExecutionResult
             {
                 Success = false,
                 ExitCode = -1,
-                Error = "TCShell installation not found."
+                StandardError = "TCShell installation not found."
             };
         }
+
+        string workingDirectory = Path.GetDirectoryName(scriptFile)!;
+
+        string outputFile = Path.Combine(
+            workingDirectory,
+            "Output.txt");
+
+        string errorFile = Path.Combine(
+            workingDirectory,
+            "Error.txt");
 
         string arguments =
             $"-workspace \"{request.WorkspacePath}\" " +
             $"-login {request.Username} {request.Password} " +
             $"\"{scriptFile}\"";
 
+        string debugFile = Path.Combine(
+    Path.GetTempPath(),
+    "ToscaWorkspaceGuardian",
+    "CommandLine.txt");
+
+        Directory.CreateDirectory(
+            Path.GetDirectoryName(debugFile)!);
+
+        await File.WriteAllTextAsync(
+            debugFile,
+            installation.TCShellPath + Environment.NewLine + arguments);
+
         var result = await _processRunner.ExecuteAsync(
             installation.TCShellPath,
             arguments);
 
-        return new TCShellResponse
+        await _outputWriter.WriteAsync(
+            outputFile,
+            errorFile,
+            result.StandardOutput,
+            result.StandardError);
+
+        return new ExecutionResult
         {
             Success = result.ExitCode == 0,
             ExitCode = result.ExitCode,
-            Output = result.StandardOutput,
-            Error = result.StandardError
+            ScriptPath = scriptFile,
+            OutputFile = outputFile,
+            ErrorFile = errorFile,
+            StandardOutput = result.StandardOutput,
+            StandardError = result.StandardError
         };
     }
 }

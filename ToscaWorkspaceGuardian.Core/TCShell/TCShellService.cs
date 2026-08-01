@@ -18,8 +18,17 @@ public class TCShellService : ITCShellService
         WorkspaceRequest request,
         CancellationToken cancellationToken = default)
     {
-        return await _executor.ExecuteAsync(
-            scriptFile,
-            request);
+        var execution =
+            await _executor.ExecuteAsync(
+                scriptFile,
+                request);
+
+        return new TCShellResponse
+        {
+            Success = execution.Success,
+            ExitCode = execution.ExitCode,
+            Output = execution.StandardOutput,
+            Error = execution.StandardError
+        };
     }
 }

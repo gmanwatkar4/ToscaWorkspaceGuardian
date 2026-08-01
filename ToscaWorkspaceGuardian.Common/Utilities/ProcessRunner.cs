@@ -15,10 +15,11 @@ public class ProcessRunner : IProcessRunner
             FileName = fileName,
             Arguments = arguments,
 
+            UseShellExecute = false,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
+            RedirectStandardInput = true,
 
-            UseShellExecute = false,
             CreateNoWindow = true
         };
 
@@ -28,11 +29,14 @@ public class ProcessRunner : IProcessRunner
 
         process.Start();
 
-        string output = await process.StandardOutput.ReadToEndAsync();
-
-        string error = await process.StandardError.ReadToEndAsync();
+        // Read both streams concurrently to avoid deadlocks
+        Task<string> outputTask = process.StandardOutput.ReadToEndAsync();
+        Task<string> errorTask = process.StandardError.ReadToEndAsync();
 
         await process.WaitForExitAsync();
+
+        string output = await outputTask;
+        string error = await errorTask;
 
         return new ProcessResult
         {

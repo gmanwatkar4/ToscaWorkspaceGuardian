@@ -5,6 +5,8 @@ using System.Windows;
 using ToscaWorkspaceGuardian.Common.Interfaces;
 using ToscaWorkspaceGuardian.Common.Services;
 using ToscaWorkspaceGuardian.Common.Utilities;
+using ToscaWorkspaceGuardian.Core.Business;
+using ToscaWorkspaceGuardian.Core.Health;
 using ToscaWorkspaceGuardian.Core.Interfaces;
 using ToscaWorkspaceGuardian.Core.Script;
 using ToscaWorkspaceGuardian.Core.TCShell;
@@ -64,8 +66,7 @@ namespace ToscaWorkspaceGuardian.UI
             // Views
             services.AddSingleton<MainWindow>();
 
-            // Services
-            // Register later
+          
             services.AddSingleton<IWorkspaceAnalyzer, WorkspaceAnalyzer>();
             services.AddSingleton<IWorkspaceReader, WorkspaceReader>();
             services.AddSingleton<IProcessRunner, ProcessRunner>();
@@ -76,8 +77,11 @@ namespace ToscaWorkspaceGuardian.UI
             services.AddSingleton<ITCShellService, TCShellService>();
             services.AddSingleton<ScriptTemplateRepository>();
             services.AddSingleton<ScriptComposer>();
-
-
+            services.AddSingleton<OutputParser>();
+            services.AddSingleton<OutputWriter>();
+            services.AddSingleton<OutputDocumentExporter>();
+            services.AddSingleton<IParsedWorkspaceMapper, ParsedWorkspaceMapper>();
+            services.AddSingleton<IWorkspaceHealthAnalyzer,WorkspaceHealthAnalyzer>();
 
 
 

@@ -5,16 +5,29 @@ namespace ToscaWorkspaceGuardian.Core.Script;
 
 public class ScriptTemplateRepository
 {
-    public string GetTemplate(
-        ScriptType scriptType)
+    public string GetTemplate(ScriptType type)
     {
-        return scriptType switch
+        return type switch
         {
-            ScriptType.WorkspaceAnalysis
-                => WorkspaceAnalysisTemplate.Template,
+            ScriptType.WorkspaceAnalysis =>
+    """
+JumpToProject
 
-            _ => throw new NotSupportedException(
-                $"Script template '{scriptType}' not found.")
+Print
+
+Exit
+""",
+
+            ScriptType.Search =>
+    """
+JumpToProject
+
+{SEARCH_BLOCK}
+
+Exit
+""",
+
+            _ => throw new NotSupportedException()
         };
     }
 }

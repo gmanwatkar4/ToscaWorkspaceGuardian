@@ -4,11 +4,13 @@ public enum ScriptType
 {
     WorkspaceAnalysis,
 
-    TQLQuery,
-
     Search,
 
-    Export,
+    Module,
 
-    HealthCheck
+    TestCase,
+
+    Requirement,
+
+    ExecutionList
 }
