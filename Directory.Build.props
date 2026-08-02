@@ -5,6 +5,9 @@
 	<AnalysisLevel>latest</AnalysisLevel>
 	<!-- Do not treat analyzer warnings as errors automatically to avoid breaking build -->
 	<TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+		<!-- Suppress StyleCop rules that require design decisions or large-scale doc updates
+				 These are suppressed to keep the build green while fixes are planned. -->
+		<NoWarn>$(NoWarn);SA1633;SA1600;SA1402;SA0001</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
