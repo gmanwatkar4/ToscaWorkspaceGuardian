@@ -14,3 +14,6 @@ This file summarizes the changes made on branch `feature/repo-improvements`.
  - Implemented script caching with eviction and batch result caching to reduce repeated TCShell calls.
  - Implemented bounded concurrency and configurable crawler options.
  - Added NodeCacheService for incremental scanning: skip child traversal when node content unchanged.
+ - Optimized OutputParser with precompiled regex and streaming line reads.
+ - Reduced LINQ allocations in OutputObject.GetProperty and SnapshotBuilder.
+ - Removed debug allocations from hot loops.

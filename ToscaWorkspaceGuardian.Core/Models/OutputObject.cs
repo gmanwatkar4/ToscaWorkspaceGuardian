@@ -27,9 +27,14 @@ public class OutputObject
     //--------------------------------------------------------
     public string? GetProperty(string propertyName)
     {
-        return this.Properties
-            .FirstOrDefault(x => x.Name == propertyName)
-            ?.Value;
+        if (propertyName == null) return null;
+        for (int i = 0; i < this.Properties.Count; i++)
+        {
+            var p = this.Properties[i];
+            if (p.Name == propertyName) return p.Value;
+        }
+
+        return null;
     }
 
     public IReadOnlyList<string> GetCollection(string collectionName)

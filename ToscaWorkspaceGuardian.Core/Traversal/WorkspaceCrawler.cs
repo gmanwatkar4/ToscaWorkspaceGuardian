@@ -111,11 +111,7 @@ public class WorkspaceCrawler : IWorkspaceCrawler
 
                     try
                     {
-                        System.Diagnostics.Debug.WriteLine("EXECUTING BATCH");
-                        foreach (var p in paths.Take(10))
-                        {
-                            System.Diagnostics.Debug.WriteLine(p);
-                        }
+                        // Debug output removed to reduce allocations during normal runs
 
                         var script = this.scriptBuilder.Build(paths);
                         var scriptFile = Path.Combine(Path.GetTempPath(), "ToscaWorkspaceGuardian", "Crawler.tcs");

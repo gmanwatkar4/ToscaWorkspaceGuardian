@@ -36,8 +36,10 @@ public class SnapshotBuilder : ISnapshotBuilder
             //--------------------------------------------------
             foreach (var collection in obj.Collections)
             {
-                repositoryObject.Collections[collection.Key] =
-                    collection.Value.ToList();
+                // create a copy of the collection values with a known capacity
+                var valuesList = new List<string>(collection.Value.Count);
+                for (int i = 0; i < collection.Value.Count; i++) valuesList.Add(collection.Value[i]);
+                repositoryObject.Collections[collection.Key] = valuesList;
             }
 
             //--------------------------------------------------

@@ -9,6 +9,9 @@ using ToscaWorkspaceGuardian.Core.Models;
 
 public class OutputParser
 {
+    private static readonly System.Text.RegularExpressions.Regex _headerRegex =
+        new("'(.+?)'\\s+\\[(.+?)\\]", System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.CultureInvariant);
+
     public OutputDocument Parse(string output)
     {
         var document = new OutputDocument();
@@ -30,10 +33,7 @@ public class OutputParser
             //----------------------------------------
             if (line.StartsWith("'") && line.Contains('['))
             {
-                var match = Regex.Match(
-                    line,
-                    @"'(.+?)'\s+\[(.+?)\]");
-
+                var match = _headerRegex.Match(line);
                 if (match.Success)
                 {
                     currentObject = new OutputObject
