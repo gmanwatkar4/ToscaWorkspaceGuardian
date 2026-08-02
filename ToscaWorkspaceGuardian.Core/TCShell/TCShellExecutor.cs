@@ -67,12 +67,12 @@ public class TCShellExecutor
     "ToscaWorkspaceGuardian",
     "CommandLine.txt");
 
-        Directory.CreateDirectory(
-            Path.GetDirectoryName(debugFile)!);
-
-        await File.WriteAllTextAsync(
-            debugFile,
-            installation.TCShellPath + Environment.NewLine + arguments);
+        // Write debug command-line file only when explicitly enabled to avoid excessive I/O in normal runs
+        if (Environment.GetEnvironmentVariable("TWG_DEBUG_WRITE") == "1")
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(debugFile)!);
+            await File.WriteAllTextAsync(debugFile, installation.TCShellPath + Environment.NewLine + arguments);
+        }
 
         var sw = System.Diagnostics.Stopwatch.StartNew();
         var result = await this.processRunner.ExecuteAsync(
