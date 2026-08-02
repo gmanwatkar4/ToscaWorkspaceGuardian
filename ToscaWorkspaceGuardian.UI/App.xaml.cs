@@ -31,6 +31,9 @@ namespace ToscaWorkspaceGuardian.UI
     using ToscaWorkspaceGuardian.Core.Upgrade;
     using ToscaWorkspaceGuardian.Core.Workspace;
     using ToscaWorkspaceGuardian.Core.Diagnostics;
+    using OpenTelemetry.Trace;
+    using OpenTelemetry.Metrics;
+    using OpenTelemetry.Resources;
     using ToscaWorkspaceGuardian.UI.ViewModels;
     using ToscaWorkspaceGuardian.UI.Views;
 
@@ -51,6 +54,19 @@ namespace ToscaWorkspaceGuardian.UI
 
     .ConfigureServices((context, services) =>
     {
+        // Configure OpenTelemetry tracing + metrics (console exporter for local dev)
+        services.AddOpenTelemetryTracing(builder =>
+        {
+            builder.AddSource("ToscaWorkspaceGuardian");
+            builder.AddConsoleExporter();
+        });
+
+        services.AddOpenTelemetryMetrics(builder =>
+        {
+            builder.AddMeter("ToscaWorkspaceGuardian.Metrics");
+            builder.AddConsoleExporter();
+        });
+
         var configuration = new ConfigurationBuilder()
     .SetBasePath(AppContext.BaseDirectory)
     .AddJsonFile("appsettings.json", optional: false)

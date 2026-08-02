@@ -73,7 +73,8 @@ public class TCShellExecutor
             Directory.CreateDirectory(Path.GetDirectoryName(debugFile)!);
             await File.WriteAllTextAsync(debugFile, installation.TCShellPath + Environment.NewLine + arguments);
         }
-
+        using var activity = ToscaWorkspaceGuardian.Core.Diagnostics.TelemetrySources.Activity.StartActivity("TCShell.Execute");
+        activity?.SetTag("script", scriptFile);
         var sw = System.Diagnostics.Stopwatch.StartNew();
         var result = await this.processRunner.ExecuteAsync(
             installation.TCShellPath,
@@ -81,9 +82,13 @@ public class TCShellExecutor
             cancellationToken: cancellationToken);
         sw.Stop();
 
+        activity?.SetTag("exit_code", result.ExitCode);
+        activity?.SetTag("elapsed_ms", sw.Elapsed.TotalMilliseconds);
+
         try
         {
             this.telemetry?.RecordTCShellCall(sw.Elapsed, result.ExitCode);
+            ToscaWorkspaceGuardian.Core.Diagnostics.TelemetrySources.TCShellCalls.Add(1);
         }
         catch { }
 

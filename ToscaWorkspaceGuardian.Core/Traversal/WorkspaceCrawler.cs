@@ -80,6 +80,7 @@ public class WorkspaceCrawler : IWorkspaceCrawler
         //------------------------------------------
         // Crawl Until Queue Empty (bounded concurrency)
         //------------------------------------------
+        using var crawlActivity = ToscaWorkspaceGuardian.Core.Diagnostics.TelemetrySources.Activity.StartActivity("Workspace.Crawl");
         var crawlSw = System.Diagnostics.Stopwatch.StartNew();
 
         var queueLock = new object();
