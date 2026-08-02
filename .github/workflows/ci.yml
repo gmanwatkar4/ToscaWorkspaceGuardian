@@ -27,6 +27,9 @@ jobs:
       - name: Build
         run: dotnet build --no-restore --configuration Release --verbosity minimal
 
+      - name: Run analyzers
+        run: dotnet build --no-restore --configuration Release /p:RunAnalyzers=true
+
       - name: Test
         run: dotnet test --no-build --verbosity normal
 

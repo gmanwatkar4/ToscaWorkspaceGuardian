@@ -1,0 +1,19 @@
+root = true
+
+[*.cs]
+charset = utf-8
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+dotnet_sort_system_directives_first = true
+dotnet_style_qualification_for_field = false:suggestion
+dotnet_style_qualification_for_property = false:suggestion
+dotnet_style_qualification_for_method = false:suggestion
+dotnet_style_prefer_auto_properties = true:suggestion
+csharp_style_var_for_built_in_types = true:suggestion
+csharp_style_var_for_simple_types = true:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion
+
+[*.{csproj,props,targets}]
+indent_style = space
+indent_size = 2

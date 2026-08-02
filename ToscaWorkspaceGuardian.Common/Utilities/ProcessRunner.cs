@@ -1,6 +1,7 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Text;
 using System.Threading;
+using Microsoft.Extensions.Logging;
 using ToscaWorkspaceGuardian.Common.Interfaces;
 using ToscaWorkspaceGuardian.Common.Models;
 
@@ -8,6 +9,12 @@ namespace ToscaWorkspaceGuardian.Common.Utilities;
 
 public class ProcessRunner : IProcessRunner
 {
+    private readonly Microsoft.Extensions.Logging.ILogger<ProcessRunner>? _logger;
+
+    public ProcessRunner(Microsoft.Extensions.Logging.ILogger<ProcessRunner>? logger = null)
+    {
+        _logger = logger;
+    }
     public async Task<ProcessResult> ExecuteAsync(
         string fileName,
         string arguments,
@@ -29,15 +36,50 @@ public class ProcessRunner : IProcessRunner
         using var process = new Process();
         process.StartInfo = startInfo;
 
-        try
+        int maxAttempts = 3;
+        int attempt = 0;
+        while (true)
         {
-            process.Start();
+            attempt++;
+            try
+            {
+                _logger?.LogDebug("Starting process {FileName} {Arguments} (attempt {Attempt})", fileName, arguments, attempt);
+                process.Start();
 
-            // Read both streams concurrently to avoid deadlocks
-            Task<string> outputTask = process.StandardOutput.ReadToEndAsync();
-            Task<string> errorTask = process.StandardError.ReadToEndAsync();
+                // Read both streams concurrently to avoid deadlocks
+                Task<string> outputTask = process.StandardOutput.ReadToEndAsync();
+                Task<string> errorTask = process.StandardError.ReadToEndAsync();
 
-            using var registration = cancellationToken.Register(() =>
+                using var registration = cancellationToken.Register(() =>
+                {
+                    try
+                    {
+                        if (!process.HasExited)
+                        {
+                            process.Kill(true);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger?.LogWarning(ex, "Failed to kill process on cancellation");
+                    }
+                });
+
+                await process.WaitForExitAsync(cancellationToken);
+
+                string output = await outputTask;
+                string error = await errorTask;
+
+                _logger?.LogDebug("Process exited with code {ExitCode}", process.ExitCode);
+
+                return new ProcessResult
+                {
+                    ExitCode = process.ExitCode,
+                    StandardOutput = output,
+                    StandardError = error
+                };
+            }
+            catch (OperationCanceledException)
             {
                 try
                 {
@@ -46,44 +88,30 @@ public class ProcessRunner : IProcessRunner
                         process.Kill(true);
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
-                    // Ignore exceptions from Kill
+                    _logger?.LogWarning(ex, "Failed to kill process after cancellation");
                 }
-            });
 
-            await process.WaitForExitAsync(cancellationToken);
-
-            string output = await outputTask;
-            string error = await errorTask;
-
-            return new ProcessResult
-            {
-                ExitCode = process.ExitCode,
-                StandardOutput = output,
-                StandardError = error
-            };
-        }
-        catch (OperationCanceledException)
-        {
-            try
-            {
-                if (!process.HasExited)
+                return new ProcessResult
                 {
-                    process.Kill(true);
-                }
+                    ExitCode = -1,
+                    StandardOutput = string.Empty,
+                    StandardError = "Process execution canceled"
+                };
             }
-            catch
+            catch (Exception ex) when (attempt < maxAttempts)
             {
-                // ignore
+                _logger?.LogWarning(ex, "Process execution failed on attempt {Attempt}, retrying...", attempt);
+                // small backoff
+                await Task.Delay(TimeSpan.FromMilliseconds(200 * attempt), CancellationToken.None);
+                // retry loop
             }
-
-            return new ProcessResult
+            catch (Exception ex)
             {
-                ExitCode = -1,
-                StandardOutput = string.Empty,
-                StandardError = "Process execution canceled"
-            };
+                _logger?.LogError(ex, "Process execution failed");
+                throw;
+            }
         }
     }
 

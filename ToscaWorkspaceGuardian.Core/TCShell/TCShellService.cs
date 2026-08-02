@@ -1,4 +1,4 @@
-﻿using ToscaWorkspaceGuardian.Core.Interfaces;
+using ToscaWorkspaceGuardian.Core.Interfaces;
 using ToscaWorkspaceGuardian.Core.Models;
 
 namespace ToscaWorkspaceGuardian.Core.TCShell;
@@ -21,7 +21,8 @@ public class TCShellService : ITCShellService
         var execution =
             await _executor.ExecuteAsync(
                 scriptFile,
-                request);
+                request,
+                cancellationToken: cancellationToken);
 
         return new TCShellResponse
         {
