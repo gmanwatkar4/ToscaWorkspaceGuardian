@@ -8,6 +8,8 @@ using System.Diagnostics;
 using System.Text;
 using System.Threading;
 using Microsoft.Extensions.Logging;
+using Polly;
+using Polly.Timeout;
 using ToscaWorkspaceGuardian.Common.Interfaces;
 using ToscaWorkspaceGuardian.Common.Models;
 

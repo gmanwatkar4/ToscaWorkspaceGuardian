@@ -17,3 +17,4 @@ This file summarizes the changes made on branch `feature/repo-improvements`.
  - Optimized OutputParser with precompiled regex and streaming line reads.
  - Reduced LINQ allocations in OutputObject.GetProperty and SnapshotBuilder.
  - Removed debug allocations from hot loops.
+ - Added Polly-based retry and timeout policy for external process execution (configurable via env vars TWG_PROCESS_RETRIES and TWG_PROCESS_TIMEOUT_SECONDS).
