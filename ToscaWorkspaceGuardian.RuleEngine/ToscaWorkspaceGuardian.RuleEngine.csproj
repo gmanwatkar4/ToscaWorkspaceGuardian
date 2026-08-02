@@ -11,10 +11,6 @@
     <ProjectReference Include="..\ToscaWorkspaceGuardian.Core\ToscaWorkspaceGuardian.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Evaluators\" />
-    <Folder Include="Models\" />
-    <Folder Include="Rules\" />
-  </ItemGroup>
+  <!-- Removed empty folder includes to keep project file clean -->
 
 </Project>

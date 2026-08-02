@@ -6,16 +6,6 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Constants\" />
-    <Folder Include="Enums\" />
-    <Folder Include="Extensions\" />
-    <Folder Include="Helpers\" />
-    <Folder Include="Logging\" />
-    <Folder Include="Models\Analysis\" />
-    <Folder Include="Models\Versioning\" />
-    <Folder Include="Models\Reporting\" />
-    <Folder Include="Models\Workspace\" />
-  </ItemGroup>
+  <!-- Removed empty folder includes to keep project file clean -->
 
 </Project>

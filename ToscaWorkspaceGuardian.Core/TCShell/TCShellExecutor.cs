@@ -21,7 +21,8 @@ public class TCShellExecutor
 
     public async Task<ExecutionResult> ExecuteAsync(
         string scriptFile,
-        WorkspaceRequest request)
+        WorkspaceRequest request,
+        CancellationToken cancellationToken = default)
     {
         var installation = _installationService.GetInstallation();
 
@@ -64,7 +65,8 @@ public class TCShellExecutor
 
         var result = await _processRunner.ExecuteAsync(
             installation.TCShellPath,
-            arguments);
+            arguments,
+            cancellationToken: cancellationToken);
 
         await _outputWriter.WriteAsync(
             outputFile,

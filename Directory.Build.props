@@ -1,0 +1,15 @@
+<Project>
+  <PropertyGroup>
+	<!-- Enable .NET analyzers for all projects -->
+	<EnableNETAnalyzers>true</EnableNETAnalyzers>
+	<AnalysisLevel>latest</AnalysisLevel>
+	<!-- Do not treat analyzer warnings as errors automatically to avoid breaking build -->
+	<TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<!-- Centralize the analyzer package so every project benefits -->
+	<PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.0" PrivateAssets="all" />
+	<PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556" PrivateAssets="all" />
+  </ItemGroup>
+</Project>
