@@ -1,7 +1,11 @@
-﻿using ToscaWorkspaceGuardian.Core.Business;
-using ToscaWorkspaceGuardian.Core.Health;
+// <copyright file="WG004_NoRootFoldersRule.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Rules;
+
+using ToscaWorkspaceGuardian.Core.Business;
+using ToscaWorkspaceGuardian.Core.Health;
 
 public class WG004_NoRootFoldersRule : WorkspaceRuleBase
 {
@@ -12,9 +16,11 @@ public class WG004_NoRootFoldersRule : WorkspaceRuleBase
         WorkspaceHealthReport report)
     {
         if (workspace.RootFolders.Count > 0)
+        {
             return;
+        }
 
-        AddFinding(
+        this.AddFinding(
             report,
             FindingSeverity.Warning,
             "Empty Workspace",

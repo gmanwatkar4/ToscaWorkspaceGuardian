@@ -1,16 +1,21 @@
-﻿using ToscaWorkspaceGuardian.Core.Business;
+﻿// <copyright file="UpgradeReadinessAnalyzer.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Upgrade;
 
+using ToscaWorkspaceGuardian.Core.Business;
+
 public class UpgradeReadinessAnalyzer
 {
-    private readonly VersionCompatibilityEngine _engine;
+    private readonly VersionCompatibilityEngine engine;
 
     public UpgradeReadinessAnalyzer(
         VersionCompatibilityEngine engine)
     {
-        _engine = engine;
+        this.engine = engine;
     }
+
     public UpgradeReadinessReport Analyze(
         RepositoryStatistics statistics,
         IReadOnlyCollection<HealthIssue> issues,
@@ -21,7 +26,7 @@ public class UpgradeReadinessAnalyzer
         {
             SourceVersion = sourceVersion,
             TargetVersion = targetVersion,
-            HealthScore = statistics.HealthScore
+            HealthScore = statistics.HealthScore,
         };
 
         foreach (var issue in issues)
@@ -60,7 +65,7 @@ public class UpgradeReadinessAnalyzer
             report.BlockingIssues == 0;
 
         report.CompatibilityRules =
-        _engine.GetRules(
+        this.engine.GetRules(
         sourceVersion,
         targetVersion)
         .ToList();

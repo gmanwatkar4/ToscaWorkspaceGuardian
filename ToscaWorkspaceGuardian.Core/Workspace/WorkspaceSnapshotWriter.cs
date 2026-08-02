@@ -1,8 +1,12 @@
-﻿using System.Text.Json;
-using ToscaWorkspaceGuardian.Core.Business;
-using ToscaWorkspaceGuardian.Core.Interfaces;
+// <copyright file="WorkspaceSnapshotWriter.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Workspace;
+
+using System.Text.Json;
+using ToscaWorkspaceGuardian.Core.Business;
+using ToscaWorkspaceGuardian.Core.Interfaces;
 
 public class WorkspaceSnapshotWriter : IWorkspaceSnapshotWriter
 {
@@ -13,7 +17,7 @@ public class WorkspaceSnapshotWriter : IWorkspaceSnapshotWriter
     {
         var options = new JsonSerializerOptions
         {
-            WriteIndented = true
+            WriteIndented = true,
         };
 
         var json =

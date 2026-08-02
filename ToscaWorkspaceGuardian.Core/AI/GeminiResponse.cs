@@ -1,6 +1,10 @@
-﻿using System.Text.Json.Serialization;
+// <copyright file="GeminiResponse.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.AI;
+
+using System.Text.Json.Serialization;
 
 public class GeminiResponse
 {

@@ -1,6 +1,10 @@
-﻿using System.Text.Json;
+// <copyright file="JsonCompareReportExporter.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Compare;
+
+using System.Text.Json;
 
 public class JsonCompareReportExporter : ICompareReportExporter
 {
@@ -14,7 +18,7 @@ public class JsonCompareReportExporter : ICompareReportExporter
 
         var options = new JsonSerializerOptions
         {
-            WriteIndented = true
+            WriteIndented = true,
         };
 
         await File.WriteAllTextAsync(

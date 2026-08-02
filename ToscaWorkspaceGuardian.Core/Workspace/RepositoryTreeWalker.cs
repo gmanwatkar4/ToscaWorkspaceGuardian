@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
+// <copyright file="RepositoryTreeWalker.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+namespace ToscaWorkspaceGuardian.Core.Workspace;
+
+using System.Collections.Generic;
 using ToscaWorkspaceGuardian.Core.Business;
 using ToscaWorkspaceGuardian.Core.Interfaces;
 using ToscaWorkspaceGuardian.Core.Models;
-
-namespace ToscaWorkspaceGuardian.Core.Workspace;
 
 public class RepositoryTreeWalker : IRepositoryTreeWalker
 {
@@ -16,7 +20,7 @@ public class RepositoryTreeWalker : IRepositoryTreeWalker
         queue.Enqueue(
             new RepositoryNode
             {
-                NodePath = "/"
+                NodePath = "/",
             });
 
         while (queue.Count > 0)

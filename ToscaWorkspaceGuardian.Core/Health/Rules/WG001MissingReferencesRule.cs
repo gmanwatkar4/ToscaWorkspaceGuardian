@@ -1,6 +1,10 @@
-﻿using ToscaWorkspaceGuardian.Core.Business;
+// <copyright file="WG001MissingReferencesRule.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Health.Rules;
+
+using ToscaWorkspaceGuardian.Core.Business;
 
 public class WG001MissingReferencesRule : IHealthRule
 {
@@ -30,13 +34,13 @@ public class WG001MissingReferencesRule : IHealthRule
 
             yield return new HealthIssue
             {
-                RuleId = RuleId,
-                Title = Title,
+                RuleId = this.RuleId,
+                Title = this.Title,
                 Severity = "High",
                 ObjectName = obj.Name,
                 NodePath = obj.NodePath,
                 Description =
-                    "Repository object contains missing references."
+                    "Repository object contains missing references.",
             };
         }
     }

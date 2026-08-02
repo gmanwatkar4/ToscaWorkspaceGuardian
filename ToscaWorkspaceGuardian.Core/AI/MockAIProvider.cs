@@ -1,4 +1,8 @@
-﻿namespace ToscaWorkspaceGuardian.Core.AI;
+// <copyright file="MockAIProvider.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+namespace ToscaWorkspaceGuardian.Core.AI;
 
 public class MockAIProvider : IAIProvider
 {
@@ -22,7 +26,7 @@ Recommendations
 • Resolve duplicate sibling objects.
 
 • Execute smoke regression after upgrade.
-"""
+""",
             });
     }
 }

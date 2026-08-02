@@ -1,4 +1,8 @@
-﻿namespace ToscaWorkspaceGuardian.Core.Configuration;
+// <copyright file="RuleConfiguration.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+namespace ToscaWorkspaceGuardian.Core.Configuration;
 
 public class RuleConfiguration
 {

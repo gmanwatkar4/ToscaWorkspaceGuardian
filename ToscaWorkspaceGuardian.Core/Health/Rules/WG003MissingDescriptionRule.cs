@@ -1,6 +1,10 @@
-﻿using ToscaWorkspaceGuardian.Core.Business;
+// <copyright file="WG003MissingDescriptionRule.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Health.Rules;
+
+using ToscaWorkspaceGuardian.Core.Business;
 
 public class WG003MissingDescriptionRule : IHealthRule
 {
@@ -15,24 +19,30 @@ public class WG003MissingDescriptionRule : IHealthRule
         {
             // Skip repository roots
             if (obj.ParentPath == "/")
+            {
                 continue;
+            }
 
             // Skip Standard Modules
             if (obj.NodePath.Contains("/Standard modules/", StringComparison.OrdinalIgnoreCase))
+            {
                 continue;
+            }
 
             // Skip Engine objects
             if (obj.NodePath.Contains("/Engines/", StringComparison.OrdinalIgnoreCase))
+            {
                 continue;
+            }
 
             yield return new HealthIssue
             {
-                RuleId = RuleId,
-                Title = Title,
+                RuleId = this.RuleId,
+                Title = this.Title,
                 Severity = "Info",
                 ObjectName = obj.Name,
                 NodePath = obj.NodePath,
-                Description = "Description is empty."
+                Description = "Description is empty.",
             };
         }
     }

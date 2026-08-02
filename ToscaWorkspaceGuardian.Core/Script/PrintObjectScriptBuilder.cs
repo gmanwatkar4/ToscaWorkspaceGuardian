@@ -1,4 +1,8 @@
-﻿namespace ToscaWorkspaceGuardian.Core.Script;
+// <copyright file="PrintObjectScriptBuilder.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+namespace ToscaWorkspaceGuardian.Core.Script;
 
 public class PrintObjectScriptBuilder
 {

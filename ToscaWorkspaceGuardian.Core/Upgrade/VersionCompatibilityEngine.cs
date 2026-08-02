@@ -1,4 +1,8 @@
-﻿namespace ToscaWorkspaceGuardian.Core.Upgrade;
+// <copyright file="VersionCompatibilityEngine.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+namespace ToscaWorkspaceGuardian.Core.Upgrade;
 
 public class VersionCompatibilityEngine
 {
@@ -11,14 +15,13 @@ public class VersionCompatibilityEngine
         //------------------------------------------
         // Generic Recommendations
         //------------------------------------------
-
         rules.Add(new VersionCompatibilityRule
         {
             SourceVersion = sourceVersion,
             TargetVersion = targetVersion,
             Severity = "Info",
             Recommendation =
-                "Generate a fresh workspace snapshot before upgrading."
+                "Generate a fresh workspace snapshot before upgrading.",
         });
 
         rules.Add(new VersionCompatibilityRule
@@ -27,7 +30,7 @@ public class VersionCompatibilityEngine
             TargetVersion = targetVersion,
             Severity = "Info",
             Recommendation =
-                "Run snapshot comparison after upgrade."
+                "Run snapshot comparison after upgrade.",
         });
 
         rules.Add(new VersionCompatibilityRule
@@ -36,13 +39,12 @@ public class VersionCompatibilityEngine
             TargetVersion = targetVersion,
             Severity = "Low",
             Recommendation =
-                "Execute smoke regression after upgrade."
+                "Execute smoke regression after upgrade.",
         });
 
         //------------------------------------------
         // Example Version Rule
         //------------------------------------------
-
         if (sourceVersion == "2025.1" &&
             targetVersion == "2026.1")
         {
@@ -52,7 +54,7 @@ public class VersionCompatibilityEngine
                 TargetVersion = targetVersion,
                 Severity = "Medium",
                 Recommendation =
-                    "Review repository health before upgrading to 2026.1."
+                    "Review repository health before upgrading to 2026.1.",
             });
         }
 

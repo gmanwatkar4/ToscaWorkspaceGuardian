@@ -1,10 +1,14 @@
-﻿namespace ToscaWorkspaceGuardian.Core.Upgrade;
+// <copyright file="UpgradeReadinessReport.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+namespace ToscaWorkspaceGuardian.Core.Upgrade;
 
 public class UpgradeReadinessReport
 {
-    public string SourceVersion { get; set; } = "";
+    public string SourceVersion { get; set; } = string.Empty;
 
-    public string TargetVersion { get; set; } = "";
+    public string TargetVersion { get; set; } = string.Empty;
 
     public int HealthScore { get; set; }
 

@@ -1,22 +1,25 @@
-﻿using System.Text;
-using System.Text.Json;
-
+// <copyright file="GeminiProvider.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.AI;
 
+using System.Text;
+using System.Text.Json;
+
 public class GeminiProvider : IAIProvider
 {
-    private readonly HttpClient _httpClient;
-    private readonly GeminiSettings _settings;
+    private readonly HttpClient httpClient;
+    private readonly GeminiSettings settings;
 
     public GeminiProvider()
     {
-        _httpClient = new HttpClient();
+        this.httpClient = new HttpClient();
 
-        _settings = new GeminiSettings
+        this.settings = new GeminiSettings
         {
             ApiKey = "...",
-            Model = "gemini-2.5-flash"
+            Model = "gemini-2.5-flash",
         };
     }
 
@@ -25,7 +28,7 @@ public class GeminiProvider : IAIProvider
         CancellationToken cancellationToken = default)
     {
         string url =
-            $"https://generativelanguage.googleapis.com/v1beta/models/{_settings.Model}:generateContent?key={_settings.ApiKey}";
+            $"https://generativelanguage.googleapis.com/v1beta/models/{this.settings.Model}:generateContent?key={this.settings.ApiKey}";
 
         var body = new
         {
@@ -41,7 +44,7 @@ public class GeminiProvider : IAIProvider
                         }
                     }
                 }
-            }
+            },
         };
 
         string json = JsonSerializer.Serialize(body);
@@ -51,7 +54,7 @@ public class GeminiProvider : IAIProvider
             Encoding.UTF8,
             "application/json");
 
-        using var response = await _httpClient.PostAsync(
+        using var response = await this.httpClient.PostAsync(
             url,
             content,
             cancellationToken);
@@ -68,11 +71,10 @@ public class GeminiProvider : IAIProvider
         //------------------------------------------
         // Parse JSON
         //------------------------------------------
-
         using JsonDocument document =
             JsonDocument.Parse(responseText);
 
-        string aiText = "";
+        string aiText = string.Empty;
 
         if (document.RootElement.TryGetProperty(
             "candidates",
@@ -95,7 +97,7 @@ public class GeminiProvider : IAIProvider
                             aiText =
                                 parts[0]
                                 .GetProperty("text")
-                                .GetString() ?? "";
+                                .GetString() ?? string.Empty;
                         }
                     }
                 }
@@ -104,7 +106,7 @@ public class GeminiProvider : IAIProvider
 
         return new AIResponse
         {
-            Content = aiText
+            Content = aiText,
         };
     }
 }

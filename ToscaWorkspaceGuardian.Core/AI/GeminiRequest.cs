@@ -1,6 +1,10 @@
-﻿using System.Text.Json.Serialization;
+// <copyright file="GeminiRequest.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.AI;
+
+using System.Text.Json.Serialization;
 
 public class GeminiRequest
 {
@@ -17,5 +21,5 @@ public class GeminiContent
 public class GeminiPart
 {
     [JsonPropertyName("text")]
-    public string Text { get; set; } = "";
+    public string Text { get; set; } = string.Empty;
 }

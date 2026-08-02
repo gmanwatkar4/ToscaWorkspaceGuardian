@@ -1,6 +1,10 @@
-﻿using ToscaWorkspaceGuardian.Core.Business;
+// <copyright file="RepositoryStatisticsBuilder.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Health;
+
+using ToscaWorkspaceGuardian.Core.Business;
 
 public class RepositoryStatisticsBuilder
 {
@@ -14,28 +18,42 @@ public class RepositoryStatisticsBuilder
 
         foreach (var obj in snapshot.Objects)
         {
-            string path = obj.NodePath ?? "";
+            string path = obj.NodePath ?? string.Empty;
 
             if (obj.ObjectType == "TCFolder")
+            {
                 stats.FolderCount++;
+            }
 
             if (path.StartsWith("/Modules/", StringComparison.OrdinalIgnoreCase))
+            {
                 stats.ModuleCount++;
+            }
 
             if (path.StartsWith("/TestCases/", StringComparison.OrdinalIgnoreCase))
+            {
                 stats.TestCaseCount++;
+            }
 
             if (path.StartsWith("/Execution/", StringComparison.OrdinalIgnoreCase))
+            {
                 stats.ExecutionListCount++;
+            }
 
             if (path.StartsWith("/Requirements/", StringComparison.OrdinalIgnoreCase))
+            {
                 stats.RequirementCount++;
+            }
 
             if (obj.ObjectType == "TCUser")
+            {
                 stats.UserCount++;
+            }
 
             if (obj.ObjectType == "TCUserGroup")
+            {
                 stats.GroupCount++;
+            }
         }
 
         stats.HealthIssueCount = issues.Count;

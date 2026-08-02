@@ -1,4 +1,8 @@
-﻿namespace ToscaWorkspaceGuardian.Core.Models;
+// <copyright file="OutputProperty.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+namespace ToscaWorkspaceGuardian.Core.Models;
 
 public class OutputProperty
 {

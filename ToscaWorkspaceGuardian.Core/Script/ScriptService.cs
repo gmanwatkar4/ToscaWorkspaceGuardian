@@ -1,22 +1,26 @@
-﻿using ToscaWorkspaceGuardian.Core.Interfaces;
-using ToscaWorkspaceGuardian.Core.Models;
+// <copyright file="ScriptService.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Script;
 
+using ToscaWorkspaceGuardian.Core.Interfaces;
+using ToscaWorkspaceGuardian.Core.Models;
+
 public class ScriptService : IScriptService
 {
-    private readonly ScriptComposer _composer;
-    private readonly RepositoryScanScriptBuilder _repositoryBuilder;
-    private readonly PrintObjectScriptBuilder _printBuilder;
+    private readonly ScriptComposer composer;
+    private readonly RepositoryScanScriptBuilder repositoryBuilder;
+    private readonly PrintObjectScriptBuilder printBuilder;
 
     public ScriptService(
         ScriptComposer composer,
         RepositoryScanScriptBuilder repositoryBuilder,
         PrintObjectScriptBuilder printBuilder)
     {
-        _composer = composer;
-        _repositoryBuilder = repositoryBuilder;
-        _printBuilder = printBuilder;
+        this.composer = composer;
+        this.repositoryBuilder = repositoryBuilder;
+        this.printBuilder = printBuilder;
     }
 
     public async Task<string> GenerateScriptAsync(
@@ -33,7 +37,7 @@ public class ScriptService : IScriptService
         if (request.ScriptType == ScriptType.RepositoryScan)
         {
             string repositoryScript =
-                _repositoryBuilder.Build(request.Queries);
+                this.repositoryBuilder.Build(request.Queries);
 
             string repositoryFile =
                 Path.Combine(directory, "RepositoryScan.tcs");
@@ -48,14 +52,14 @@ public class ScriptService : IScriptService
 
             await File.WriteAllTextAsync(
                 printFile,
-                _printBuilder.Build(),
+                this.printBuilder.Build(),
                 cancellationToken);
 
             return repositoryFile;
         }
 
         string script =
-            _composer.Compose(request);
+            this.composer.Compose(request);
 
         string workspaceFile =
             Path.Combine(directory, "WorkspaceAnalysis.tcs");

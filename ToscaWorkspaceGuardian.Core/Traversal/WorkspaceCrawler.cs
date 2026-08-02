@@ -1,17 +1,21 @@
-﻿using ToscaWorkspaceGuardian.Core.Business;
+// <copyright file="WorkspaceCrawler.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+namespace ToscaWorkspaceGuardian.Core.Traversal;
+
+using ToscaWorkspaceGuardian.Core.Business;
 using ToscaWorkspaceGuardian.Core.Interfaces;
 using ToscaWorkspaceGuardian.Core.Models;
 using ToscaWorkspaceGuardian.Core.Script;
 using ToscaWorkspaceGuardian.Core.TCShell;
 
-namespace ToscaWorkspaceGuardian.Core.Traversal;
-
 public class WorkspaceCrawler : IWorkspaceCrawler
 {
-    private readonly BatchScriptBuilder _scriptBuilder;
-    private readonly ITCShellService _tcShellService;
-    private readonly OutputParser _parser;
-    private readonly ISnapshotBuilder _snapshotBuilder;
+    private readonly BatchScriptBuilder scriptBuilder;
+    private readonly ITCShellService tcShellService;
+    private readonly OutputParser parser;
+    private readonly ISnapshotBuilder snapshotBuilder;
 
     public WorkspaceCrawler(
         BatchScriptBuilder scriptBuilder,
@@ -19,10 +23,10 @@ public class WorkspaceCrawler : IWorkspaceCrawler
         OutputParser parser,
         ISnapshotBuilder snapshotBuilder)
     {
-        _scriptBuilder = scriptBuilder;
-        _tcShellService = tcShellService;
-        _parser = parser;
-        _snapshotBuilder = snapshotBuilder;
+        this.scriptBuilder = scriptBuilder;
+        this.tcShellService = tcShellService;
+        this.parser = parser;
+        this.snapshotBuilder = snapshotBuilder;
     }
 
     public async Task<WorkspaceSnapshot> CrawlAsync(
@@ -32,7 +36,6 @@ public class WorkspaceCrawler : IWorkspaceCrawler
         //------------------------------------------
         // Repository Queue
         //------------------------------------------
-
         var queue = new Queue<string>();
 
         var visited = new HashSet<string>(
@@ -50,13 +53,11 @@ public class WorkspaceCrawler : IWorkspaceCrawler
         //------------------------------------------
         // Crawl Until Queue Empty
         //------------------------------------------
-
         while (queue.Count > 0)
         {
             //--------------------------------------
             // Build Current Batch
             //--------------------------------------
-
             var paths = new List<string>();
 
             System.Diagnostics.Debug.WriteLine("================================");
@@ -85,14 +86,12 @@ public class WorkspaceCrawler : IWorkspaceCrawler
             //--------------------------------------
             // Generate Script
             //--------------------------------------
-
             string script =
-                _scriptBuilder.Build(paths);
+                this.scriptBuilder.Build(paths);
 
             //--------------------------------------
             // Save Script
             //--------------------------------------
-
             string scriptFile =
                 Path.Combine(
                     Path.GetTempPath(),
@@ -110,9 +109,8 @@ public class WorkspaceCrawler : IWorkspaceCrawler
             //--------------------------------------
             // Execute
             //--------------------------------------
-
             var response =
-                await _tcShellService.ExecuteScriptAsync(
+                await this.tcShellService.ExecuteScriptAsync(
                     scriptFile,
                     request,
                     cancellationToken);
@@ -126,16 +124,14 @@ public class WorkspaceCrawler : IWorkspaceCrawler
             //--------------------------------------
             // Diagnostics
             //--------------------------------------
-
             System.Diagnostics.Debug.WriteLine(
                 $"Response Length : {response.Output.Length}");
 
             //--------------------------------------
             // Parse
             //--------------------------------------
-
             var document =
-                _parser.Parse(response.Output);
+                this.parser.Parse(response.Output);
 
             if (document.Objects.Count != paths.Count)
             {
@@ -174,13 +170,15 @@ public class WorkspaceCrawler : IWorkspaceCrawler
                 Directory.CreateDirectory(debugFolder);
 
                 await File.WriteAllTextAsync(
-                    Path.Combine(debugFolder,
+                    Path.Combine(
+                        debugFolder,
                         $"Batch_{DateTime.Now:yyyyMMdd_HHmmss}.tcs"),
                     script,
                     cancellationToken);
 
                 await File.WriteAllTextAsync(
-                    Path.Combine(debugFolder,
+                    Path.Combine(
+                        debugFolder,
                         $"Batch_{DateTime.Now:yyyyMMdd_HHmmss}.txt"),
                     response.Output,
                     cancellationToken);
@@ -192,10 +190,9 @@ public class WorkspaceCrawler : IWorkspaceCrawler
             //--------------------------------------
             // Merge Snapshot
             //--------------------------------------
-
-            _snapshotBuilder.AddDocument(
+            this.snapshotBuilder.AddDocument(
                 snapshot,
-                document);  
+                document);
 
             System.Diagnostics.Debug.WriteLine(
                 $"Snapshot Objects : {snapshot.Objects.Count}");
@@ -203,20 +200,22 @@ public class WorkspaceCrawler : IWorkspaceCrawler
             //--------------------------------------
             // Discover Children
             //--------------------------------------
-
             foreach (var obj in document.Objects)
             {
                 //------------------------------------------
                 // Only traverse container objects
                 //------------------------------------------
-
                 if (!IsContainer(obj.ObjectType))
+                {
                     continue;
+                }
 
                 string? nodePath = obj.GetProperty("NodePath");
 
                 if (string.IsNullOrWhiteSpace(nodePath))
+                {
                     continue;
+                }
 
                 foreach (var child in obj.GetCollection("Items"))
                 {
@@ -227,7 +226,6 @@ public class WorkspaceCrawler : IWorkspaceCrawler
             //--------------------------------------
             // Debug
             //--------------------------------------
-
             System.Diagnostics.Debug.WriteLine(
                 $"Batch Completed : {paths.Count}");
 
@@ -257,7 +255,7 @@ public class WorkspaceCrawler : IWorkspaceCrawler
                 "TCFolder" => true,
                 "OwnedFolder" => true,
                 "ExecutionEntryFolder" => true,
-                _ => false
+                _ => false,
             };
         }
 

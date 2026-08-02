@@ -1,8 +1,12 @@
-﻿using ToscaWorkspaceGuardian.Core.Business;
-using ToscaWorkspaceGuardian.Core.Interfaces;
-using ToscaWorkspaceGuardian.Core.Models;
+// <copyright file="SnapshotBuilder.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Workspace;
+
+using ToscaWorkspaceGuardian.Core.Business;
+using ToscaWorkspaceGuardian.Core.Interfaces;
+using ToscaWorkspaceGuardian.Core.Models;
 
 public class SnapshotBuilder : ISnapshotBuilder
 {
@@ -15,13 +19,12 @@ public class SnapshotBuilder : ISnapshotBuilder
             var repositoryObject = new RepositoryObject
             {
                 Name = obj.Name,
-                ObjectType = obj.ObjectType
+                ObjectType = obj.ObjectType,
             };
 
             //--------------------------------------------------
             // Properties
             //--------------------------------------------------
-
             foreach (var property in obj.Properties)
             {
                 repositoryObject.Properties[property.Name] =
@@ -31,7 +34,6 @@ public class SnapshotBuilder : ISnapshotBuilder
             //--------------------------------------------------
             // Collections
             //--------------------------------------------------
-
             foreach (var collection in obj.Collections)
             {
                 repositoryObject.Collections[collection.Key] =
@@ -41,7 +43,6 @@ public class SnapshotBuilder : ISnapshotBuilder
             //--------------------------------------------------
             // NodePath
             //--------------------------------------------------
-
             if (repositoryObject.Properties.TryGetValue(
             "NodePath",
             out var nodePath))
@@ -66,7 +67,6 @@ public class SnapshotBuilder : ISnapshotBuilder
             //------------------------------------------
             // NodePath Index
             //------------------------------------------
-
             if (!string.IsNullOrWhiteSpace(repositoryObject.NodePath))
             {
                 snapshot.ByNodePath[repositoryObject.NodePath] =
@@ -76,7 +76,6 @@ public class SnapshotBuilder : ISnapshotBuilder
             //------------------------------------------
             // ObjectType Index
             //------------------------------------------
-
             if (!snapshot.ByObjectType.TryGetValue(
                     repositoryObject.ObjectType,
                     out var list))

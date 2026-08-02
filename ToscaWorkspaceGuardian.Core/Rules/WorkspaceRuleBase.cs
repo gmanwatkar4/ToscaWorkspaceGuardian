@@ -1,7 +1,11 @@
-﻿using ToscaWorkspaceGuardian.Core.Business;
-using ToscaWorkspaceGuardian.Core.Health;
+// <copyright file="WorkspaceRuleBase.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Rules;
+
+using ToscaWorkspaceGuardian.Core.Business;
+using ToscaWorkspaceGuardian.Core.Health;
 
 public abstract class WorkspaceRuleBase : IWorkspaceRule
 {
@@ -22,11 +26,11 @@ public abstract class WorkspaceRuleBase : IWorkspaceRule
         report.Findings.Add(
             new WorkspaceFinding
             {
-                RuleId = RuleId,
+                RuleId = this.RuleId,
                 Severity = severity,
                 Title = title,
                 Description = description,
-                Recommendation = recommendation
+                Recommendation = recommendation,
             });
 
         report.HealthScore -= scorePenalty;

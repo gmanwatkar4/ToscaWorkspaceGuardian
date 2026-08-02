@@ -1,16 +1,19 @@
-﻿using ToscaWorkspaceGuardian.Core.Interfaces;
-using ToscaWorkspaceGuardian.Core.Models;
-using ToscaWorkspaceGuardian.Core.TCShell;
-
+﻿// <copyright file="WorkspaceReader.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Workspace;
 
+using ToscaWorkspaceGuardian.Core.Interfaces;
+using ToscaWorkspaceGuardian.Core.Models;
+using ToscaWorkspaceGuardian.Core.TCShell;
+
 public class WorkspaceReader : IWorkspaceReader
 {
-    private readonly IScriptService _scriptService;
-    private readonly ITCShellService _tcShellService;
-    private readonly OutputDocumentExporter _exporter;
-    private readonly IParsedWorkspaceMapper _mapper;
+    private readonly IScriptService scriptService;
+    private readonly ITCShellService tcShellService;
+    private readonly OutputDocumentExporter exporter;
+    private readonly IParsedWorkspaceMapper mapper;
 
     public WorkspaceReader(
         IScriptService scriptService,
@@ -18,18 +21,18 @@ public class WorkspaceReader : IWorkspaceReader
         OutputDocumentExporter exporter,
         IParsedWorkspaceMapper mapper)
     {
-        _scriptService = scriptService;
-        _tcShellService = tcShellService;
-        _exporter = exporter;
-        _mapper = mapper;
+        this.scriptService = scriptService;
+        this.tcShellService = tcShellService;
+        this.exporter = exporter;
+        this.mapper = mapper;
     }
 
     public async Task<WorkspaceSummary> ReadAsync(
-        
+
         WorkspaceRequest request,
         CancellationToken cancellationToken = default)
     {
-        var script = await _scriptService.GenerateScriptAsync(
+        var script = await this.scriptService.GenerateScriptAsync(
      new ScriptRequest
      {
          ScriptType = ScriptType.RepositoryScan,
@@ -41,12 +44,11 @@ public class WorkspaceReader : IWorkspaceReader
             "=>SUBPARTS:TestCase",
             "=>SUBPARTS:ExecutionList",
             "=>SUBPARTS:Requirement"
-         }
+         },
      },
      cancellationToken);
 
-
-        var response = await _tcShellService.ExecuteScriptAsync(
+        var response = await this.tcShellService.ExecuteScriptAsync(
             script,
             request,
             cancellationToken);
@@ -55,29 +57,29 @@ public class WorkspaceReader : IWorkspaceReader
 
         var document = parser.Parse(response.Output);
 
-        await _exporter.ExportAsync(
+        await this.exporter.ExportAsync(
            document,
-            Path.Combine(
+           Path.Combine(
             Path.GetTempPath(),
             "ToscaWorkspaceGuardian"));
 
         var parsedWorkspace =
-        _mapper.Map(document);
+        this.mapper.Map(document);
 
         return new WorkspaceSummary
         {
             WorkspaceInfo = new WorkspaceInfo
             {
                 WorkspacePath = request.WorkspacePath,
-                IsManagedRepository = request.IsManagedRepository
+                IsManagedRepository = request.IsManagedRepository,
             },
 
             Metadata = new WorkspaceMetadata
             {
-                AnalysisTime = DateTime.Now
+                AnalysisTime = DateTime.Now,
             },
 
-            Statistics = new WorkspaceStatistics()
+            Statistics = new WorkspaceStatistics(),
         };
     }
 }

@@ -1,6 +1,10 @@
-﻿using System.Text;
+// <copyright file="CompareHtmlReportGenerator.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Compare;
+
+using System.Text;
 
 public class CompareHtmlReportGenerator
 {
@@ -35,7 +39,9 @@ public class CompareHtmlReportGenerator
         html.AppendLine("<h2>Added Objects</h2>");
 
         foreach (var item in result.AddedObjects)
+        {
             html.AppendLine($"<div>{item}</div>");
+        }
 
         html.AppendLine("</div>");
 
@@ -43,7 +49,9 @@ public class CompareHtmlReportGenerator
         html.AppendLine("<h2>Removed Objects</h2>");
 
         foreach (var item in result.RemovedObjects)
+        {
             html.AppendLine($"<div>{item}</div>");
+        }
 
         html.AppendLine("</div>");
 

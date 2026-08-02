@@ -1,8 +1,12 @@
-﻿using System.Net;
-using System.Text;
-using ToscaWorkspaceGuardian.Core.Business;
+// <copyright file="WorkspaceHtmlReportGenerator.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Reporting;
+
+using System.Net;
+using System.Text;
+using ToscaWorkspaceGuardian.Core.Business;
 
 public class WorkspaceHtmlReportGenerator
 {
@@ -41,14 +45,12 @@ public class WorkspaceHtmlReportGenerator
         //---------------------------------------
         // Header
         //---------------------------------------
-
         html.AppendLine("<h1>Workspace Guardian Report</h1>");
         html.AppendLine($"<div class='subtitle'>Generated : {statistics.GeneratedOn:dd-MMM-yyyy HH:mm:ss}</div>");
 
         //---------------------------------------
         // Dashboard Cards
         //---------------------------------------
-
         html.AppendLine("<div class='cards'>");
 
         AddCard("Objects", statistics.TotalObjects.ToString());
@@ -61,7 +63,6 @@ public class WorkspaceHtmlReportGenerator
         //---------------------------------------
         // Repository Statistics
         //---------------------------------------
-
         html.AppendLine("<div class='section'>");
         html.AppendLine("<h2>Repository Statistics</h2>");
 
@@ -82,7 +83,6 @@ public class WorkspaceHtmlReportGenerator
         //---------------------------------------
         // Rule Summary
         //---------------------------------------
-
         html.AppendLine("<div class='section'>");
         html.AppendLine("<h2>Rule Summary</h2>");
 
@@ -103,7 +103,6 @@ public class WorkspaceHtmlReportGenerator
         //---------------------------------------
         // Health Issues
         //---------------------------------------
-
         html.AppendLine("<div class='section'>");
         html.AppendLine("<h2>Health Issues</h2>");
 
@@ -124,7 +123,7 @@ public class WorkspaceHtmlReportGenerator
                 "High" => "#d32f2f",
                 "Medium" => "#f57c00",
                 "Low" => "#1976d2",
-                _ => "#555555"
+                _ => "#555555",
             };
 
             html.AppendLine("<tr>");
@@ -151,7 +150,6 @@ public class WorkspaceHtmlReportGenerator
         //---------------------------------------------------
         // Local helper methods
         //---------------------------------------------------
-
         void AddCard(string title, string value)
         {
             html.AppendLine("<div class='card'>");

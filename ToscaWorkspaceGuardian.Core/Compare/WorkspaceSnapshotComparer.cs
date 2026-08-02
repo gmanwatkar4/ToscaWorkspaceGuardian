@@ -1,6 +1,10 @@
-﻿using ToscaWorkspaceGuardian.Core.Business;
+// <copyright file="WorkspaceSnapshotComparer.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Compare;
+
+using ToscaWorkspaceGuardian.Core.Business;
 
 public class WorkspaceSnapshotComparer
 {
@@ -19,7 +23,6 @@ public class WorkspaceSnapshotComparer
         //------------------------------------
         // Added
         //------------------------------------
-
         foreach (var node in newObjects.Keys)
         {
             if (!oldObjects.ContainsKey(node))
@@ -31,7 +34,6 @@ public class WorkspaceSnapshotComparer
         //------------------------------------
         // Removed
         //------------------------------------
-
         foreach (var node in oldObjects.Keys)
         {
             if (!newObjects.ContainsKey(node))
@@ -43,11 +45,12 @@ public class WorkspaceSnapshotComparer
         //------------------------------------
         // Property Changes
         //------------------------------------
-
         foreach (var node in oldObjects.Keys)
         {
             if (!newObjects.ContainsKey(node))
+            {
                 continue;
+            }
 
             var oldObj = oldObjects[node];
             var newObj = newObjects[node];
@@ -57,10 +60,14 @@ public class WorkspaceSnapshotComparer
                 if (!newObj.Properties.TryGetValue(
                     property.Key,
                     out var newValue))
+                {
                     continue;
+                }
 
                 if (property.Value == newValue)
+                {
                     continue;
+                }
 
                 result.PropertyChanges.Add(
                     new PropertyChange
@@ -68,7 +75,7 @@ public class WorkspaceSnapshotComparer
                         NodePath = node,
                         Property = property.Key,
                         OldValue = property.Value,
-                        NewValue = newValue
+                        NewValue = newValue,
                     });
             }
         }

@@ -1,6 +1,10 @@
-﻿using ToscaWorkspaceGuardian.Core.Models;
+// <copyright file="ScriptTemplateRepository.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Script;
+
+using ToscaWorkspaceGuardian.Core.Models;
 
 public class ScriptTemplateRepository
 {
@@ -26,7 +30,7 @@ JumpToProject
 Exit
 """,
 
-            _ => throw new NotSupportedException()
+            _ => throw new NotSupportedException(),
         };
     }
 }

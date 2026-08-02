@@ -1,7 +1,11 @@
-﻿using ToscaWorkspaceGuardian.Core.Business;
-using ToscaWorkspaceGuardian.Core.Interfaces;
+// <copyright file="WorkspaceHealthAnalyzer.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Health;
+
+using ToscaWorkspaceGuardian.Core.Business;
+using ToscaWorkspaceGuardian.Core.Interfaces;
 
 public class WorkspaceHealthAnalyzer : IWorkspaceHealthAnalyzer
 {
@@ -10,13 +14,12 @@ public class WorkspaceHealthAnalyzer : IWorkspaceHealthAnalyzer
     {
         var report = new WorkspaceHealthReport
         {
-            HealthScore = 100
+            HealthScore = 100,
         };
 
         //--------------------------------------------------
         // WG001 - Missing References
         //--------------------------------------------------
-
         if (workspace.HasMissingReferences)
         {
             report.Findings.Add(new WorkspaceFinding
@@ -25,7 +28,7 @@ public class WorkspaceHealthAnalyzer : IWorkspaceHealthAnalyzer
                 Severity = FindingSeverity.Critical,
                 Title = "Missing References",
                 Description = "Workspace contains missing references.",
-                Recommendation = "Resolve all missing references before upgrading."
+                Recommendation = "Resolve all missing references before upgrading.",
             });
 
             report.HealthScore -= 40;
@@ -34,7 +37,6 @@ public class WorkspaceHealthAnalyzer : IWorkspaceHealthAnalyzer
         //--------------------------------------------------
         // WG002 - No Users
         //--------------------------------------------------
-
         if (workspace.Users.Count == 0)
         {
             report.Findings.Add(new WorkspaceFinding
@@ -43,7 +45,7 @@ public class WorkspaceHealthAnalyzer : IWorkspaceHealthAnalyzer
                 Severity = FindingSeverity.Warning,
                 Title = "No Users",
                 Description = "Workspace does not contain any users.",
-                Recommendation = "Verify repository permissions."
+                Recommendation = "Verify repository permissions.",
             });
 
             report.HealthScore -= 10;
@@ -52,7 +54,6 @@ public class WorkspaceHealthAnalyzer : IWorkspaceHealthAnalyzer
         //--------------------------------------------------
         // WG003 - No Groups
         //--------------------------------------------------
-
         if (workspace.Groups.Count == 0)
         {
             report.Findings.Add(new WorkspaceFinding
@@ -61,7 +62,7 @@ public class WorkspaceHealthAnalyzer : IWorkspaceHealthAnalyzer
                 Severity = FindingSeverity.Warning,
                 Title = "No Groups",
                 Description = "Workspace does not contain any groups.",
-                Recommendation = "Verify repository security configuration."
+                Recommendation = "Verify repository security configuration.",
             });
 
             report.HealthScore -= 10;
@@ -70,7 +71,6 @@ public class WorkspaceHealthAnalyzer : IWorkspaceHealthAnalyzer
         //--------------------------------------------------
         // WG004 - Empty Workspace
         //--------------------------------------------------
-
         if (workspace.RootFolders.Count == 0)
         {
             report.Findings.Add(new WorkspaceFinding
@@ -79,7 +79,7 @@ public class WorkspaceHealthAnalyzer : IWorkspaceHealthAnalyzer
                 Severity = FindingSeverity.Warning,
                 Title = "No Root Folders",
                 Description = "Workspace does not contain any root folders.",
-                Recommendation = "Verify repository integrity."
+                Recommendation = "Verify repository integrity.",
             });
 
             report.HealthScore -= 20;
@@ -88,7 +88,6 @@ public class WorkspaceHealthAnalyzer : IWorkspaceHealthAnalyzer
         //--------------------------------------------------
         // WG005 - Revision Check
         //--------------------------------------------------
-
         if (workspace.Revision <= 0)
         {
             report.Findings.Add(new WorkspaceFinding
@@ -97,7 +96,7 @@ public class WorkspaceHealthAnalyzer : IWorkspaceHealthAnalyzer
                 Severity = FindingSeverity.Information,
                 Title = "Revision Information",
                 Description = "Workspace revision is unavailable.",
-                Recommendation = "Verify repository metadata."
+                Recommendation = "Verify repository metadata.",
             });
 
             report.HealthScore -= 5;
@@ -106,12 +105,15 @@ public class WorkspaceHealthAnalyzer : IWorkspaceHealthAnalyzer
         //--------------------------------------------------
         // Normalize Score
         //--------------------------------------------------
-
         if (report.HealthScore < 0)
+        {
             report.HealthScore = 0;
+        }
 
         if (report.HealthScore > 100)
+        {
             report.HealthScore = 100;
+        }
 
         return report;
     }

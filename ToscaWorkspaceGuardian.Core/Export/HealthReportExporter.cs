@@ -1,8 +1,12 @@
-﻿using System.Text.Json;
-using ToscaWorkspaceGuardian.Core.Business;
-using ToscaWorkspaceGuardian.Core.Interfaces;
+// <copyright file="HealthReportExporter.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Export;
+
+using System.Text.Json;
+using ToscaWorkspaceGuardian.Core.Business;
+using ToscaWorkspaceGuardian.Core.Interfaces;
 
 public class HealthReportExporter : IHealthReportExporter
 {
@@ -15,7 +19,7 @@ public class HealthReportExporter : IHealthReportExporter
             issues,
             new JsonSerializerOptions
             {
-                WriteIndented = true
+                WriteIndented = true,
             });
 
         Directory.CreateDirectory(

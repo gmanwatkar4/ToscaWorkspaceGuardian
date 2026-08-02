@@ -1,22 +1,26 @@
-﻿using ToscaWorkspaceGuardian.Common.Interfaces;
-using ToscaWorkspaceGuardian.Core.Models;
+// <copyright file="TCShellExecutor.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.TCShell;
 
+using ToscaWorkspaceGuardian.Common.Interfaces;
+using ToscaWorkspaceGuardian.Core.Models;
+
 public class TCShellExecutor
 {
-    private readonly IToscaInstallationService _installationService;
-    private readonly IProcessRunner _processRunner;
-    private readonly OutputWriter _outputWriter;
+    private readonly IToscaInstallationService installationService;
+    private readonly IProcessRunner processRunner;
+    private readonly OutputWriter outputWriter;
 
     public TCShellExecutor(
         IToscaInstallationService installationService,
         IProcessRunner processRunner,
         OutputWriter outputWriter)
     {
-        _installationService = installationService;
-        _processRunner = processRunner;
-        _outputWriter = outputWriter;
+        this.installationService = installationService;
+        this.processRunner = processRunner;
+        this.outputWriter = outputWriter;
     }
 
     public async Task<ExecutionResult> ExecuteAsync(
@@ -24,7 +28,7 @@ public class TCShellExecutor
         WorkspaceRequest request,
         CancellationToken cancellationToken = default)
     {
-        var installation = _installationService.GetInstallation();
+        var installation = this.installationService.GetInstallation();
 
         if (!installation.IsInstalled)
         {
@@ -32,7 +36,7 @@ public class TCShellExecutor
             {
                 Success = false,
                 ExitCode = -1,
-                StandardError = "TCShell installation not found."
+                StandardError = "TCShell installation not found.",
             };
         }
 
@@ -63,12 +67,12 @@ public class TCShellExecutor
             debugFile,
             installation.TCShellPath + Environment.NewLine + arguments);
 
-        var result = await _processRunner.ExecuteAsync(
+        var result = await this.processRunner.ExecuteAsync(
             installation.TCShellPath,
             arguments,
             cancellationToken: cancellationToken);
 
-        await _outputWriter.WriteAsync(
+        await this.outputWriter.WriteAsync(
             outputFile,
             errorFile,
             result.StandardOutput,
@@ -82,7 +86,7 @@ public class TCShellExecutor
             OutputFile = outputFile,
             ErrorFile = errorFile,
             StandardOutput = result.StandardOutput,
-            StandardError = result.StandardError
+            StandardError = result.StandardError,
         };
     }
 }

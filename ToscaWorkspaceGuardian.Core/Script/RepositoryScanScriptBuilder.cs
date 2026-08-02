@@ -1,6 +1,10 @@
-﻿using System.Text;
+// <copyright file="RepositoryScanScriptBuilder.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Script;
+
+using System.Text;
 
 public class RepositoryScanScriptBuilder
 {

@@ -1,4 +1,8 @@
-﻿namespace ToscaWorkspaceGuardian.Core.Health;
+// <copyright file="WorkspaceFinding.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+namespace ToscaWorkspaceGuardian.Core.Health;
 
 public class WorkspaceFinding
 {

@@ -1,8 +1,12 @@
-﻿using System.Text.Json;
-using ToscaWorkspaceGuardian.Core.Business;
-using ToscaWorkspaceGuardian.Core.Interfaces;
+// <copyright file="WorkspaceSnapshotExporter.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Export;
+
+using System.Text.Json;
+using ToscaWorkspaceGuardian.Core.Business;
+using ToscaWorkspaceGuardian.Core.Interfaces;
 
 public class WorkspaceSnapshotExporter : IWorkspaceSnapshotExporter
 {
@@ -13,7 +17,7 @@ public class WorkspaceSnapshotExporter : IWorkspaceSnapshotExporter
     {
         var options = new JsonSerializerOptions
         {
-            WriteIndented = true
+            WriteIndented = true,
         };
 
         var json = JsonSerializer.Serialize(snapshot, options);

@@ -1,7 +1,11 @@
-﻿namespace ToscaWorkspaceGuardian.Common.Interfaces;
+// <copyright file="IProcessRunner.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
-using ToscaWorkspaceGuardian.Common.Models;
+namespace ToscaWorkspaceGuardian.Common.Interfaces;
+
 using System.Threading;
+using ToscaWorkspaceGuardian.Common.Models;
 
 public interface IProcessRunner
 {

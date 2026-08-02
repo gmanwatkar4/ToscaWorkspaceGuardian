@@ -1,6 +1,10 @@
-﻿using System.Text.Json.Serialization;
+// <copyright file="OpenRouterResponse.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.AI;
+
+using System.Text.Json.Serialization;
 
 public class OpenRouterResponse
 {

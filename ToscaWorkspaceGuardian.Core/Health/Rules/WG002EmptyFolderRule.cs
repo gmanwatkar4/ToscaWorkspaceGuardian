@@ -1,6 +1,10 @@
-﻿using ToscaWorkspaceGuardian.Core.Business;
+// <copyright file="WG002EmptyFolderRule.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Health.Rules;
+
+using ToscaWorkspaceGuardian.Core.Business;
 
 public class WG002EmptyFolderRule : IHealthRule
 {
@@ -14,14 +18,20 @@ public class WG002EmptyFolderRule : IHealthRule
         foreach (var obj in snapshot.Objects)
         {
             if (obj.ObjectType != "TCFolder")
+            {
                 continue;
+            }
 
             if (string.IsNullOrWhiteSpace(obj.ParentPath))
+            {
                 continue;
+            }
 
             // Ignore repository root folders
             if (obj.ParentPath == "/")
+            {
                 continue;
+            }
 
             // Ignore Tosca system folders
             if (obj.NodePath.StartsWith("/Execution/ExecutionLists", StringComparison.OrdinalIgnoreCase) ||
@@ -34,19 +44,23 @@ public class WG002EmptyFolderRule : IHealthRule
             }
 
             if (!obj.Collections.TryGetValue("Items", out var items))
+            {
                 continue;
+            }
 
             if (items.Count != 0)
+            {
                 continue;
+            }
 
             yield return new HealthIssue
             {
-                RuleId = RuleId,
-                Title = Title,
+                RuleId = this.RuleId,
+                Title = this.Title,
                 Severity = "Low",
                 ObjectName = obj.Name,
                 NodePath = obj.NodePath,
-                Description = "Folder contains no child objects."
+                Description = "Folder contains no child objects.",
             };
         }
     }

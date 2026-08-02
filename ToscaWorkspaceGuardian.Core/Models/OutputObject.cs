@@ -1,12 +1,16 @@
-﻿namespace ToscaWorkspaceGuardian.Core.Models;
+// <copyright file="OutputObject.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+namespace ToscaWorkspaceGuardian.Core.Models;
 
 public class OutputObject
 {
     public bool IsContainer =>
-    ObjectType == "TCProject" ||
-    ObjectType == "TCFolder" ||
-    ObjectType == "OwnedFolder" ||
-    ObjectType == "ExecutionEntryFolder";
+    this.ObjectType == "TCProject" ||
+    this.ObjectType == "TCFolder" ||
+    this.ObjectType == "OwnedFolder" ||
+    this.ObjectType == "ExecutionEntryFolder";
 
     public string ObjectType { get; set; } = string.Empty;
 
@@ -21,24 +25,25 @@ public class OutputObject
     //--------------------------------------------------------
     // Helper Methods
     //--------------------------------------------------------
-
     public string? GetProperty(string propertyName)
     {
-        return Properties
+        return this.Properties
             .FirstOrDefault(x => x.Name == propertyName)
             ?.Value;
     }
 
     public IReadOnlyList<string> GetCollection(string collectionName)
     {
-        if (Collections.TryGetValue(collectionName, out var values))
+        if (this.Collections.TryGetValue(collectionName, out var values))
+        {
             return values;
+        }
 
         return Array.Empty<string>();
     }
 
     public bool HasCollection(string collectionName)
     {
-        return Collections.ContainsKey(collectionName);
+        return this.Collections.ContainsKey(collectionName);
     }
 }

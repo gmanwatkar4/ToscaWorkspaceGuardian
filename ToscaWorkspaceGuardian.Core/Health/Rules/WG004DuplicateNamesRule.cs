@@ -1,6 +1,10 @@
-﻿using ToscaWorkspaceGuardian.Core.Business;
+// <copyright file="WG004DuplicateNamesRule.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Health.Rules;
+
+using ToscaWorkspaceGuardian.Core.Business;
 
 public class WG004DuplicateNamesRule : IHealthRule
 {
@@ -16,7 +20,7 @@ public class WG004DuplicateNamesRule : IHealthRule
             {
                 x.ParentPath,
                 x.Name,
-                x.ObjectType
+                x.ObjectType,
             })
             .Where(g => g.Count() > 1);
 
@@ -26,13 +30,13 @@ public class WG004DuplicateNamesRule : IHealthRule
             {
                 yield return new HealthIssue
                 {
-                    RuleId = RuleId,
-                    Title = Title,
+                    RuleId = this.RuleId,
+                    Title = this.Title,
                     Severity = "Medium",
                     ObjectName = obj.Name,
                     NodePath = obj.NodePath,
                     Description =
-                        $"Duplicate sibling object ({group.Count()} occurrences)."
+                        $"Duplicate sibling object ({group.Count()} occurrences).",
                 };
             }
         }

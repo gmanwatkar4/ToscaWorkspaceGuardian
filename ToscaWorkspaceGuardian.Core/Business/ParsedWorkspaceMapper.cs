@@ -1,7 +1,11 @@
-﻿using ToscaWorkspaceGuardian.Core.Interfaces;
-using ToscaWorkspaceGuardian.Core.Models;
+// <copyright file="ParsedWorkspaceMapper.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Business;
+
+using ToscaWorkspaceGuardian.Core.Interfaces;
+using ToscaWorkspaceGuardian.Core.Models;
 
 public class ParsedWorkspaceMapper : IParsedWorkspaceMapper
 {
@@ -10,7 +14,9 @@ public class ParsedWorkspaceMapper : IParsedWorkspaceMapper
         var workspace = new ParsedWorkspace();
 
         if (document.Objects.Count == 0)
+        {
             return workspace;
+        }
 
         var project = document.Objects[0];
 
@@ -35,22 +41,34 @@ public class ParsedWorkspaceMapper : IParsedWorkspaceMapper
 
                 case "CreatedAt":
                     if (DateTime.TryParse(property.Value, out var created))
+                    {
                         workspace.CreatedAt = created;
+                    }
+
                     break;
 
                 case "ModifiedAt":
                     if (DateTime.TryParse(property.Value, out var modified))
+                    {
                         workspace.ModifiedAt = modified;
+                    }
+
                     break;
 
                 case "Revision":
                     if (int.TryParse(property.Value, out var revision))
+                    {
                         workspace.Revision = revision;
+                    }
+
                     break;
 
                 case "HasMissingReferences":
                     if (bool.TryParse(property.Value, out var missing))
+                    {
                         workspace.HasMissingReferences = missing;
+                    }
+
                     break;
 
                 case "SynchronizationPolicy":
@@ -66,7 +84,7 @@ public class ParsedWorkspaceMapper : IParsedWorkspaceMapper
                 workspace.RootFolders.Add(
                     new WorkspaceFolder
                     {
-                        Name = folder
+                        Name = folder,
                     });
             }
         }
@@ -78,7 +96,7 @@ public class ParsedWorkspaceMapper : IParsedWorkspaceMapper
                 workspace.Users.Add(
                     new WorkspaceUser
                     {
-                        Name = user
+                        Name = user,
                     });
             }
         }
@@ -90,7 +108,7 @@ public class ParsedWorkspaceMapper : IParsedWorkspaceMapper
                 workspace.Groups.Add(
                     new WorkspaceGroup
                     {
-                        Name = group
+                        Name = group,
                     });
             }
         }

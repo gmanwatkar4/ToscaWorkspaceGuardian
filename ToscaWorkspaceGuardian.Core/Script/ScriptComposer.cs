@@ -1,25 +1,31 @@
-﻿using System.Text;
-using ToscaWorkspaceGuardian.Core.Models;
+// <copyright file="ScriptComposer.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Script;
 
+using System.Text;
+using ToscaWorkspaceGuardian.Core.Models;
+
 public class ScriptComposer
 {
-    private readonly ScriptTemplateRepository _repository;
+    private readonly ScriptTemplateRepository repository;
 
     public ScriptComposer(
         ScriptTemplateRepository repository)
     {
-        _repository = repository;
+        this.repository = repository;
     }
 
     public string Compose(ScriptRequest request)
     {
         string template =
-            _repository.GetTemplate(request.ScriptType);
+            this.repository.GetTemplate(request.ScriptType);
 
         if (request.ScriptType == ScriptType.WorkspaceAnalysis)
+        {
             return template;
+        }
 
         var builder = new StringBuilder();
 

@@ -1,34 +1,38 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System.Configuration;
-using System.Net.Http;
-using System.Windows;
-using ToscaWorkspaceGuardian.Common.Interfaces;
-using ToscaWorkspaceGuardian.Common.Services;
-using ToscaWorkspaceGuardian.Common.Utilities;
-using ToscaWorkspaceGuardian.Core.AI;
-using ToscaWorkspaceGuardian.Core.Business;
-using ToscaWorkspaceGuardian.Core.Compare;
-using ToscaWorkspaceGuardian.Core.Configuration;
-using ToscaWorkspaceGuardian.Core.Export;
-using ToscaWorkspaceGuardian.Core.Health;
-using ToscaWorkspaceGuardian.Core.Health.Rules;
-using ToscaWorkspaceGuardian.Core.Interfaces;
-using ToscaWorkspaceGuardian.Core.Reporting;
-using ToscaWorkspaceGuardian.Core.Rules;
-using ToscaWorkspaceGuardian.Core.Script;
-using ToscaWorkspaceGuardian.Core.Services;
-using ToscaWorkspaceGuardian.Core.TCShell;
-using ToscaWorkspaceGuardian.Core.Traversal;
-using ToscaWorkspaceGuardian.Core.Upgrade;
-using ToscaWorkspaceGuardian.Core.Workspace;
-using ToscaWorkspaceGuardian.UI.ViewModels;
-using ToscaWorkspaceGuardian.UI.Views;
+// <copyright file="App.xaml.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.UI
 {
+    using System.Configuration;
+    using System.Net.Http;
+    using System.Windows;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+    using Microsoft.Extensions.Logging;
+    using ToscaWorkspaceGuardian.Common.Interfaces;
+    using ToscaWorkspaceGuardian.Common.Services;
+    using ToscaWorkspaceGuardian.Common.Utilities;
+    using ToscaWorkspaceGuardian.Core.AI;
+    using ToscaWorkspaceGuardian.Core.Business;
+    using ToscaWorkspaceGuardian.Core.Compare;
+    using ToscaWorkspaceGuardian.Core.Configuration;
+    using ToscaWorkspaceGuardian.Core.Export;
+    using ToscaWorkspaceGuardian.Core.Health;
+    using ToscaWorkspaceGuardian.Core.Health.Rules;
+    using ToscaWorkspaceGuardian.Core.Interfaces;
+    using ToscaWorkspaceGuardian.Core.Reporting;
+    using ToscaWorkspaceGuardian.Core.Rules;
+    using ToscaWorkspaceGuardian.Core.Script;
+    using ToscaWorkspaceGuardian.Core.Services;
+    using ToscaWorkspaceGuardian.Core.TCShell;
+    using ToscaWorkspaceGuardian.Core.Traversal;
+    using ToscaWorkspaceGuardian.Core.Upgrade;
+    using ToscaWorkspaceGuardian.Core.Workspace;
+    using ToscaWorkspaceGuardian.UI.ViewModels;
+    using ToscaWorkspaceGuardian.UI.Views;
+
     public partial class App : Application
     {
         public static IHost? Host { get; private set; }
@@ -53,8 +57,8 @@ namespace ToscaWorkspaceGuardian.UI
 
         var openRouterSettings = new OpenRouterSettings
         {
-            ApiKey = configuration["OpenRouter:ApiKey"] ?? "",
-            Model = configuration["OpenRouter:Model"] ?? "google/gemini-2.5-flash"
+            ApiKey = configuration["OpenRouter:ApiKey"] ?? string.Empty,
+            Model = configuration["OpenRouter:Model"] ?? "google/gemini-2.5-flash",
         };
 
         services.AddSingleton(openRouterSettings);
@@ -97,7 +101,6 @@ namespace ToscaWorkspaceGuardian.UI
             // Views
             services.AddSingleton<MainWindow>();
 
-          
             services.AddSingleton<IWorkspaceAnalyzer, WorkspaceAnalyzer>();
             services.AddSingleton<IWorkspaceReader, WorkspaceReader>();
             services.AddSingleton<IProcessRunner, ProcessRunner>();
@@ -112,7 +115,7 @@ namespace ToscaWorkspaceGuardian.UI
             services.AddSingleton<OutputWriter>();
             services.AddSingleton<OutputDocumentExporter>();
             services.AddSingleton<IParsedWorkspaceMapper, ParsedWorkspaceMapper>();
-            services.AddSingleton<IWorkspaceHealthAnalyzer,WorkspaceHealthAnalyzer>();
+            services.AddSingleton<IWorkspaceHealthAnalyzer, WorkspaceHealthAnalyzer>();
             services.AddSingleton<IWorkspaceRule, WG001_MissingReferencesRule>();
             services.AddSingleton<IWorkspaceRule, WG002_NoUsersRule>();
             services.AddSingleton<IWorkspaceRule, WG003_NoGroupsRule>();
@@ -151,11 +154,6 @@ namespace ToscaWorkspaceGuardian.UI
 
                 return new OpenRouterProvider(settings);
             });
-
-
-
-
-
         }
     }
 }

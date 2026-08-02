@@ -1,17 +1,21 @@
-﻿using System.Text.Json;
-using ToscaWorkspaceGuardian.Core.Business;
-using ToscaWorkspaceGuardian.Core.Compare;
+// <copyright file="WorkspaceCompareService.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Services;
 
+using System.Text.Json;
+using ToscaWorkspaceGuardian.Core.Business;
+using ToscaWorkspaceGuardian.Core.Compare;
+
 public class WorkspaceCompareService : IWorkspaceCompareService
 {
-    private readonly WorkspaceSnapshotComparer _comparer;
+    private readonly WorkspaceSnapshotComparer comparer;
 
     public WorkspaceCompareService(
         WorkspaceSnapshotComparer comparer)
     {
-        _comparer = comparer;
+        this.comparer = comparer;
     }
 
     public async Task<CompareResult> CompareAsync(
@@ -29,7 +33,7 @@ public class WorkspaceCompareService : IWorkspaceCompareService
 
         var options = new JsonSerializerOptions
         {
-            PropertyNameCaseInsensitive = true
+            PropertyNameCaseInsensitive = true,
         };
 
         var oldSnapshot =
@@ -44,7 +48,7 @@ public class WorkspaceCompareService : IWorkspaceCompareService
                 options)
             ?? new WorkspaceSnapshot();
 
-        return _comparer.Compare(
+        return this.comparer.Compare(
             oldSnapshot,
             newSnapshot);
     }

@@ -1,8 +1,12 @@
-﻿using System.Xml.Linq;
-using ToscaWorkspaceGuardian.Core.Interfaces;
-using ToscaWorkspaceGuardian.Core.Models;
+// <copyright file="WorkspaceDetector.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Workspace;
+
+using System.Xml.Linq;
+using ToscaWorkspaceGuardian.Core.Interfaces;
+using ToscaWorkspaceGuardian.Core.Models;
 
 public class WorkspaceDetector : IWorkspaceDetector
 {
@@ -13,7 +17,9 @@ public class WorkspaceDetector : IWorkspaceDetector
         info.WorkspacePath = workspacePath;
 
         if (!File.Exists(workspacePath))
+        {
             return info;
+        }
 
         var document = XDocument.Load(workspacePath);
 
@@ -21,10 +27,12 @@ public class WorkspaceDetector : IWorkspaceDetector
             document.Root?.Element("CommonRepository");
 
         if (commonRepository == null)
+        {
             return info;
+        }
 
         string repoClass =
-            commonRepository.Element("RepoClass")?.Value ?? "";
+            commonRepository.Element("RepoClass")?.Value ?? string.Empty;
 
         info.RepositoryType = repoClass;
 

@@ -1,3 +1,9 @@
+// <copyright file="ProcessRunner.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+namespace ToscaWorkspaceGuardian.Common.Utilities;
+
 using System.Diagnostics;
 using System.Text;
 using System.Threading;
@@ -5,16 +11,15 @@ using Microsoft.Extensions.Logging;
 using ToscaWorkspaceGuardian.Common.Interfaces;
 using ToscaWorkspaceGuardian.Common.Models;
 
-namespace ToscaWorkspaceGuardian.Common.Utilities;
-
 public class ProcessRunner : IProcessRunner
 {
-    private readonly Microsoft.Extensions.Logging.ILogger<ProcessRunner>? _logger;
+    private readonly Microsoft.Extensions.Logging.ILogger<ProcessRunner>? logger;
 
     public ProcessRunner(Microsoft.Extensions.Logging.ILogger<ProcessRunner>? logger = null)
     {
-        _logger = logger;
+        this.logger = logger;
     }
+
     public async Task<ProcessResult> ExecuteAsync(
         string fileName,
         string arguments,
@@ -30,7 +35,7 @@ public class ProcessRunner : IProcessRunner
             RedirectStandardError = true,
             RedirectStandardInput = true,
 
-            CreateNoWindow = true
+            CreateNoWindow = true,
         };
 
         using var process = new Process();
@@ -43,7 +48,7 @@ public class ProcessRunner : IProcessRunner
             attempt++;
             try
             {
-                _logger?.LogDebug("Starting process {FileName} {Arguments} (attempt {Attempt})", fileName, arguments, attempt);
+                this.logger?.LogDebug("Starting process {FileName} {Arguments} (attempt {Attempt})", fileName, arguments, attempt);
                 process.Start();
 
                 // Read both streams concurrently to avoid deadlocks
@@ -61,7 +66,7 @@ public class ProcessRunner : IProcessRunner
                     }
                     catch (Exception ex)
                     {
-                        _logger?.LogWarning(ex, "Failed to kill process on cancellation");
+                        this.logger?.LogWarning(ex, "Failed to kill process on cancellation");
                     }
                 });
 
@@ -70,13 +75,13 @@ public class ProcessRunner : IProcessRunner
                 string output = await outputTask;
                 string error = await errorTask;
 
-                _logger?.LogDebug("Process exited with code {ExitCode}", process.ExitCode);
+                this.logger?.LogDebug("Process exited with code {ExitCode}", process.ExitCode);
 
                 return new ProcessResult
                 {
                     ExitCode = process.ExitCode,
                     StandardOutput = output,
-                    StandardError = error
+                    StandardError = error,
                 };
             }
             catch (OperationCanceledException)
@@ -90,26 +95,28 @@ public class ProcessRunner : IProcessRunner
                 }
                 catch (Exception ex)
                 {
-                    _logger?.LogWarning(ex, "Failed to kill process after cancellation");
+                    this.logger?.LogWarning(ex, "Failed to kill process after cancellation");
                 }
 
                 return new ProcessResult
                 {
                     ExitCode = -1,
                     StandardOutput = string.Empty,
-                    StandardError = "Process execution canceled"
+                    StandardError = "Process execution canceled",
                 };
             }
             catch (Exception ex) when (attempt < maxAttempts)
             {
-                _logger?.LogWarning(ex, "Process execution failed on attempt {Attempt}, retrying...", attempt);
+                this.logger?.LogWarning(ex, "Process execution failed on attempt {Attempt}, retrying...", attempt);
+
                 // small backoff
                 await Task.Delay(TimeSpan.FromMilliseconds(200 * attempt), CancellationToken.None);
+
                 // retry loop
             }
             catch (Exception ex)
             {
-                _logger?.LogError(ex, "Process execution failed");
+                this.logger?.LogError(ex, "Process execution failed");
                 throw;
             }
         }
@@ -122,7 +129,7 @@ public class ProcessRunner : IProcessRunner
         TimeSpan timeout)
     {
         using var cts = new CancellationTokenSource(timeout);
-        return ExecuteAsync(fileName, arguments, cts.Token);
+        return this.ExecuteAsync(fileName, arguments, cts.Token);
     }
 
     // Synchronous wrapper for callers that need a blocking call
@@ -133,9 +140,9 @@ public class ProcessRunner : IProcessRunner
     {
         if (timeout.HasValue)
         {
-            return ExecuteWithTimeoutAsync(fileName, arguments, timeout.Value).GetAwaiter().GetResult();
+            return this.ExecuteWithTimeoutAsync(fileName, arguments, timeout.Value).GetAwaiter().GetResult();
         }
 
-        return ExecuteAsync(fileName, arguments, CancellationToken.None).GetAwaiter().GetResult();
+        return this.ExecuteAsync(fileName, arguments, CancellationToken.None).GetAwaiter().GetResult();
     }
 }

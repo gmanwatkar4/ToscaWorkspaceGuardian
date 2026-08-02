@@ -1,6 +1,10 @@
-﻿using System.Text.Json;
+// <copyright file="ConfigurationLoader.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Configuration;
+
+using System.Text.Json;
 
 public class ConfigurationLoader
 {
@@ -19,7 +23,7 @@ public class ConfigurationLoader
                     config,
                     new JsonSerializerOptions
                     {
-                        WriteIndented = true
+                        WriteIndented = true,
                     }));
 
             return config;

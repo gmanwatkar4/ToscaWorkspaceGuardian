@@ -1,7 +1,11 @@
-﻿using System.Text.RegularExpressions;
-using ToscaWorkspaceGuardian.Core.Models;
+// <copyright file="OutputParser.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.TCShell;
+
+using System.Text.RegularExpressions;
+using ToscaWorkspaceGuardian.Core.Models;
 
 public class OutputParser
 {
@@ -10,7 +14,9 @@ public class OutputParser
         var document = new OutputDocument();
 
         if (string.IsNullOrWhiteSpace(output))
+        {
             return document;
+        }
 
         var lines = output.Split(
             Environment.NewLine,
@@ -25,7 +31,6 @@ public class OutputParser
             //----------------------------------------
             // Object
             //----------------------------------------
-
             if (line.StartsWith("'") && line.Contains('['))
             {
                 var match = Regex.Match(
@@ -38,7 +43,7 @@ public class OutputParser
                     {
                         Name = match.Groups[1].Value,
                         ObjectType = match.Groups[2].Value,
-                        RawText = line
+                        RawText = line,
                     };
 
                     document.Objects.Add(currentObject);
@@ -48,7 +53,9 @@ public class OutputParser
             }
 
             if (currentObject == null)
+            {
                 continue;
+            }
 
             //----------------------------------------
             // Collection Start
@@ -56,7 +63,6 @@ public class OutputParser
             //----------------------------------------
             // Single-line Collection
             //----------------------------------------
-
             if (line.Contains(" : {"))
             {
                 int colon = line.IndexOf(':');
@@ -64,7 +70,9 @@ public class OutputParser
                 string collectionName = line[..colon];
 
                 if (collectionName.Contains('['))
+                {
                     collectionName = collectionName[..collectionName.IndexOf('[')];
+                }
 
                 collectionName = collectionName.Trim();
 
@@ -89,7 +97,6 @@ public class OutputParser
             //----------------------------------------
             // Property
             //----------------------------------------
-
             if (line.Contains('='))
             {
                 bool readOnly = line.StartsWith("(R)");
@@ -97,19 +104,23 @@ public class OutputParser
                 string property = line;
 
                 if (readOnly)
+                {
                     property = property.Substring(3);
+                }
 
                 int index = property.IndexOf('=');
 
                 if (index < 0)
+                {
                     continue;
+                }
 
                 currentObject.Properties.Add(
                     new OutputProperty
                     {
                         Name = property[..index].Trim(),
                         Value = property[(index + 1)..].Trim('\''),
-                        IsReadOnly = readOnly
+                        IsReadOnly = readOnly,
                     });
 
                 continue;

@@ -1,7 +1,11 @@
-﻿using ToscaWorkspaceGuardian.Core.Business;
-using ToscaWorkspaceGuardian.Core.Health;
+// <copyright file="WG002_NoUsersRule.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Rules;
+
+using ToscaWorkspaceGuardian.Core.Business;
+using ToscaWorkspaceGuardian.Core.Health;
 
 public class WG002_NoUsersRule : WorkspaceRuleBase
 {
@@ -12,9 +16,11 @@ public class WG002_NoUsersRule : WorkspaceRuleBase
         WorkspaceHealthReport report)
     {
         if (workspace.Users.Count > 0)
+        {
             return;
+        }
 
-        AddFinding(
+        this.AddFinding(
             report,
             FindingSeverity.Warning,
             "No Users",

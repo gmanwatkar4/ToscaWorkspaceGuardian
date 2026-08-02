@@ -1,25 +1,29 @@
-using System.Threading.Tasks;
-using ToscaWorkspaceGuardian.Common.Interfaces;
-using ToscaWorkspaceGuardian.Common.Models;
-using ToscaWorkspaceGuardian.Common.Utilities;
-using ToscaWorkspaceGuardian.Core.TCShell;
-using ToscaWorkspaceGuardian.Core.Models;
-using Xunit;
+// <copyright file="TcshellExecutorTests.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Tests
 {
+    using System.Threading.Tasks;
+    using ToscaWorkspaceGuardian.Common.Interfaces;
+    using ToscaWorkspaceGuardian.Common.Models;
+    using ToscaWorkspaceGuardian.Common.Utilities;
+    using ToscaWorkspaceGuardian.Core.Models;
+    using ToscaWorkspaceGuardian.Core.TCShell;
+    using Xunit;
+
     public class TcshellExecutorTests
     {
         private class FakeInstallationService : IToscaInstallationService
         {
-            private readonly ToscaInstallation _installation;
+            private readonly ToscaInstallation installation;
 
             public FakeInstallationService(ToscaInstallation installation)
             {
-                _installation = installation;
+                this.installation = installation;
             }
 
-            public ToscaInstallation GetInstallation() => _installation;
+            public ToscaInstallation GetInstallation() => this.installation;
         }
 
         private class DummyProcessRunner : IProcessRunner
@@ -30,7 +34,7 @@ namespace ToscaWorkspaceGuardian.Tests
                 {
                     ExitCode = 0,
                     StandardOutput = string.Empty,
-                    StandardError = string.Empty
+                    StandardError = string.Empty,
                 });
             }
         }

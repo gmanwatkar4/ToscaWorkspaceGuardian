@@ -1,18 +1,21 @@
-﻿using System.Text;
-using System.Text.Json;
-
+// <copyright file="OpenRouterProvider.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.AI;
 
+using System.Text;
+using System.Text.Json;
+
 public class OpenRouterProvider : IAIProvider
 {
-    private readonly HttpClient _httpClient;
-    private readonly OpenRouterSettings _settings;
+    private readonly HttpClient httpClient;
+    private readonly OpenRouterSettings settings;
 
     public OpenRouterProvider(OpenRouterSettings settings)
     {
-        _httpClient = new HttpClient();
-        _settings = settings;
+        this.httpClient = new HttpClient();
+        this.settings = settings;
     }
 
     public async Task<AIResponse> GenerateAsync(
@@ -21,7 +24,7 @@ public class OpenRouterProvider : IAIProvider
     {
         var body = new OpenRouterRequest
         {
-            Model = _settings.Model,
+            Model = this.settings.Model,
             MaxTokens = 1000,
             Temperature = 0.2,
             Messages =
@@ -31,7 +34,7 @@ public class OpenRouterProvider : IAIProvider
             Role = "user",
             Content = request.Prompt
         }
-    }
+    },
         };
 
         string json = JsonSerializer.Serialize(body);
@@ -43,7 +46,7 @@ public class OpenRouterProvider : IAIProvider
         message.Headers.Authorization =
             new System.Net.Http.Headers.AuthenticationHeaderValue(
                 "Bearer",
-                _settings.ApiKey);
+                this.settings.ApiKey);
 
         message.Headers.Add("HTTP-Referer", "https://workspaceguardian.local");
         message.Headers.Add("X-Title", "Workspace Guardian");
@@ -53,7 +56,7 @@ public class OpenRouterProvider : IAIProvider
             Encoding.UTF8,
             "application/json");
 
-        var response = await _httpClient.SendAsync(
+        var response = await this.httpClient.SendAsync(
             message,
             cancellationToken);
 
@@ -74,7 +77,7 @@ public class OpenRouterProvider : IAIProvider
                 result?.Choices?
                     .FirstOrDefault()?
                     .Message?
-                    .Content ?? ""
+                    .Content ?? string.Empty,
         };
     }
 }

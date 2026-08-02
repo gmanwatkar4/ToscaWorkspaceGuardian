@@ -1,8 +1,12 @@
-﻿using System.IO;
-using ToscaWorkspaceGuardian.Common.Interfaces;
-using ToscaWorkspaceGuardian.Common.Models;
+// <copyright file="ToscaInstallationService.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Common.Services;
+
+using System.IO;
+using ToscaWorkspaceGuardian.Common.Interfaces;
+using ToscaWorkspaceGuardian.Common.Models;
 
 public class ToscaInstallationService : IToscaInstallationService
 {
@@ -13,13 +17,15 @@ public class ToscaInstallationService : IToscaInstallationService
         string[] possiblePaths =
         {
             @"C:\Program Files\TRICENTIS\Tosca Testsuite",
-            @"C:\Program Files (x86)\TRICENTIS\Tosca Testsuite"
+            @"C:\Program Files (x86)\TRICENTIS\Tosca Testsuite",
         };
 
         foreach (var path in possiblePaths)
         {
             if (!Directory.Exists(path))
+            {
                 continue;
+            }
 
             installation.InstallationPath = path;
 
@@ -36,7 +42,9 @@ public class ToscaInstallationService : IToscaInstallationService
                 File.Exists(installation.TCShellPath);
 
             if (installation.IsInstalled)
+            {
                 return installation;
+            }
         }
 
         return installation;

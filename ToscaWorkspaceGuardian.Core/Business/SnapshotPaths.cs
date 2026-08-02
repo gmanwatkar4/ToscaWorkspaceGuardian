@@ -1,4 +1,8 @@
-﻿namespace ToscaWorkspaceGuardian.Core.Business;
+// <copyright file="SnapshotPaths.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+namespace ToscaWorkspaceGuardian.Core.Business;
 
 public static class SnapshotPaths
 {
