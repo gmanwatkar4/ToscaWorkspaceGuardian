@@ -14,23 +14,29 @@ using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 
+using Microsoft.Extensions.Options;
+using System.Linq;
+
 public class WorkspaceCrawler : IWorkspaceCrawler
 {
     private readonly BatchScriptBuilder scriptBuilder;
     private readonly ITCShellService tcShellService;
     private readonly OutputParser parser;
     private readonly ISnapshotBuilder snapshotBuilder;
-    private readonly int maxDegreeOfParallelism = 4;
+    private readonly int maxDegreeOfParallelism;
     private readonly object snapshotLock = new();
     private readonly ToscaWorkspaceGuardian.Core.Diagnostics.TelemetryCollector? telemetry;
     private readonly Microsoft.Extensions.Logging.ILogger<WorkspaceCrawler>? logger;
     private readonly string cacheDirectory;
+
+    private readonly int _batchSize;
 
     public WorkspaceCrawler(
         BatchScriptBuilder scriptBuilder,
         ITCShellService tcShellService,
         OutputParser parser,
         ISnapshotBuilder snapshotBuilder,
+        IOptions<ToscaWorkspaceGuardian.Core.Configuration.CrawlerOptions>? options = null,
         ToscaWorkspaceGuardian.Core.Diagnostics.TelemetryCollector? telemetry = null,
         Microsoft.Extensions.Logging.ILogger<WorkspaceCrawler>? logger = null)
     {
@@ -40,6 +46,9 @@ public class WorkspaceCrawler : IWorkspaceCrawler
         this.snapshotBuilder = snapshotBuilder;
         this.telemetry = telemetry;
         this.logger = logger;
+        var opts = options?.Value ?? new ToscaWorkspaceGuardian.Core.Configuration.CrawlerOptions();
+        this.maxDegreeOfParallelism = Math.Max(1, opts.MaxDegreeOfParallelism);
+        this._batchSize = Math.Max(1, opts.BatchSize);
         this.cacheDirectory = Path.Combine(Path.GetTempPath(), "ToscaWorkspaceGuardian", "Cache");
         Directory.CreateDirectory(this.cacheDirectory);
     }
@@ -63,7 +72,7 @@ public class WorkspaceCrawler : IWorkspaceCrawler
 
         var snapshot = new WorkspaceSnapshot();
 
-        const int BatchSize = 50;
+        // batch size now configurable via CrawlerOptions
 
         //------------------------------------------
         // Crawl Until Queue Empty (bounded concurrency)
@@ -82,7 +91,7 @@ public class WorkspaceCrawler : IWorkspaceCrawler
                 List<string> paths = new List<string>();
                 lock (queueLock)
                 {
-                    while (queue.Count > 0 && paths.Count < BatchSize)
+                    while (queue.Count > 0 && paths.Count < _batchSize)
                     {
                         paths.Add(queue.Dequeue());
                     }
