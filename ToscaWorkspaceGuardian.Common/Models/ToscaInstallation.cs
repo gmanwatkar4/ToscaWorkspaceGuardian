@@ -1,4 +1,8 @@
-﻿namespace ToscaWorkspaceGuardian.Common.Models;
+// <copyright file="ToscaInstallation.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+namespace ToscaWorkspaceGuardian.Common.Models;
 
 public class ToscaInstallation
 {

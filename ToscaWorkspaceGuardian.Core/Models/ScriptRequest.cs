@@ -1,4 +1,8 @@
-﻿namespace ToscaWorkspaceGuardian.Core.Models;
+// <copyright file="ScriptRequest.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+namespace ToscaWorkspaceGuardian.Core.Models;
 
 public class ScriptRequest
 {
@@ -6,7 +10,5 @@ public class ScriptRequest
 
     public WorkspaceRequest WorkspaceRequest { get; set; } = new();
 
-    public string Query { get; set; } = string.Empty;
-
-    public string OutputDirectory { get; set; } = string.Empty;
+    public List<string> Queries { get; set; } = new();
 }

@@ -1,16 +1,20 @@
-﻿using ToscaWorkspaceGuardian.Core.Interfaces;
-using ToscaWorkspaceGuardian.Core.Models;
+// <copyright file="TCShellService.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.TCShell;
 
+using ToscaWorkspaceGuardian.Core.Interfaces;
+using ToscaWorkspaceGuardian.Core.Models;
+
 public class TCShellService : ITCShellService
 {
-    private readonly TCShellExecutor _executor;
+    private readonly TCShellExecutor executor;
 
     public TCShellService(
         TCShellExecutor executor)
     {
-        _executor = executor;
+        this.executor = executor;
     }
 
     public async Task<TCShellResponse> ExecuteScriptAsync(
@@ -18,8 +22,18 @@ public class TCShellService : ITCShellService
         WorkspaceRequest request,
         CancellationToken cancellationToken = default)
     {
-        return await _executor.ExecuteAsync(
-            scriptFile,
-            request);
+        var execution =
+            await this.executor.ExecuteAsync(
+                scriptFile,
+                request,
+                cancellationToken: cancellationToken);
+
+        return new TCShellResponse
+        {
+            Success = execution.Success,
+            ExitCode = execution.ExitCode,
+            Output = execution.StandardOutput,
+            Error = execution.StandardError,
+        };
     }
 }

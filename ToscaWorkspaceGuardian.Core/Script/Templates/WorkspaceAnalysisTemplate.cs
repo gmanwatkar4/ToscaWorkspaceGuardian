@@ -1,4 +1,8 @@
-﻿namespace ToscaWorkspaceGuardian.Core.Script.Templates;
+// <copyright file="WorkspaceAnalysisTemplate.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+namespace ToscaWorkspaceGuardian.Core.Script.Templates;
 
 public static class WorkspaceAnalysisTemplate
 {

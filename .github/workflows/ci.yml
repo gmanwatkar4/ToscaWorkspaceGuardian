@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, feature/** ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore --configuration Release --verbosity minimal
+
+      - name: Run analyzers
+        run: dotnet build --no-restore --configuration Release /p:RunAnalyzers=true
+
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+
+  benchmark:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Run benchmark
+        working-directory: Tools/Benchmark
+        run: |
+          dotnet restore
+          dotnet build -c Release
+          dotnet run --configuration Release --no-build > benchmark_output.txt
+
+      - name: Upload benchmark results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: |
+            Tools/Benchmark/bin/Release/net8.0/Benchmark.dll
+            ${{ runner.temp }}/t wg_benchmark/benchmark_result.txt
+            Tools/Benchmark/benchmark_output.txt
+
+      - name: Upload coverage (artifact)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            **/TestResults
+            **/coverage.cobertura.xml

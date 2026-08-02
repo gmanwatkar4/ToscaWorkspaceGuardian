@@ -1,4 +1,8 @@
-﻿namespace ToscaWorkspaceGuardian.Common.Models;
+// <copyright file="ProcessResult.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+namespace ToscaWorkspaceGuardian.Common.Models;
 
 public class ProcessResult
 {
@@ -8,5 +12,5 @@ public class ProcessResult
 
     public string StandardError { get; set; } = string.Empty;
 
-    public bool Success => ExitCode == 0;
+    public bool Success => this.ExitCode == 0;
 }

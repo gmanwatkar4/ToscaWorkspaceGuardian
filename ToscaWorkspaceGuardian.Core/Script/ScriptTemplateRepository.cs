@@ -1,20 +1,36 @@
-﻿using ToscaWorkspaceGuardian.Core.Models;
-using ToscaWorkspaceGuardian.Core.Script.Templates;
+// <copyright file="ScriptTemplateRepository.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Script;
 
+using ToscaWorkspaceGuardian.Core.Models;
+
 public class ScriptTemplateRepository
 {
-    public string GetTemplate(
-        ScriptType scriptType)
+    public string GetTemplate(ScriptType type)
     {
-        return scriptType switch
+        return type switch
         {
-            ScriptType.WorkspaceAnalysis
-                => WorkspaceAnalysisTemplate.Template,
+            ScriptType.WorkspaceAnalysis =>
+"""
+JumpToProject
 
-            _ => throw new NotSupportedException(
-                $"Script template '{scriptType}' not found.")
+Print
+
+Exit
+""",
+
+            ScriptType.RepositoryScan =>
+"""
+JumpToProject
+
+{SEARCH_BLOCK}
+
+Exit
+""",
+
+            _ => throw new NotSupportedException(),
         };
     }
 }

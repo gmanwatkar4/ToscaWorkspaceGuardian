@@ -1,14 +1,18 @@
-﻿using System.Windows;
-using ToscaWorkspaceGuardian.UI.ViewModels;
+// <copyright file="MainWindow.xaml.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace ToscaWorkspaceGuardian.UI.Views;
+
+using System.Windows;
+using ToscaWorkspaceGuardian.UI.ViewModels;
 
 public partial class MainWindow : Window
 {
     public MainWindow(MainViewModel viewModel)
     {
-        InitializeComponent();
+        this.InitializeComponent();
 
-        DataContext = viewModel;
+        this.DataContext = viewModel;
     }
 }

@@ -1,4 +1,11 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+// <copyright file="MainViewModel.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+namespace ToscaWorkspaceGuardian.UI.ViewModels;
+
+using System.Windows;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using ToscaWorkspaceGuardian.Common.Interfaces;
@@ -6,64 +13,61 @@ using ToscaWorkspaceGuardian.Core.Interfaces;
 using ToscaWorkspaceGuardian.Core.Models;
 using ToscaWorkspaceGuardian.Core.TCShell;
 
-namespace ToscaWorkspaceGuardian.UI.ViewModels;
-
 public partial class MainViewModel : ObservableObject
 {
-    private readonly IToscaInstallationService _installationService;
-    private readonly IWorkspaceDetector _workspaceDetector;
-    private readonly IWorkspaceAnalyzer _workspaceAnalyzer;
+    private readonly IToscaInstallationService installationService;
+    private readonly IWorkspaceDetector workspaceDetector;
+    private readonly IWorkspaceAnalyzer workspaceAnalyzer;
+    private readonly IWorkspaceSnapshotExporter snapshotExporter;
 
     public MainViewModel(
     IToscaInstallationService installationService,
+    IWorkspaceSnapshotExporter snapshotExporter,
     IWorkspaceDetector workspaceDetector,
     IWorkspaceAnalyzer workspaceAnalyzer)
     {
-        _installationService = installationService;
-        _workspaceDetector = workspaceDetector;
-        _workspaceAnalyzer = workspaceAnalyzer;
+        this.installationService = installationService;
+        this.workspaceDetector = workspaceDetector;
+        this.workspaceAnalyzer = workspaceAnalyzer;
+        this.snapshotExporter = snapshotExporter;
 
-        var installation = _installationService.GetInstallation();
+        var installation = this.installationService.GetInstallation();
 
-        StatusMessage = installation.IsInstalled
+        this.StatusMessage = installation.IsInstalled
             ? "Tosca installation detected."
             : "Tosca installation not found.";
     }
 
-    //====================================================
+    // ====================================================
     // Versions
-    //====================================================
-
+    // ====================================================
     [ObservableProperty]
     private string sourceVersion = "2025.1";
 
     [ObservableProperty]
     private string targetVersion = "2026.1";
 
-    //====================================================
+    // ====================================================
     // Workspace
-    //====================================================
-
+    // ====================================================
     [ObservableProperty]
     private string workspacePath = string.Empty;
 
     [ObservableProperty]
     private string outputFolder = string.Empty;
 
-    //====================================================
+    // ====================================================
     // Repository
-    //====================================================
-
+    // ====================================================
     [ObservableProperty]
     private string repositoryType = "Not Detected";
 
     [ObservableProperty]
     private string projectId = string.Empty;
 
-    //====================================================
+    // ====================================================
     // SQL Authentication
-    //====================================================
-
+    // ====================================================
     [ObservableProperty]
     private bool showSqlAuthentication;
 
@@ -73,10 +77,9 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private string password = string.Empty;
 
-    //====================================================
+    // ====================================================
     // TSR Authentication
-    //====================================================
-
+    // ====================================================
     [ObservableProperty]
     private bool showTsrAuthentication;
 
@@ -86,20 +89,18 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private string clientSecret = string.Empty;
 
-    //====================================================
+    // ====================================================
     // Status
-    //====================================================
-
+    // ====================================================
     [ObservableProperty]
     private string statusMessage = "Ready";
 
     [ObservableProperty]
     private bool isAnalyzing;
 
-    //====================================================
+    // ====================================================
     // Browse Workspace
-    //====================================================
-
+    // ====================================================
     [RelayCommand]
     private void BrowseWorkspace()
     {
@@ -109,17 +110,18 @@ public partial class MainViewModel : ObservableObject
             "Tosca Workspace (*.tws)|*.tws";
 
         if (dialog.ShowDialog() != true)
+        {
             return;
+        }
 
-        WorkspacePath = dialog.FileName;
+        this.WorkspacePath = dialog.FileName;
 
-        DetectWorkspace();
+        this.DetectWorkspace();
     }
 
-    //====================================================
+    // ====================================================
     // Browse Output Folder
-    //====================================================
-
+    // ====================================================
     [RelayCommand]
     private void BrowseOutputFolder()
     {
@@ -127,75 +129,76 @@ public partial class MainViewModel : ObservableObject
 
         if (dialog.ShowDialog() == true)
         {
-            OutputFolder = dialog.FolderName;
+            this.OutputFolder = dialog.FolderName;
         }
     }
 
-    //====================================================
+    // ====================================================
     // Detect Workspace
-    //====================================================
-
+    // ====================================================
     private void DetectWorkspace()
     {
         var info =
-            _workspaceDetector.Detect(WorkspacePath);
+            this.workspaceDetector.Detect(this.WorkspacePath);
 
-        RepositoryType = info.RepositoryType;
+        this.RepositoryType = info.RepositoryType;
 
-        ProjectId = info.ProjectId ?? "";
+        this.ProjectId = info.ProjectId ?? string.Empty;
 
-        Username = info.DefaultUser ?? "";
+        this.Username = info.DefaultUser ?? string.Empty;
 
-        ShowSqlAuthentication =
+        this.ShowSqlAuthentication =
             info.RequiresUserPassword;
 
-        ShowTsrAuthentication =
+        this.ShowTsrAuthentication =
             info.RequiresClientSecret;
 
-        StatusMessage =
-            $"Repository detected : {RepositoryType}";
+        this.StatusMessage =
+            $"Repository detected : {this.RepositoryType}";
     }
 
-    //====================================================
+    // ====================================================
     // Analyze
-    //====================================================
-
+    // ====================================================
     [RelayCommand]
+
     private async Task Analyze()
     {
-        if (string.IsNullOrWhiteSpace(WorkspacePath))
+        if (string.IsNullOrWhiteSpace(this.WorkspacePath))
         {
-            StatusMessage = "Please select a workspace.";
+            this.StatusMessage = "Please select a workspace.";
             return;
         }
 
-        IsAnalyzing = true;
+        this.IsAnalyzing = true;
 
         try
         {
             var request = new WorkspaceRequest
             {
-                WorkspacePath = WorkspacePath,
-                Username = Username,
-                Password = Password,
-                ClientId = ClientId,
-                ClientSecret = ClientSecret,
-                IsManagedRepository = ShowTsrAuthentication
+                WorkspacePath = this.WorkspacePath,
+                Username = this.Username,
+                Password = this.Password,
+                ClientId = this.ClientId,
+                ClientSecret = this.ClientSecret,
+                IsManagedRepository = this.ShowTsrAuthentication,
+                SourceVersion = this.SourceVersion,
+                TargetVersion = this.TargetVersion,
             };
 
-            var result = await _workspaceAnalyzer.AnalyzeAsync(request);
+            var result = await this.workspaceAnalyzer.AnalyzeAsync(request);
 
-            StatusMessage = result.Success
+            this.StatusMessage = result.Success
                 ? result.Message
                 : "Workspace analysis failed.";
         }
         catch (Exception ex)
         {
-            StatusMessage = ex.Message;
+            this.StatusMessage = ex.Message;
         }
         finally
         {
-            IsAnalyzing = false;
+            this.IsAnalyzing = false;
         }
     }
 }
