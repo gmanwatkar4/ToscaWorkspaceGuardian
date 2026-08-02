@@ -6,10 +6,14 @@ using ToscaWorkspaceGuardian.Common.Interfaces;
 using ToscaWorkspaceGuardian.Common.Services;
 using ToscaWorkspaceGuardian.Common.Utilities;
 using ToscaWorkspaceGuardian.Core.Business;
+using ToscaWorkspaceGuardian.Core.Export;
 using ToscaWorkspaceGuardian.Core.Health;
+using ToscaWorkspaceGuardian.Core.Health.Rules;
 using ToscaWorkspaceGuardian.Core.Interfaces;
+using ToscaWorkspaceGuardian.Core.Rules;
 using ToscaWorkspaceGuardian.Core.Script;
 using ToscaWorkspaceGuardian.Core.TCShell;
+using ToscaWorkspaceGuardian.Core.Traversal;
 using ToscaWorkspaceGuardian.Core.Workspace;
 using ToscaWorkspaceGuardian.UI.ViewModels;
 using ToscaWorkspaceGuardian.UI.Views;
@@ -82,8 +86,23 @@ namespace ToscaWorkspaceGuardian.UI
             services.AddSingleton<OutputDocumentExporter>();
             services.AddSingleton<IParsedWorkspaceMapper, ParsedWorkspaceMapper>();
             services.AddSingleton<IWorkspaceHealthAnalyzer,WorkspaceHealthAnalyzer>();
-
-
+            services.AddSingleton<IWorkspaceRule, WG001_MissingReferencesRule>();
+            services.AddSingleton<IWorkspaceRule, WG002_NoUsersRule>();
+            services.AddSingleton<IWorkspaceRule, WG003_NoGroupsRule>();
+            services.AddSingleton<IWorkspaceRule, WG004_NoRootFoldersRule>();
+            services.AddSingleton<RepositoryScanScriptBuilder>();
+            services.AddSingleton<PrintObjectScriptBuilder>();
+            services.AddSingleton<IRepositoryTreeWalker, RepositoryTreeWalker>();
+            services.AddSingleton<NodePrintScriptBuilder>();
+            services.AddSingleton<BatchScriptBuilder>();
+            services.AddSingleton<ISnapshotBuilder, SnapshotBuilder>();
+            services.AddSingleton<IWorkspaceSnapshotWriter, WorkspaceSnapshotWriter>();
+            services.AddSingleton<IWorkspaceCrawler, WorkspaceCrawler>();
+            services.AddSingleton<INodePathResolver, NodePathResolver>();
+            services.AddSingleton<IWorkspaceSnapshotExporter, WorkspaceSnapshotExporter>();
+            services.AddSingleton<IHealthRule, WG001MissingReferencesRule>();
+            services.AddSingleton<HealthAnalyzer>();
+            services.AddSingleton<IHealthReportExporter, HealthReportExporter>();
 
         }
     }

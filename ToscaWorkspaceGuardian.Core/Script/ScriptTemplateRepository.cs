@@ -1,5 +1,4 @@
 ﻿using ToscaWorkspaceGuardian.Core.Models;
-using ToscaWorkspaceGuardian.Core.Script.Templates;
 
 namespace ToscaWorkspaceGuardian.Core.Script;
 
@@ -10,7 +9,7 @@ public class ScriptTemplateRepository
         return type switch
         {
             ScriptType.WorkspaceAnalysis =>
-    """
+"""
 JumpToProject
 
 Print
@@ -18,8 +17,8 @@ Print
 Exit
 """,
 
-            ScriptType.Search =>
-    """
+            ScriptType.RepositoryScan =>
+"""
 JumpToProject
 
 {SEARCH_BLOCK}

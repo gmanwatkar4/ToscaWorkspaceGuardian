@@ -30,13 +30,21 @@ public class WorkspaceReader : IWorkspaceReader
         CancellationToken cancellationToken = default)
     {
         var script = await _scriptService.GenerateScriptAsync(
-            new ScriptRequest
-            {
-                ScriptType = ScriptType.WorkspaceAnalysis,
-                WorkspaceRequest = request
-            },
-            cancellationToken);
-       
+     new ScriptRequest
+     {
+         ScriptType = ScriptType.RepositoryScan,
+         WorkspaceRequest = request,
+
+         Queries =
+         {
+            "=>SUBPARTS:Module",
+            "=>SUBPARTS:TestCase",
+            "=>SUBPARTS:ExecutionList",
+            "=>SUBPARTS:Requirement"
+         }
+     },
+     cancellationToken);
+
 
         var response = await _tcShellService.ExecuteScriptAsync(
             script,

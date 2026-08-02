@@ -13,8 +13,7 @@ public class ScriptComposer
         _repository = repository;
     }
 
-    public string Compose(
-        ScriptRequest request)
+    public string Compose(ScriptRequest request)
     {
         string template =
             _repository.GetTemplate(request.ScriptType);
@@ -27,7 +26,6 @@ public class ScriptComposer
         foreach (var query in request.Queries)
         {
             builder.AppendLine($"Search \"{query}\" 0");
-            builder.AppendLine();
             builder.AppendLine("Print");
             builder.AppendLine();
         }

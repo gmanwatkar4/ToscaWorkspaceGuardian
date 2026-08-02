@@ -6,20 +6,23 @@ namespace ToscaWorkspaceGuardian.Core.Script;
 public class ScriptService : IScriptService
 {
     private readonly ScriptComposer _composer;
+    private readonly RepositoryScanScriptBuilder _repositoryBuilder;
+    private readonly PrintObjectScriptBuilder _printBuilder;
 
     public ScriptService(
-        ScriptComposer composer)
+        ScriptComposer composer,
+        RepositoryScanScriptBuilder repositoryBuilder,
+        PrintObjectScriptBuilder printBuilder)
     {
         _composer = composer;
+        _repositoryBuilder = repositoryBuilder;
+        _printBuilder = printBuilder;
     }
 
     public async Task<string> GenerateScriptAsync(
         ScriptRequest request,
         CancellationToken cancellationToken = default)
     {
-        string script =
-            _composer.Compose(request);
-
         string directory =
             Path.Combine(
                 Path.GetTempPath(),
@@ -27,16 +30,41 @@ public class ScriptService : IScriptService
 
         Directory.CreateDirectory(directory);
 
-        string file =
-            Path.Combine(
-                directory,
-                "WorkspaceAnalysis.tcs");
+        if (request.ScriptType == ScriptType.RepositoryScan)
+        {
+            string repositoryScript =
+                _repositoryBuilder.Build(request.Queries);
+
+            string repositoryFile =
+                Path.Combine(directory, "RepositoryScan.tcs");
+
+            await File.WriteAllTextAsync(
+                repositoryFile,
+                repositoryScript,
+                cancellationToken);
+
+            string printFile =
+                Path.Combine(directory, "PrintObject.tcs");
+
+            await File.WriteAllTextAsync(
+                printFile,
+                _printBuilder.Build(),
+                cancellationToken);
+
+            return repositoryFile;
+        }
+
+        string script =
+            _composer.Compose(request);
+
+        string workspaceFile =
+            Path.Combine(directory, "WorkspaceAnalysis.tcs");
 
         await File.WriteAllTextAsync(
-            file,
+            workspaceFile,
             script,
             cancellationToken);
 
-        return file;
+        return workspaceFile;
     }
 }

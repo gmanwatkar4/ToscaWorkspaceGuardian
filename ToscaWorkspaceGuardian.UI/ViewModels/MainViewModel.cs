@@ -6,7 +6,7 @@ using ToscaWorkspaceGuardian.Common.Interfaces;
 using ToscaWorkspaceGuardian.Core.Interfaces;
 using ToscaWorkspaceGuardian.Core.Models;
 using ToscaWorkspaceGuardian.Core.TCShell;
-using System.Windows;
+
 
 namespace ToscaWorkspaceGuardian.UI.ViewModels;
 
@@ -15,15 +15,18 @@ public partial class MainViewModel : ObservableObject
     private readonly IToscaInstallationService _installationService;
     private readonly IWorkspaceDetector _workspaceDetector;
     private readonly IWorkspaceAnalyzer _workspaceAnalyzer;
+    private readonly IWorkspaceSnapshotExporter _snapshotExporter;
 
     public MainViewModel(
     IToscaInstallationService installationService,
+    IWorkspaceSnapshotExporter snapshotExporter,
     IWorkspaceDetector workspaceDetector,
     IWorkspaceAnalyzer workspaceAnalyzer)
     {
         _installationService = installationService;
         _workspaceDetector = workspaceDetector;
         _workspaceAnalyzer = workspaceAnalyzer;
+        _snapshotExporter = snapshotExporter;
 
         var installation = _installationService.GetInstallation();
 

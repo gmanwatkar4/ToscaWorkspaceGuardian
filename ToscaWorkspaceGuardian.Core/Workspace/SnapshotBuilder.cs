@@ -1,0 +1,81 @@
+﻿using ToscaWorkspaceGuardian.Core.Business;
+using ToscaWorkspaceGuardian.Core.Interfaces;
+using ToscaWorkspaceGuardian.Core.Models;
+
+namespace ToscaWorkspaceGuardian.Core.Workspace;
+
+public class SnapshotBuilder : ISnapshotBuilder
+{
+    public void AddDocument(
+        WorkspaceSnapshot snapshot,
+        OutputDocument document)
+    {
+        foreach (var obj in document.Objects)
+        {
+            var repositoryObject = new RepositoryObject
+            {
+                Name = obj.Name,
+                ObjectType = obj.ObjectType
+            };
+
+            //--------------------------------------------------
+            // Properties
+            //--------------------------------------------------
+
+            foreach (var property in obj.Properties)
+            {
+                repositoryObject.Properties[property.Name] =
+                    property.Value;
+            }
+
+            //--------------------------------------------------
+            // Collections
+            //--------------------------------------------------
+
+            foreach (var collection in obj.Collections)
+            {
+                repositoryObject.Collections[collection.Key] =
+                    collection.Value.ToList();
+            }
+
+            //--------------------------------------------------
+            // NodePath
+            //--------------------------------------------------
+
+            if (repositoryObject.Properties.TryGetValue(
+                "NodePath",
+                out var nodePath))
+            {
+                repositoryObject.NodePath = nodePath;
+            }
+
+            snapshot.Objects.Add(repositoryObject);
+
+            //------------------------------------------
+            // NodePath Index
+            //------------------------------------------
+
+            if (!string.IsNullOrWhiteSpace(repositoryObject.NodePath))
+            {
+                snapshot.ByNodePath[repositoryObject.NodePath] =
+                    repositoryObject;
+            }
+
+            //------------------------------------------
+            // ObjectType Index
+            //------------------------------------------
+
+            if (!snapshot.ByObjectType.TryGetValue(
+                    repositoryObject.ObjectType,
+                    out var list))
+            {
+                list = new List<RepositoryObject>();
+
+                snapshot.ByObjectType[repositoryObject.ObjectType] =
+                    list;
+            }
+
+            list.Add(repositoryObject);
+        }
+    }
+}
