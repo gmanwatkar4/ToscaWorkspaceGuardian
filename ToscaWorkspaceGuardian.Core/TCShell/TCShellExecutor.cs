@@ -4,6 +4,7 @@
 
 namespace ToscaWorkspaceGuardian.Core.TCShell;
 
+using Microsoft.Extensions.Logging;
 using ToscaWorkspaceGuardian.Common.Interfaces;
 using ToscaWorkspaceGuardian.Core.Models;
 
@@ -12,15 +13,21 @@ public class TCShellExecutor
     private readonly IToscaInstallationService installationService;
     private readonly IProcessRunner processRunner;
     private readonly OutputWriter outputWriter;
+    private readonly ToscaWorkspaceGuardian.Core.Diagnostics.TelemetryCollector telemetry;
+    private readonly Microsoft.Extensions.Logging.ILogger<TCShellExecutor>? logger;
 
     public TCShellExecutor(
         IToscaInstallationService installationService,
         IProcessRunner processRunner,
-        OutputWriter outputWriter)
+        OutputWriter outputWriter,
+        ToscaWorkspaceGuardian.Core.Diagnostics.TelemetryCollector telemetry,
+        Microsoft.Extensions.Logging.ILogger<TCShellExecutor>? logger = null)
     {
         this.installationService = installationService;
         this.processRunner = processRunner;
         this.outputWriter = outputWriter;
+        this.telemetry = telemetry;
+        this.logger = logger;
     }
 
     public async Task<ExecutionResult> ExecuteAsync(
@@ -67,10 +74,20 @@ public class TCShellExecutor
             debugFile,
             installation.TCShellPath + Environment.NewLine + arguments);
 
+        var sw = System.Diagnostics.Stopwatch.StartNew();
         var result = await this.processRunner.ExecuteAsync(
             installation.TCShellPath,
             arguments,
             cancellationToken: cancellationToken);
+        sw.Stop();
+
+        try
+        {
+            this.telemetry?.RecordTCShellCall(sw.Elapsed, result.ExitCode);
+        }
+        catch { }
+
+        this.logger?.LogDebug("TCShell executed in {Elapsed}ms with exit code {ExitCode}", sw.Elapsed.TotalMilliseconds, result.ExitCode);
 
         await this.outputWriter.WriteAsync(
             outputFile,

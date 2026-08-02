@@ -47,7 +47,8 @@ namespace ToscaWorkspaceGuardian.Tests
             var processRunner = new DummyProcessRunner();
             var outputWriter = new OutputWriter();
 
-            var executor = new TCShellExecutor(installationService, processRunner, outputWriter);
+            var telemetry = new ToscaWorkspaceGuardian.Core.Diagnostics.TelemetryCollector();
+            var executor = new TCShellExecutor(installationService, processRunner, outputWriter, telemetry, null);
 
             var result = await executor.ExecuteAsync("script.tcs", new WorkspaceRequest(), cancellationToken: System.Threading.CancellationToken.None);
 

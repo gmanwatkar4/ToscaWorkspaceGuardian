@@ -18,13 +18,10 @@ public class OutputParser
             return document;
         }
 
-        var lines = output.Split(
-            Environment.NewLine,
-            StringSplitOptions.RemoveEmptyEntries);
-
         OutputObject? currentObject = null;
-
-        foreach (var rawLine in lines)
+        using var reader = new System.IO.StringReader(output);
+        string? rawLine;
+        while ((rawLine = reader.ReadLine()) != null)
         {
             var line = rawLine.Trim();
 

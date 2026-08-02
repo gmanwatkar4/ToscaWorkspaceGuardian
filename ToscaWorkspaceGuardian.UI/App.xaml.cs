@@ -30,6 +30,7 @@ namespace ToscaWorkspaceGuardian.UI
     using ToscaWorkspaceGuardian.Core.Traversal;
     using ToscaWorkspaceGuardian.Core.Upgrade;
     using ToscaWorkspaceGuardian.Core.Workspace;
+    using ToscaWorkspaceGuardian.Core.Diagnostics;
     using ToscaWorkspaceGuardian.UI.ViewModels;
     using ToscaWorkspaceGuardian.UI.Views;
 
@@ -123,6 +124,7 @@ namespace ToscaWorkspaceGuardian.UI
             services.AddSingleton<RepositoryScanScriptBuilder>();
             services.AddSingleton<PrintObjectScriptBuilder>();
             services.AddSingleton<IRepositoryTreeWalker, RepositoryTreeWalker>();
+            services.AddSingleton<TelemetryCollector>();
             services.AddSingleton<NodePrintScriptBuilder>();
             services.AddSingleton<BatchScriptBuilder>();
             services.AddSingleton<ISnapshotBuilder, SnapshotBuilder>();

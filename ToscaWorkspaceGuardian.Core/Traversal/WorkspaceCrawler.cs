@@ -9,6 +9,10 @@ using ToscaWorkspaceGuardian.Core.Interfaces;
 using ToscaWorkspaceGuardian.Core.Models;
 using ToscaWorkspaceGuardian.Core.Script;
 using ToscaWorkspaceGuardian.Core.TCShell;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
+using Microsoft.Extensions.Logging;
 
 public class WorkspaceCrawler : IWorkspaceCrawler
 {
@@ -16,17 +20,28 @@ public class WorkspaceCrawler : IWorkspaceCrawler
     private readonly ITCShellService tcShellService;
     private readonly OutputParser parser;
     private readonly ISnapshotBuilder snapshotBuilder;
+    private readonly int maxDegreeOfParallelism = 4;
+    private readonly object snapshotLock = new();
+    private readonly ToscaWorkspaceGuardian.Core.Diagnostics.TelemetryCollector? telemetry;
+    private readonly Microsoft.Extensions.Logging.ILogger<WorkspaceCrawler>? logger;
+    private readonly string cacheDirectory;
 
     public WorkspaceCrawler(
         BatchScriptBuilder scriptBuilder,
         ITCShellService tcShellService,
         OutputParser parser,
-        ISnapshotBuilder snapshotBuilder)
+        ISnapshotBuilder snapshotBuilder,
+        ToscaWorkspaceGuardian.Core.Diagnostics.TelemetryCollector? telemetry = null,
+        Microsoft.Extensions.Logging.ILogger<WorkspaceCrawler>? logger = null)
     {
         this.scriptBuilder = scriptBuilder;
         this.tcShellService = tcShellService;
         this.parser = parser;
         this.snapshotBuilder = snapshotBuilder;
+        this.telemetry = telemetry;
+        this.logger = logger;
+        this.cacheDirectory = Path.Combine(Path.GetTempPath(), "ToscaWorkspaceGuardian", "Cache");
+        Directory.CreateDirectory(this.cacheDirectory);
     }
 
     public async Task<WorkspaceSnapshot> CrawlAsync(
@@ -51,192 +66,141 @@ public class WorkspaceCrawler : IWorkspaceCrawler
         const int BatchSize = 50;
 
         //------------------------------------------
-        // Crawl Until Queue Empty
+        // Crawl Until Queue Empty (bounded concurrency)
         //------------------------------------------
-        while (queue.Count > 0)
+        var crawlSw = System.Diagnostics.Stopwatch.StartNew();
+
+        var queueLock = new object();
+        var visitedLock = new object();
+        var runningTasks = new List<Task>();
+
+        while (queue.Count > 0 || runningTasks.Count > 0)
         {
-            //--------------------------------------
-            // Build Current Batch
-            //--------------------------------------
-            var paths = new List<string>();
-
-            System.Diagnostics.Debug.WriteLine("================================");
-            System.Diagnostics.Debug.WriteLine("CURRENT BATCH");
-
-            foreach (var p in queue.Take(10))
+            // Start new tasks up to maxDegreeOfParallelism
+            while (runningTasks.Count < maxDegreeOfParallelism)
             {
-                System.Diagnostics.Debug.WriteLine(p);
-            }
-
-            System.Diagnostics.Debug.WriteLine("================================");
-
-            while (queue.Count > 0 &&
-                   paths.Count < BatchSize)
-            {
-                paths.Add(queue.Dequeue());
-            }
-
-            System.Diagnostics.Debug.WriteLine("EXECUTING");
-
-            foreach (var p in paths.Take(10))
-            {
-                System.Diagnostics.Debug.WriteLine(p);
-            }
-
-            //--------------------------------------
-            // Generate Script
-            //--------------------------------------
-            string script =
-                this.scriptBuilder.Build(paths);
-
-            //--------------------------------------
-            // Save Script
-            //--------------------------------------
-            string scriptFile =
-                Path.Combine(
-                    Path.GetTempPath(),
-                    "ToscaWorkspaceGuardian",
-                    "Crawler.tcs");
-
-            Directory.CreateDirectory(
-                Path.GetDirectoryName(scriptFile)!);
-
-            await File.WriteAllTextAsync(
-                scriptFile,
-                script,
-                cancellationToken);
-
-            //--------------------------------------
-            // Execute
-            //--------------------------------------
-            var response =
-                await this.tcShellService.ExecuteScriptAsync(
-                    scriptFile,
-                    request,
-                    cancellationToken);
-
-            System.Diagnostics.Debug.WriteLine(
-                $"ExitCode : {response.ExitCode}");
-
-            System.Diagnostics.Debug.WriteLine(
-                $"StdErr Length : {response.Error?.Length ?? 0}");
-
-            //--------------------------------------
-            // Diagnostics
-            //--------------------------------------
-            System.Diagnostics.Debug.WriteLine(
-                $"Response Length : {response.Output.Length}");
-
-            //--------------------------------------
-            // Parse
-            //--------------------------------------
-            var document =
-                this.parser.Parse(response.Output);
-
-            if (document.Objects.Count != paths.Count)
-            {
-                var debugFolder = Path.Combine(
-                    Path.GetTempPath(),
-                    "ToscaWorkspaceGuardian",
-                    "Debug");
-
-                Directory.CreateDirectory(debugFolder);
-
-                string stamp = DateTime.Now.ToString("yyyyMMdd_HHmmssfff");
-
-                await File.WriteAllTextAsync(
-                    Path.Combine(debugFolder, $"Batch_{stamp}.tcs"),
-                    script,
-                    cancellationToken);
-
-                await File.WriteAllTextAsync(
-                    Path.Combine(debugFolder, $"Batch_{stamp}_stdout.txt"),
-                    response.Output ?? string.Empty,
-                    cancellationToken);
-
-                await File.WriteAllTextAsync(
-                    Path.Combine(debugFolder, $"Batch_{stamp}_stderr.txt"),
-                    response.Error ?? string.Empty,
-                    cancellationToken);
-            }
-
-            if (document.Objects.Count != paths.Count)
-            {
-                var debugFolder = Path.Combine(
-                    Path.GetTempPath(),
-                    "ToscaWorkspaceGuardian",
-                    "Debug");
-
-                Directory.CreateDirectory(debugFolder);
-
-                await File.WriteAllTextAsync(
-                    Path.Combine(
-                        debugFolder,
-                        $"Batch_{DateTime.Now:yyyyMMdd_HHmmss}.tcs"),
-                    script,
-                    cancellationToken);
-
-                await File.WriteAllTextAsync(
-                    Path.Combine(
-                        debugFolder,
-                        $"Batch_{DateTime.Now:yyyyMMdd_HHmmss}.txt"),
-                    response.Output,
-                    cancellationToken);
-            }
-
-            System.Diagnostics.Debug.WriteLine(
-                $"Parser Objects : {document.Objects.Count}");
-
-            //--------------------------------------
-            // Merge Snapshot
-            //--------------------------------------
-            this.snapshotBuilder.AddDocument(
-                snapshot,
-                document);
-
-            System.Diagnostics.Debug.WriteLine(
-                $"Snapshot Objects : {snapshot.Objects.Count}");
-
-            //--------------------------------------
-            // Discover Children
-            //--------------------------------------
-            foreach (var obj in document.Objects)
-            {
-                //------------------------------------------
-                // Only traverse container objects
-                //------------------------------------------
-                if (!IsContainer(obj.ObjectType))
+                List<string> paths = new List<string>();
+                lock (queueLock)
                 {
-                    continue;
+                    while (queue.Count > 0 && paths.Count < BatchSize)
+                    {
+                        paths.Add(queue.Dequeue());
+                    }
                 }
 
-                string? nodePath = obj.GetProperty("NodePath");
+                if (paths.Count == 0) break;
 
-                if (string.IsNullOrWhiteSpace(nodePath))
+                var task = Task.Run(async () =>
                 {
-                    continue;
-                }
+                    string? responseOutput = null;
+                    string? responseError = null;
+                    int responseExitCode = 0;
+                    object? document = null;
 
-                foreach (var child in obj.GetCollection("Items"))
-                {
-                    EnqueueIfNew($"{nodePath}/{child}");
-                }
+                    try
+                    {
+                        System.Diagnostics.Debug.WriteLine("EXECUTING BATCH");
+                        foreach (var p in paths.Take(10))
+                        {
+                            System.Diagnostics.Debug.WriteLine(p);
+                        }
+
+                        var script = this.scriptBuilder.Build(paths);
+                        var scriptFile = Path.Combine(Path.GetTempPath(), "ToscaWorkspaceGuardian", "Crawler.tcs");
+                        Directory.CreateDirectory(Path.GetDirectoryName(scriptFile)!);
+                        await File.WriteAllTextAsync(scriptFile, script, cancellationToken);
+
+                        var batchKey = ComputeHash(string.Join("|", paths));
+                        var cacheFile = Path.Combine(this.cacheDirectory, $"batch_{batchKey}.json");
+
+                        string? cachedOutput = null;
+
+                        if (File.Exists(cacheFile))
+                        {
+                            try
+                            {
+                                var json = await File.ReadAllTextAsync(cacheFile, cancellationToken);
+                                var dict = System.Text.Json.JsonSerializer.Deserialize<System.Collections.Generic.Dictionary<string, string>>(json);
+                                cachedOutput = dict != null && dict.TryGetValue("Output", out var o) ? o : string.Empty;
+                                responseOutput = cachedOutput;
+                                responseError = dict != null && dict.TryGetValue("Error", out var e) ? e : null;
+                                responseExitCode = dict != null && dict.TryGetValue("ExitCode", out var c) && int.TryParse(c, out var ci) ? ci : 0;
+                                this.logger?.LogDebug("Loaded cached batch result {CacheFile}", cacheFile);
+                            }
+                            catch (Exception ex)
+                            {
+                                this.logger?.LogWarning(ex, "Failed to read cache file {CacheFile}, will execute TCShell", cacheFile);
+                            }
+                        }
+
+                        if (cachedOutput != null)
+                        {
+                            document = this.parser.Parse(cachedOutput);
+                        }
+                        else
+                        {
+                            var response = await this.tcShellService.ExecuteScriptAsync(scriptFile, request, cancellationToken);
+                            responseOutput = response.Output ?? string.Empty;
+                            responseError = response.Error;
+                            responseExitCode = response.ExitCode;
+                            document = this.parser.Parse(responseOutput);
+                            try
+                            {
+                                var ser = System.Text.Json.JsonSerializer.Serialize(new { Output = responseOutput, Error = responseError, ExitCode = responseExitCode });
+                                await File.WriteAllTextAsync(cacheFile, ser, cancellationToken);
+                            }
+                            catch { }
+                        }
+
+                        var parsedDocument = (document is null) ? this.parser.Parse(responseOutput ?? string.Empty) : (dynamic)document;
+
+                        // Merge snapshot
+                        lock (snapshotLock)
+                        {
+                            this.snapshotBuilder.AddDocument(snapshot, parsedDocument);
+                        }
+
+                        // Discover children and enqueue
+                        foreach (var obj in parsedDocument.Objects)
+                        {
+                            if (!IsContainer(obj.ObjectType)) continue;
+                            string? nodePath = obj.GetProperty("NodePath");
+                            if (string.IsNullOrWhiteSpace(nodePath)) continue;
+                            foreach (var child in obj.GetCollection("Items"))
+                            {
+                                var childPath = $"{nodePath}/{child}";
+                                lock (visitedLock)
+                                {
+                                    if (visited.Add(childPath))
+                                    {
+                                        lock (queueLock)
+                                        {
+                                            queue.Enqueue(childPath);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        this.logger?.LogWarning(ex, "Batch processing failed");
+                    }
+                }, cancellationToken);
+
+                runningTasks.Add(task);
             }
 
-            //--------------------------------------
-            // Debug
-            //--------------------------------------
-            System.Diagnostics.Debug.WriteLine(
-                $"Batch Completed : {paths.Count}");
+            if (runningTasks.Count == 0)
+            {
+                // Nothing is running and nothing was started (queue empty)
+                break;
+            }
 
-            System.Diagnostics.Debug.WriteLine(
-                $"Snapshot Objects : {snapshot.Objects.Count}");
-
-            System.Diagnostics.Debug.WriteLine(
-                $"Visited : {visited.Count}");
-
-            System.Diagnostics.Debug.WriteLine(
-                $"Remaining Queue : {queue.Count}");
+            // Wait for any task to complete
+            var completed = await Task.WhenAny(runningTasks);
+            // Remove completed tasks
+            runningTasks.RemoveAll(t => t.IsCompleted);
         }
 
         void EnqueueIfNew(string path)
@@ -259,6 +223,27 @@ public class WorkspaceCrawler : IWorkspaceCrawler
             };
         }
 
+        crawlSw.Stop();
+
+        try
+        {
+            var summary = this.telemetry?.GetSummary();
+            if (!string.IsNullOrWhiteSpace(summary))
+            {
+                this.logger?.LogInformation(summary);
+            }
+        }
+        catch { }
+
         return snapshot;
     }
+
+    private static string ComputeHash(string content)
+    {
+        using var sha = SHA256.Create();
+        var bytes = Encoding.UTF8.GetBytes(content);
+        var hash = sha.ComputeHash(bytes);
+        return Convert.ToHexString(hash).ToLowerInvariant();
+    }
 }
+

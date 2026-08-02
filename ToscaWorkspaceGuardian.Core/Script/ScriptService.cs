@@ -6,6 +6,9 @@ namespace ToscaWorkspaceGuardian.Core.Script;
 
 using ToscaWorkspaceGuardian.Core.Interfaces;
 using ToscaWorkspaceGuardian.Core.Models;
+using System.Collections.Concurrent;
+using System.Security.Cryptography;
+using System.Text;
 
 public class ScriptService : IScriptService
 {
