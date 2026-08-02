@@ -10,3 +10,7 @@ This file summarizes the changes made on branch `feature/repo-improvements`.
 - Updated IProcessRunner interface to accept CancellationToken.
 - Added unit tests: ProcessRunnerTest and TcshellExecutorTests.
 - Added GitHub Actions workflow for CI (build + test) and upload of test artifacts.
+ - Added TelemetryCollector and instrumentation for TCShell and crawler.
+ - Implemented script caching with eviction and batch result caching to reduce repeated TCShell calls.
+ - Implemented bounded concurrency and configurable crawler options.
+ - Added NodeCacheService for incremental scanning: skip child traversal when node content unchanged.

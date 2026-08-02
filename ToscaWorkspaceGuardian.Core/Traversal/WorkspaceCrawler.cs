@@ -27,6 +27,7 @@ public class WorkspaceCrawler : IWorkspaceCrawler
     private readonly object snapshotLock = new();
     private readonly ToscaWorkspaceGuardian.Core.Diagnostics.TelemetryCollector? telemetry;
     private readonly Microsoft.Extensions.Logging.ILogger<WorkspaceCrawler>? logger;
+    private readonly ToscaWorkspaceGuardian.Core.Caching.NodeCacheService? nodeCache;
     private readonly string cacheDirectory;
 
     private readonly int _batchSize;
@@ -38,6 +39,7 @@ public class WorkspaceCrawler : IWorkspaceCrawler
         ISnapshotBuilder snapshotBuilder,
         IOptions<ToscaWorkspaceGuardian.Core.Configuration.CrawlerOptions>? options = null,
         ToscaWorkspaceGuardian.Core.Diagnostics.TelemetryCollector? telemetry = null,
+        ToscaWorkspaceGuardian.Core.Caching.NodeCacheService? nodeCache = null,
         Microsoft.Extensions.Logging.ILogger<WorkspaceCrawler>? logger = null)
     {
         this.scriptBuilder = scriptBuilder;
@@ -50,6 +52,7 @@ public class WorkspaceCrawler : IWorkspaceCrawler
         this.maxDegreeOfParallelism = Math.Max(1, opts.MaxDegreeOfParallelism);
         this._batchSize = Math.Max(1, opts.BatchSize);
         this.cacheDirectory = Path.Combine(Path.GetTempPath(), "ToscaWorkspaceGuardian", "Cache");
+        this.nodeCache = nodeCache;
         Directory.CreateDirectory(this.cacheDirectory);
     }
 
@@ -169,22 +172,45 @@ public class WorkspaceCrawler : IWorkspaceCrawler
                             this.snapshotBuilder.AddDocument(snapshot, parsedDocument);
                         }
 
-                        // Discover children and enqueue
+                        // Discover children and enqueue if node changed (use node cache to skip unchanged nodes)
                         foreach (var obj in parsedDocument.Objects)
                         {
                             if (!IsContainer(obj.ObjectType)) continue;
+
                             string? nodePath = obj.GetProperty("NodePath");
                             if (string.IsNullOrWhiteSpace(nodePath)) continue;
-                            foreach (var child in obj.GetCollection("Items"))
+
+                            // Use RawText as the canonical content for hashing
+                            var content = obj.RawText ?? string.Empty;
+                            var contentHash = ComputeHash(content);
+
+                            var skipChildren = false;
+                            try
                             {
-                                var childPath = $"{nodePath}/{child}";
-                                lock (visitedLock)
+                                if (this.nodeCache != null && this.nodeCache.TryGetHash(nodePath, out var existingHash))
                                 {
-                                    if (visited.Add(childPath))
+                                    if (!string.IsNullOrWhiteSpace(existingHash) && existingHash == contentHash)
                                     {
-                                        lock (queueLock)
+                                        skipChildren = true;
+                                    }
+                                }
+                            }
+                            catch { }
+
+                            if (!skipChildren)
+                            {
+                                this.nodeCache?.UpdateHash(nodePath, contentHash);
+                                foreach (var child in obj.GetCollection("Items"))
+                                {
+                                    var childPath = $"{nodePath}/{child}";
+                                    lock (visitedLock)
+                                    {
+                                        if (visited.Add(childPath))
                                         {
-                                            queue.Enqueue(childPath);
+                                            lock (queueLock)
+                                            {
+                                                queue.Enqueue(childPath);
+                                            }
                                         }
                                     }
                                 }

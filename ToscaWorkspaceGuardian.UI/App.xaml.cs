@@ -125,6 +125,7 @@ namespace ToscaWorkspaceGuardian.UI
             services.AddSingleton<PrintObjectScriptBuilder>();
             services.AddSingleton<IRepositoryTreeWalker, RepositoryTreeWalker>();
             services.AddSingleton<TelemetryCollector>();
+            services.AddSingleton<ToscaWorkspaceGuardian.Core.Caching.NodeCacheService>();
             services.AddSingleton<NodePrintScriptBuilder>();
             services.AddSingleton<BatchScriptBuilder>();
             services.AddSingleton<ISnapshotBuilder, SnapshotBuilder>();
