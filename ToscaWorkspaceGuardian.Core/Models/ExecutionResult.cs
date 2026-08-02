@@ -1,8 +1,14 @@
-// <copyright file="ExecutionResult.cs" company="PlaceholderCompany">
+﻿// <copyright file="ExecutionResult.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Models;
+
+/// <summary>
+
+/// TODO: Describe ExecutionResult.
+
+/// </summary>
 
 public class ExecutionResult
 {
@@ -20,3 +26,4 @@ public class ExecutionResult
 
     public string StandardError { get; set; } = string.Empty;
 }
+

@@ -1,4 +1,4 @@
-// <copyright file="HealthReportExporter.cs" company="PlaceholderCompany">
+﻿// <copyright file="HealthReportExporter.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -7,6 +7,12 @@ namespace ToscaWorkspaceGuardian.Core.Export;
 using System.Text.Json;
 using ToscaWorkspaceGuardian.Core.Business;
 using ToscaWorkspaceGuardian.Core.Interfaces;
+
+/// <summary>
+
+/// TODO: Describe HealthReportExporter.
+
+/// </summary>
 
 public class HealthReportExporter : IHealthReportExporter
 {
@@ -31,3 +37,4 @@ public class HealthReportExporter : IHealthReportExporter
             cancellationToken);
     }
 }
+

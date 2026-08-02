@@ -1,8 +1,14 @@
-// <copyright file="WorkspaceStatistics.cs" company="PlaceholderCompany">
+﻿// <copyright file="WorkspaceStatistics.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Models;
+
+/// <summary>
+
+/// TODO: Describe WorkspaceStatistics.
+
+/// </summary>
 
 public class WorkspaceStatistics
 {
@@ -18,3 +24,4 @@ public class WorkspaceStatistics
 
     public int FolderCount { get; set; }
 }
+

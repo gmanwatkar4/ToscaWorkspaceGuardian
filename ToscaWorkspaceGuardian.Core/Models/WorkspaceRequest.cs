@@ -1,8 +1,14 @@
-// <copyright file="WorkspaceRequest.cs" company="PlaceholderCompany">
+﻿// <copyright file="WorkspaceRequest.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Models;
+
+/// <summary>
+
+/// TODO: Describe WorkspaceRequest.
+
+/// </summary>
 
 public class WorkspaceRequest
 {
@@ -22,3 +28,4 @@ public class WorkspaceRequest
 
     public string TargetVersion { get; set; } = string.Empty;
 }
+

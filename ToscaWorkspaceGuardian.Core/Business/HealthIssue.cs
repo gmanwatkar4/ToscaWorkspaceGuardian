@@ -1,8 +1,14 @@
-// <copyright file="HealthIssue.cs" company="PlaceholderCompany">
+﻿// <copyright file="HealthIssue.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Business;
+
+/// <summary>
+
+/// TODO: Describe HealthIssue.
+
+/// </summary>
 
 public class HealthIssue
 {
@@ -18,3 +24,4 @@ public class HealthIssue
 
     public string Description { get; set; } = string.Empty;
 }
+

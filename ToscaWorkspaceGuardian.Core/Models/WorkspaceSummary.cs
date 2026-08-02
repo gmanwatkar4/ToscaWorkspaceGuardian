@@ -1,8 +1,14 @@
-// <copyright file="WorkspaceSummary.cs" company="PlaceholderCompany">
+﻿// <copyright file="WorkspaceSummary.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Models;
+
+/// <summary>
+
+/// TODO: Describe WorkspaceSummary.
+
+/// </summary>
 
 public class WorkspaceSummary
 {
@@ -12,3 +18,4 @@ public class WorkspaceSummary
 
     public WorkspaceStatistics Statistics { get; set; } = new();
 }
+

@@ -1,8 +1,14 @@
-// <copyright file="TCShellResponse.cs" company="PlaceholderCompany">
+﻿// <copyright file="TCShellResponse.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Models;
+
+/// <summary>
+
+/// TODO: Describe TCShellResponse.
+
+/// </summary>
 
 public class TCShellResponse
 {
@@ -14,3 +20,4 @@ public class TCShellResponse
 
     public string Error { get; set; } = string.Empty;
 }
+

@@ -1,10 +1,16 @@
-// <copyright file="BatchScriptBuilder.cs" company="PlaceholderCompany">
+﻿// <copyright file="BatchScriptBuilder.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Script;
 
 using System.Text;
+
+/// <summary>
+
+/// TODO: Describe BatchScriptBuilder.
+
+/// </summary>
 
 public class BatchScriptBuilder
 {
@@ -25,3 +31,4 @@ public class BatchScriptBuilder
         return script.ToString();
     }
 }
+

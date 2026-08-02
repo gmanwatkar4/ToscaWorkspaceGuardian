@@ -1,10 +1,16 @@
-// <copyright file="MicrosoftCopilotProvider.cs" company="PlaceholderCompany">
+﻿// <copyright file="MicrosoftCopilotProvider.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.AI;
 
 using System.Threading;
+
+/// <summary>
+
+/// TODO: Describe MicrosoftCopilotProvider.
+
+/// </summary>
 
 public class MicrosoftCopilotProvider : IAIProvider
 {
@@ -15,3 +21,4 @@ public class MicrosoftCopilotProvider : IAIProvider
         throw new NotImplementedException();
     }
 }
+

@@ -1,10 +1,16 @@
-// <copyright file="TCShellCommandBuilder.cs" company="PlaceholderCompany">
+﻿// <copyright file="TCShellCommandBuilder.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.TCShell;
 
 using ToscaWorkspaceGuardian.Core.Models;
+
+/// <summary>
+
+/// TODO: Describe TCShellCommandBuilder.
+
+/// </summary>
 
 public class TCShellCommandBuilder
 {
@@ -23,3 +29,4 @@ public class TCShellCommandBuilder
             $"-login {request.Username} {request.Password}";
     }
 }
+

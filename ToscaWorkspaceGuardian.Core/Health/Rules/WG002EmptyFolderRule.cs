@@ -1,10 +1,16 @@
-// <copyright file="WG002EmptyFolderRule.cs" company="PlaceholderCompany">
+﻿// <copyright file="WG002EmptyFolderRule.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Health.Rules;
 
 using ToscaWorkspaceGuardian.Core.Business;
+
+/// <summary>
+
+/// TODO: Describe WG002EmptyFolderRule.
+
+/// </summary>
 
 public class WG002EmptyFolderRule : IHealthRule
 {
@@ -65,3 +71,4 @@ public class WG002EmptyFolderRule : IHealthRule
         }
     }
 }
+

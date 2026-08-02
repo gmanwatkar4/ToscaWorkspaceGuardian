@@ -1,4 +1,4 @@
-// <copyright file="MainViewModel.cs" company="PlaceholderCompany">
+﻿// <copyright file="MainViewModel.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -12,6 +12,12 @@ using ToscaWorkspaceGuardian.Common.Interfaces;
 using ToscaWorkspaceGuardian.Core.Interfaces;
 using ToscaWorkspaceGuardian.Core.Models;
 using ToscaWorkspaceGuardian.Core.TCShell;
+
+/// <summary>
+
+/// TODO: Describe MainViewModel.
+
+/// </summary>
 
 public partial class MainViewModel : ObservableObject
 {
@@ -202,3 +208,4 @@ public partial class MainViewModel : ObservableObject
         }
     }
 }
+

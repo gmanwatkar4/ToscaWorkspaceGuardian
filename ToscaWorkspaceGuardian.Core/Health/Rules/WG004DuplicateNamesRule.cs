@@ -1,10 +1,16 @@
-// <copyright file="WG004DuplicateNamesRule.cs" company="PlaceholderCompany">
+﻿// <copyright file="WG004DuplicateNamesRule.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Health.Rules;
 
 using ToscaWorkspaceGuardian.Core.Business;
+
+/// <summary>
+
+/// TODO: Describe WG004DuplicateNamesRule.
+
+/// </summary>
 
 public class WG004DuplicateNamesRule : IHealthRule
 {
@@ -42,3 +48,4 @@ public class WG004DuplicateNamesRule : IHealthRule
         }
     }
 }
+

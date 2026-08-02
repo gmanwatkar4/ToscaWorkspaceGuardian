@@ -1,8 +1,14 @@
-// <copyright file="WorkspaceMetadata.cs" company="PlaceholderCompany">
+﻿// <copyright file="WorkspaceMetadata.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Models;
+
+/// <summary>
+
+/// TODO: Describe WorkspaceMetadata.
+
+/// </summary>
 
 public class WorkspaceMetadata
 {
@@ -16,3 +22,4 @@ public class WorkspaceMetadata
 
     public DateTime AnalysisTime { get; set; } = DateTime.Now;
 }
+

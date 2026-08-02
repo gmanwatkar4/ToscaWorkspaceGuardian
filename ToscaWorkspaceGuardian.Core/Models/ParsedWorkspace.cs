@@ -1,8 +1,14 @@
-// <copyright file="ParsedWorkspace.cs" company="PlaceholderCompany">
+﻿// <copyright file="ParsedWorkspace.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Business;
+
+/// <summary>
+
+/// TODO: Describe ParsedWorkspace.
+
+/// </summary>
 
 public class ParsedWorkspace
 {
@@ -32,3 +38,4 @@ public class ParsedWorkspace
 
     public List<WorkspaceGroup> Groups { get; set; } = new();
 }
+

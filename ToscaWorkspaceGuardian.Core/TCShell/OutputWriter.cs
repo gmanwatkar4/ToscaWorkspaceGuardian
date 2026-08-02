@@ -1,8 +1,14 @@
-// <copyright file="OutputWriter.cs" company="PlaceholderCompany">
+﻿// <copyright file="OutputWriter.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.TCShell;
+
+/// <summary>
+
+/// TODO: Describe OutputWriter.
+
+/// </summary>
 
 public class OutputWriter
 {
@@ -21,3 +27,4 @@ public class OutputWriter
         await File.WriteAllTextAsync(errorFile, error);
     }
 }
+

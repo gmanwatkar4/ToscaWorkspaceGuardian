@@ -1,8 +1,14 @@
-// <copyright file="RuleConfiguration.cs" company="PlaceholderCompany">
+﻿// <copyright file="RuleConfiguration.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Configuration;
+
+/// <summary>
+
+/// TODO: Describe RuleConfiguration.
+
+/// </summary>
 
 public class RuleConfiguration
 {
@@ -16,3 +22,4 @@ public class RuleConfiguration
 
     public string SeverityThreshold { get; set; } = "Info";
 }
+

@@ -1,8 +1,14 @@
-// <copyright file="RepositoryStatistics.cs" company="PlaceholderCompany">
+﻿// <copyright file="RepositoryStatistics.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Business;
+
+/// <summary>
+
+/// TODO: Describe RepositoryStatistics.
+
+/// </summary>
 
 public class RepositoryStatistics
 {
@@ -30,3 +36,4 @@ public class RepositoryStatistics
 
     public DateTime GeneratedOn { get; set; } = DateTime.Now;
 }
+

@@ -1,4 +1,4 @@
-// <copyright file="OutputDocumentExporter.cs" company="PlaceholderCompany">
+﻿// <copyright file="OutputDocumentExporter.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -6,6 +6,12 @@ namespace ToscaWorkspaceGuardian.Core.TCShell;
 
 using System.Text.Json;
 using ToscaWorkspaceGuardian.Core.Models;
+
+/// <summary>
+
+/// TODO: Describe OutputDocumentExporter.
+
+/// </summary>
 
 public class OutputDocumentExporter
 {
@@ -29,3 +35,4 @@ public class OutputDocumentExporter
         await File.WriteAllTextAsync(file, json);
     }
 }
+

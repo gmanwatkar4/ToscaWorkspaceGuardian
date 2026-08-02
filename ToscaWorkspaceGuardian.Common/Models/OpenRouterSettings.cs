@@ -4,6 +4,12 @@
 
 namespace ToscaWorkspaceGuardian.Core.AI;
 
+/// <summary>
+
+/// TODO: Describe OpenRouterSettings.
+
+/// </summary>
+
 public class OpenRouterSettings
 {
     public string ApiKey { get; set; } = string.Empty;
@@ -14,3 +20,4 @@ public class OpenRouterSettings
 
     public double Temperature { get; set; } = 0.2;
 }
+

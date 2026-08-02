@@ -1,10 +1,16 @@
-// <copyright file="HealthAnalyzer.cs" company="PlaceholderCompany">
+﻿// <copyright file="HealthAnalyzer.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Health;
 
 using ToscaWorkspaceGuardian.Core.Business;
+
+/// <summary>
+
+/// TODO: Describe HealthAnalyzer.
+
+/// </summary>
 
 public class HealthAnalyzer
 {
@@ -29,3 +35,4 @@ public class HealthAnalyzer
         return issues;
     }
 }
+

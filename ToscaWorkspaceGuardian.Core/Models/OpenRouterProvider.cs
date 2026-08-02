@@ -1,4 +1,4 @@
-// <copyright file="OpenRouterProvider.cs" company="PlaceholderCompany">
+﻿// <copyright file="OpenRouterProvider.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -6,6 +6,12 @@ namespace ToscaWorkspaceGuardian.Core.AI;
 
 using System.Text;
 using System.Text.Json;
+
+/// <summary>
+
+/// TODO: Describe OpenRouterProvider.
+
+/// </summary>
 
 public class OpenRouterProvider : IAIProvider
 {
@@ -33,7 +39,7 @@ public class OpenRouterProvider : IAIProvider
         {
             Role = "user",
             Content = request.Prompt
-        }
+        },
     },
         };
 
@@ -81,3 +87,4 @@ public class OpenRouterProvider : IAIProvider
         };
     }
 }
+

@@ -1,4 +1,4 @@
-// <copyright file="ScriptComposer.cs" company="PlaceholderCompany">
+﻿// <copyright file="ScriptComposer.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -6,6 +6,12 @@ namespace ToscaWorkspaceGuardian.Core.Script;
 
 using System.Text;
 using ToscaWorkspaceGuardian.Core.Models;
+
+/// <summary>
+
+/// TODO: Describe ScriptComposer.
+
+/// </summary>
 
 public class ScriptComposer
 {
@@ -41,3 +47,4 @@ public class ScriptComposer
             builder.ToString());
     }
 }
+

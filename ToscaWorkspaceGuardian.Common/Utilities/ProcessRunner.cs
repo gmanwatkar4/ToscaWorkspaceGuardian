@@ -1,4 +1,4 @@
-// <copyright file="ProcessRunner.cs" company="PlaceholderCompany">
+﻿// <copyright file="ProcessRunner.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -12,6 +12,12 @@ using Polly;
 using Polly.Timeout;
 using ToscaWorkspaceGuardian.Common.Interfaces;
 using ToscaWorkspaceGuardian.Common.Models;
+
+/// <summary>
+
+/// TODO: Describe ProcessRunner.
+
+/// </summary>
 
 public class ProcessRunner : IProcessRunner
 {
@@ -148,3 +154,4 @@ public class ProcessRunner : IProcessRunner
         return this.ExecuteAsync(fileName, arguments, CancellationToken.None).GetAwaiter().GetResult();
     }
 }
+

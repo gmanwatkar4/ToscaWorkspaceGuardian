@@ -1,8 +1,14 @@
-// <copyright file="WorkspaceSnapshot.cs" company="PlaceholderCompany">
+﻿// <copyright file="WorkspaceSnapshot.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Business;
+
+/// <summary>
+
+/// TODO: Describe WorkspaceSnapshot.
+
+/// </summary>
 
 public class WorkspaceSnapshot
 {
@@ -14,3 +20,4 @@ public class WorkspaceSnapshot
 
     public List<RepositoryObject> Objects { get; } = new();
 }
+

@@ -1,10 +1,16 @@
-// <copyright file="WorkspaceSnapshotComparer.cs" company="PlaceholderCompany">
+﻿// <copyright file="WorkspaceSnapshotComparer.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Compare;
 
 using ToscaWorkspaceGuardian.Core.Business;
+
+/// <summary>
+
+/// TODO: Describe WorkspaceSnapshotComparer.
+
+/// </summary>
 
 public class WorkspaceSnapshotComparer
 {
@@ -83,3 +89,4 @@ public class WorkspaceSnapshotComparer
         return result;
     }
 }
+

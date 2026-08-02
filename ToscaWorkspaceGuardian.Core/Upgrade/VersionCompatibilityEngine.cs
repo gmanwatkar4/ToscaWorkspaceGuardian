@@ -1,8 +1,14 @@
-// <copyright file="VersionCompatibilityEngine.cs" company="PlaceholderCompany">
+﻿// <copyright file="VersionCompatibilityEngine.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Upgrade;
+
+/// <summary>
+
+/// TODO: Describe VersionCompatibilityEngine.
+
+/// </summary>
 
 public class VersionCompatibilityEngine
 {
@@ -61,3 +67,4 @@ public class VersionCompatibilityEngine
         return rules;
     }
 }
+

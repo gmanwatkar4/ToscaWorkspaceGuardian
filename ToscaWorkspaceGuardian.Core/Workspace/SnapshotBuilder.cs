@@ -1,4 +1,4 @@
-// <copyright file="SnapshotBuilder.cs" company="PlaceholderCompany">
+﻿// <copyright file="SnapshotBuilder.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -7,6 +7,12 @@ namespace ToscaWorkspaceGuardian.Core.Workspace;
 using ToscaWorkspaceGuardian.Core.Business;
 using ToscaWorkspaceGuardian.Core.Interfaces;
 using ToscaWorkspaceGuardian.Core.Models;
+
+/// <summary>
+
+/// TODO: Describe SnapshotBuilder.
+
+/// </summary>
 
 public class SnapshotBuilder : ISnapshotBuilder
 {
@@ -38,7 +44,11 @@ public class SnapshotBuilder : ISnapshotBuilder
             {
                 // create a copy of the collection values with a known capacity
                 var valuesList = new List<string>(collection.Value.Count);
-                for (int i = 0; i < collection.Value.Count; i++) valuesList.Add(collection.Value[i]);
+                for (int i = 0; i < collection.Value.Count; i++)
+                {
+                    valuesList.Add(collection.Value[i]);
+                }
+
                 repositoryObject.Collections[collection.Key] = valuesList;
             }
 
@@ -92,3 +102,4 @@ public class SnapshotBuilder : ISnapshotBuilder
         }
     }
 }
+

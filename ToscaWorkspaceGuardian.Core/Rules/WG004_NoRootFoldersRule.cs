@@ -1,4 +1,4 @@
-// <copyright file="WG004_NoRootFoldersRule.cs" company="PlaceholderCompany">
+﻿// <copyright file="WG004_NoRootFoldersRule.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -6,6 +6,12 @@ namespace ToscaWorkspaceGuardian.Core.Rules;
 
 using ToscaWorkspaceGuardian.Core.Business;
 using ToscaWorkspaceGuardian.Core.Health;
+
+/// <summary>
+
+/// TODO: Describe WG004_NoRootFoldersRule.
+
+/// </summary>
 
 public class WG004_NoRootFoldersRule : WorkspaceRuleBase
 {
@@ -29,3 +35,4 @@ public class WG004_NoRootFoldersRule : WorkspaceRuleBase
             20);
     }
 }
+

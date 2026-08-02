@@ -1,8 +1,14 @@
-// <copyright file="TQLResult.cs" company="PlaceholderCompany">
+﻿// <copyright file="TQLResult.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Models;
+
+/// <summary>
+
+/// TODO: Describe TQLResult.
+
+/// </summary>
 
 public class TQLResult
 {
@@ -14,3 +20,4 @@ public class TQLResult
 
     public string Error { get; set; } = string.Empty;
 }
+

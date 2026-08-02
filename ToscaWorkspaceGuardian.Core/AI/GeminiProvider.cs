@@ -1,4 +1,4 @@
-// <copyright file="GeminiProvider.cs" company="PlaceholderCompany">
+﻿// <copyright file="GeminiProvider.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -6,6 +6,12 @@ namespace ToscaWorkspaceGuardian.Core.AI;
 
 using System.Text;
 using System.Text.Json;
+
+/// <summary>
+
+/// TODO: Describe GeminiProvider.
+
+/// </summary>
 
 public class GeminiProvider : IAIProvider
 {
@@ -43,7 +49,7 @@ public class GeminiProvider : IAIProvider
                             text = request.Prompt
                         }
                     }
-                }
+                },
             },
         };
 
@@ -110,3 +116,4 @@ public class GeminiProvider : IAIProvider
         };
     }
 }
+

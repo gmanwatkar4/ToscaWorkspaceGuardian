@@ -1,10 +1,16 @@
-// <copyright file="ScriptTemplateRepository.cs" company="PlaceholderCompany">
+﻿// <copyright file="ScriptTemplateRepository.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Script;
 
 using ToscaWorkspaceGuardian.Core.Models;
+
+/// <summary>
+
+/// TODO: Describe ScriptTemplateRepository.
+
+/// </summary>
 
 public class ScriptTemplateRepository
 {
@@ -34,3 +40,4 @@ Exit
         };
     }
 }
+

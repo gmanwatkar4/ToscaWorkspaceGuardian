@@ -1,10 +1,16 @@
-// <copyright file="RepositoryStatisticsBuilder.cs" company="PlaceholderCompany">
+﻿// <copyright file="RepositoryStatisticsBuilder.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Health;
 
 using ToscaWorkspaceGuardian.Core.Business;
+
+/// <summary>
+
+/// TODO: Describe RepositoryStatisticsBuilder.
+
+/// </summary>
 
 public class RepositoryStatisticsBuilder
 {
@@ -94,3 +100,4 @@ public class RepositoryStatisticsBuilder
         return stats;
     }
 }
+

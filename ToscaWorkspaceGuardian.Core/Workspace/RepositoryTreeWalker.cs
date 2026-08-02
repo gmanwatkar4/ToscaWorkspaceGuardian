@@ -1,4 +1,4 @@
-// <copyright file="RepositoryTreeWalker.cs" company="PlaceholderCompany">
+﻿// <copyright file="RepositoryTreeWalker.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -8,6 +8,12 @@ using System.Collections.Generic;
 using ToscaWorkspaceGuardian.Core.Business;
 using ToscaWorkspaceGuardian.Core.Interfaces;
 using ToscaWorkspaceGuardian.Core.Models;
+
+/// <summary>
+
+/// TODO: Describe RepositoryTreeWalker.
+
+/// </summary>
 
 public class RepositoryTreeWalker : IRepositoryTreeWalker
 {
@@ -40,3 +46,4 @@ public class RepositoryTreeWalker : IRepositoryTreeWalker
         return new ParsedWorkspace();
     }
 }
+

@@ -1,8 +1,14 @@
-// <copyright file="OutputObject.cs" company="PlaceholderCompany">
+﻿// <copyright file="OutputObject.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Models;
+
+/// <summary>
+
+/// TODO: Describe OutputObject.
+
+/// </summary>
 
 public class OutputObject
 {
@@ -27,11 +33,18 @@ public class OutputObject
     //--------------------------------------------------------
     public string? GetProperty(string propertyName)
     {
-        if (propertyName == null) return null;
+        if (propertyName == null)
+        {
+            return null;
+        }
+
         for (int i = 0; i < this.Properties.Count; i++)
         {
             var p = this.Properties[i];
-            if (p.Name == propertyName) return p.Value;
+            if (p.Name == propertyName)
+            {
+                return p.Value;
+            }
         }
 
         return null;
@@ -52,3 +65,4 @@ public class OutputObject
         return this.Collections.ContainsKey(collectionName);
     }
 }
+

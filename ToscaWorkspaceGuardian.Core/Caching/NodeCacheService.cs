@@ -1,16 +1,27 @@
+﻿<!--
+// <copyright file="NodeCacheService.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+-->
+namespace ToscaWorkspaceGuardian.Core.Caching;
+
 using System.Security.Cryptography;
 using System.Text;
 
-namespace ToscaWorkspaceGuardian.Core.Caching;
+/// <summary>
+
+/// TODO: Describe NodeCacheService.
+
+/// </summary>
 
 public class NodeCacheService
 {
-    private readonly string _cacheDir;
+    private readonly string cacheDir;
 
     public NodeCacheService()
     {
-        _cacheDir = Path.Combine(Path.GetTempPath(), "ToscaWorkspaceGuardian", "NodeCache");
-        Directory.CreateDirectory(_cacheDir);
+        this.cacheDir = Path.Combine(Path.GetTempPath(), "ToscaWorkspaceGuardian", "NodeCache");
+        Directory.CreateDirectory(this.cacheDir);
     }
 
     private static string NormalizePathKey(string nodePath)
@@ -24,7 +35,7 @@ public class NodeCacheService
     private string GetFilePath(string nodePath)
     {
         var key = NormalizePathKey(nodePath);
-        return Path.Combine(_cacheDir, $"node_{key}.txt");
+        return Path.Combine(this.cacheDir, $"node_{key}.txt");
     }
 
     public bool TryGetHash(string nodePath, out string? hash)
@@ -32,8 +43,12 @@ public class NodeCacheService
         hash = null;
         try
         {
-            var path = GetFilePath(nodePath);
-            if (!File.Exists(path)) return false;
+            var path = this.GetFilePath(nodePath);
+            if (!File.Exists(path))
+            {
+                return false;
+            }
+
             hash = File.ReadAllText(path);
             return true;
         }
@@ -47,7 +62,7 @@ public class NodeCacheService
     {
         try
         {
-            var path = GetFilePath(nodePath);
+            var path = this.GetFilePath(nodePath);
             File.WriteAllText(path, hash);
         }
         catch
@@ -56,3 +71,4 @@ public class NodeCacheService
         }
     }
 }
+

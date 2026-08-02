@@ -1,4 +1,4 @@
-// <copyright file="OutputParser.cs" company="PlaceholderCompany">
+﻿// <copyright file="OutputParser.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -7,9 +7,15 @@ namespace ToscaWorkspaceGuardian.Core.TCShell;
 using System.Text.RegularExpressions;
 using ToscaWorkspaceGuardian.Core.Models;
 
+/// <summary>
+
+/// TODO: Describe OutputParser.
+
+/// </summary>
+
 public class OutputParser
 {
-    private static readonly System.Text.RegularExpressions.Regex _headerRegex =
+    private static readonly System.Text.RegularExpressions.Regex headerRegex =
         new("'(.+?)'\\s+\\[(.+?)\\]", System.Text.RegularExpressions.RegexOptions.Compiled | System.Text.RegularExpressions.RegexOptions.CultureInvariant);
 
     public OutputDocument Parse(string output)
@@ -33,7 +39,7 @@ public class OutputParser
             //----------------------------------------
             if (line.StartsWith("'") && line.Contains('['))
             {
-                var match = _headerRegex.Match(line);
+                var match = headerRegex.Match(line);
                 if (match.Success)
                 {
                     currentObject = new OutputObject
@@ -127,3 +133,4 @@ public class OutputParser
         return document;
     }
 }
+

@@ -1,21 +1,26 @@
-// <copyright file="WorkspaceCrawler.cs" company="PlaceholderCompany">
+﻿// <copyright file="WorkspaceCrawler.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Traversal;
 
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using ToscaWorkspaceGuardian.Core.Business;
 using ToscaWorkspaceGuardian.Core.Interfaces;
 using ToscaWorkspaceGuardian.Core.Models;
 using ToscaWorkspaceGuardian.Core.Script;
 using ToscaWorkspaceGuardian.Core.TCShell;
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.Json;
-using Microsoft.Extensions.Logging;
 
-using Microsoft.Extensions.Options;
-using System.Linq;
+/// <summary>
+
+/// TODO: Describe WorkspaceCrawler.
+
+/// </summary>
 
 public class WorkspaceCrawler : IWorkspaceCrawler
 {
@@ -30,7 +35,7 @@ public class WorkspaceCrawler : IWorkspaceCrawler
     private readonly ToscaWorkspaceGuardian.Core.Caching.NodeCacheService? nodeCache;
     private readonly string cacheDirectory;
 
-    private readonly int _batchSize;
+    private readonly int batchSize;
 
     public WorkspaceCrawler(
         BatchScriptBuilder scriptBuilder,
@@ -50,7 +55,7 @@ public class WorkspaceCrawler : IWorkspaceCrawler
         this.logger = logger;
         var opts = options?.Value ?? new ToscaWorkspaceGuardian.Core.Configuration.CrawlerOptions();
         this.maxDegreeOfParallelism = Math.Max(1, opts.MaxDegreeOfParallelism);
-        this._batchSize = Math.Max(1, opts.BatchSize);
+        this.batchSize = Math.Max(1, opts.BatchSize);
         this.cacheDirectory = Path.Combine(Path.GetTempPath(), "ToscaWorkspaceGuardian", "Cache");
         this.nodeCache = nodeCache;
         Directory.CreateDirectory(this.cacheDirectory);
@@ -90,20 +95,24 @@ public class WorkspaceCrawler : IWorkspaceCrawler
         while (queue.Count > 0 || runningTasks.Count > 0)
         {
             // Start new tasks up to maxDegreeOfParallelism
-            while (runningTasks.Count < maxDegreeOfParallelism)
+            while (runningTasks.Count < this.maxDegreeOfParallelism)
             {
                 List<string> paths = new List<string>();
                 lock (queueLock)
                 {
-                    while (queue.Count > 0 && paths.Count < _batchSize)
+                    while (queue.Count > 0 && paths.Count < this.batchSize)
                     {
                         paths.Add(queue.Dequeue());
                     }
                 }
 
-                if (paths.Count == 0) break;
+                if (paths.Count == 0)
+                {
+                    break;
+                }
 
-                var task = Task.Run(async () =>
+                var task = Task.Run(
+                    async () =>
                 {
                     string? responseOutput = null;
                     string? responseError = null;
@@ -113,7 +122,6 @@ public class WorkspaceCrawler : IWorkspaceCrawler
                     try
                     {
                         // Debug output removed to reduce allocations during normal runs
-
                         var script = this.scriptBuilder.Build(paths);
                         var scriptFile = Path.Combine(Path.GetTempPath(), "ToscaWorkspaceGuardian", "Crawler.tcs");
                         Directory.CreateDirectory(Path.GetDirectoryName(scriptFile)!);
@@ -158,13 +166,15 @@ public class WorkspaceCrawler : IWorkspaceCrawler
                                 var ser = System.Text.Json.JsonSerializer.Serialize(new { Output = responseOutput, Error = responseError, ExitCode = responseExitCode });
                                 await File.WriteAllTextAsync(cacheFile, ser, cancellationToken);
                             }
-                            catch { }
+                            catch
+                            {
+                            }
                         }
 
                         var parsedDocument = (document is null) ? this.parser.Parse(responseOutput ?? string.Empty) : (dynamic)document;
 
                         // Merge snapshot
-                        lock (snapshotLock)
+                        lock (this.snapshotLock)
                         {
                             this.snapshotBuilder.AddDocument(snapshot, parsedDocument);
                         }
@@ -172,10 +182,16 @@ public class WorkspaceCrawler : IWorkspaceCrawler
                         // Discover children and enqueue if node changed (use node cache to skip unchanged nodes)
                         foreach (var obj in parsedDocument.Objects)
                         {
-                            if (!IsContainer(obj.ObjectType)) continue;
+                            if (!IsContainer(obj.ObjectType))
+                            {
+                                continue;
+                            }
 
                             string? nodePath = obj.GetProperty("NodePath");
-                            if (string.IsNullOrWhiteSpace(nodePath)) continue;
+                            if (string.IsNullOrWhiteSpace(nodePath))
+                            {
+                                continue;
+                            }
 
                             // Use RawText as the canonical content for hashing
                             var content = obj.RawText ?? string.Empty;
@@ -192,7 +208,9 @@ public class WorkspaceCrawler : IWorkspaceCrawler
                                     }
                                 }
                             }
-                            catch { }
+                            catch
+                            {
+                            }
 
                             if (!skipChildren)
                             {
@@ -231,6 +249,7 @@ public class WorkspaceCrawler : IWorkspaceCrawler
 
             // Wait for any task to complete
             var completed = await Task.WhenAny(runningTasks);
+
             // Remove completed tasks
             runningTasks.RemoveAll(t => t.IsCompleted);
         }
@@ -265,7 +284,9 @@ public class WorkspaceCrawler : IWorkspaceCrawler
                 this.logger?.LogInformation(summary);
             }
         }
-        catch { }
+        catch
+        {
+        }
 
         return snapshot;
     }

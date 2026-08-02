@@ -1,8 +1,14 @@
-// <copyright file="MockAIProvider.cs" company="PlaceholderCompany">
+﻿// <copyright file="MockAIProvider.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.AI;
+
+/// <summary>
+
+/// TODO: Describe MockAIProvider.
+
+/// </summary>
 
 public class MockAIProvider : IAIProvider
 {
@@ -21,12 +27,13 @@ Health Score: Good
 
 Recommendations
 
-• Remove unused empty folders.
+â€¢ Remove unused empty folders.
 
-• Resolve duplicate sibling objects.
+â€¢ Resolve duplicate sibling objects.
 
-• Execute smoke regression after upgrade.
+â€¢ Execute smoke regression after upgrade.
 """,
             });
     }
 }
+

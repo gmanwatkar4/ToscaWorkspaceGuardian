@@ -1,8 +1,14 @@
-// <copyright file="WorkspaceFinding.cs" company="PlaceholderCompany">
+﻿// <copyright file="WorkspaceFinding.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Health;
+
+/// <summary>
+
+/// TODO: Describe WorkspaceFinding.
+
+/// </summary>
 
 public class WorkspaceFinding
 {
@@ -16,3 +22,4 @@ public class WorkspaceFinding
 
     public string Recommendation { get; set; } = string.Empty;
 }
+

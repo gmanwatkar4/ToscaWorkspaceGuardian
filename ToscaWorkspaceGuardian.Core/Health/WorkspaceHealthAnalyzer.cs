@@ -1,4 +1,4 @@
-// <copyright file="WorkspaceHealthAnalyzer.cs" company="PlaceholderCompany">
+﻿// <copyright file="WorkspaceHealthAnalyzer.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -6,6 +6,12 @@ namespace ToscaWorkspaceGuardian.Core.Health;
 
 using ToscaWorkspaceGuardian.Core.Business;
 using ToscaWorkspaceGuardian.Core.Interfaces;
+
+/// <summary>
+
+/// TODO: Describe WorkspaceHealthAnalyzer.
+
+/// </summary>
 
 public class WorkspaceHealthAnalyzer : IWorkspaceHealthAnalyzer
 {
@@ -118,3 +124,4 @@ public class WorkspaceHealthAnalyzer : IWorkspaceHealthAnalyzer
         return report;
     }
 }
+

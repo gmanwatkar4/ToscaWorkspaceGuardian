@@ -1,4 +1,4 @@
-// <copyright file="ToscaInstallationService.cs" company="PlaceholderCompany">
+﻿// <copyright file="ToscaInstallationService.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -7,6 +7,12 @@ namespace ToscaWorkspaceGuardian.Common.Services;
 using System.IO;
 using ToscaWorkspaceGuardian.Common.Interfaces;
 using ToscaWorkspaceGuardian.Common.Models;
+
+/// <summary>
+
+/// TODO: Describe ToscaInstallationService.
+
+/// </summary>
 
 public class ToscaInstallationService : IToscaInstallationService
 {
@@ -50,3 +56,4 @@ public class ToscaInstallationService : IToscaInstallationService
         return installation;
     }
 }
+

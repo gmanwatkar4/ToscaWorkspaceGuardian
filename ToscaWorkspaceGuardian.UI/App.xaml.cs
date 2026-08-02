@@ -1,4 +1,4 @@
-// <copyright file="App.xaml.cs" company="PlaceholderCompany">
+﻿// <copyright file="App.xaml.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -11,6 +11,9 @@ namespace ToscaWorkspaceGuardian.UI
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
+    using OpenTelemetry.Metrics;
+    using OpenTelemetry.Resources;
+    using OpenTelemetry.Trace;
     using ToscaWorkspaceGuardian.Common.Interfaces;
     using ToscaWorkspaceGuardian.Common.Services;
     using ToscaWorkspaceGuardian.Common.Utilities;
@@ -18,6 +21,7 @@ namespace ToscaWorkspaceGuardian.UI
     using ToscaWorkspaceGuardian.Core.Business;
     using ToscaWorkspaceGuardian.Core.Compare;
     using ToscaWorkspaceGuardian.Core.Configuration;
+    using ToscaWorkspaceGuardian.Core.Diagnostics;
     using ToscaWorkspaceGuardian.Core.Export;
     using ToscaWorkspaceGuardian.Core.Health;
     using ToscaWorkspaceGuardian.Core.Health.Rules;
@@ -30,12 +34,14 @@ namespace ToscaWorkspaceGuardian.UI
     using ToscaWorkspaceGuardian.Core.Traversal;
     using ToscaWorkspaceGuardian.Core.Upgrade;
     using ToscaWorkspaceGuardian.Core.Workspace;
-    using ToscaWorkspaceGuardian.Core.Diagnostics;
-    using OpenTelemetry.Trace;
-    using OpenTelemetry.Metrics;
-    using OpenTelemetry.Resources;
     using ToscaWorkspaceGuardian.UI.ViewModels;
     using ToscaWorkspaceGuardian.UI.Views;
+
+    /// <summary>
+
+    /// TODO: Describe App.
+
+    /// </summary>
 
     public partial class App : Application
     {
@@ -176,3 +182,4 @@ namespace ToscaWorkspaceGuardian.UI
         }
     }
 }
+

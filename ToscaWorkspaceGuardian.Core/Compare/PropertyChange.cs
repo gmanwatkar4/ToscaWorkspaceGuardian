@@ -1,8 +1,14 @@
-// <copyright file="PropertyChange.cs" company="PlaceholderCompany">
+﻿// <copyright file="PropertyChange.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Compare;
+
+/// <summary>
+
+/// TODO: Describe PropertyChange.
+
+/// </summary>
 
 public class PropertyChange
 {
@@ -14,3 +20,4 @@ public class PropertyChange
 
     public string NewValue { get; set; } = string.Empty;
 }
+

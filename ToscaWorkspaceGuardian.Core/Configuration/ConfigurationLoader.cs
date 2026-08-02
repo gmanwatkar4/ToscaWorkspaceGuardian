@@ -1,10 +1,16 @@
-// <copyright file="ConfigurationLoader.cs" company="PlaceholderCompany">
+﻿// <copyright file="ConfigurationLoader.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Configuration;
 
 using System.Text.Json;
+
+/// <summary>
+
+/// TODO: Describe ConfigurationLoader.
+
+/// </summary>
 
 public class ConfigurationLoader
 {
@@ -34,3 +40,4 @@ public class ConfigurationLoader
             ?? new RuleConfiguration();
     }
 }
+

@@ -1,10 +1,16 @@
-// <copyright file="CompareHtmlReportGenerator.cs" company="PlaceholderCompany">
+﻿// <copyright file="CompareHtmlReportGenerator.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Compare;
 
 using System.Text;
+
+/// <summary>
+
+/// TODO: Describe CompareHtmlReportGenerator.
+
+/// </summary>
 
 public class CompareHtmlReportGenerator
 {
@@ -91,3 +97,4 @@ public class CompareHtmlReportGenerator
             html.ToString());
     }
 }
+

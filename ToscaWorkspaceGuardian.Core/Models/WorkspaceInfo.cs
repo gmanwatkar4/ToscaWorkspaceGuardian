@@ -1,8 +1,14 @@
-// <copyright file="WorkspaceInfo.cs" company="PlaceholderCompany">
+﻿// <copyright file="WorkspaceInfo.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Models;
+
+/// <summary>
+
+/// TODO: Describe WorkspaceInfo.
+
+/// </summary>
 
 public class WorkspaceInfo
 {
@@ -22,3 +28,4 @@ public class WorkspaceInfo
 
     public string DefaultUser { get; set; } = string.Empty;
 }
+

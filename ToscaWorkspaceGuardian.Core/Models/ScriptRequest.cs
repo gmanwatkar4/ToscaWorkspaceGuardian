@@ -1,8 +1,14 @@
-// <copyright file="ScriptRequest.cs" company="PlaceholderCompany">
+﻿// <copyright file="ScriptRequest.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Models;
+
+/// <summary>
+
+/// TODO: Describe ScriptRequest.
+
+/// </summary>
 
 public class ScriptRequest
 {
@@ -12,3 +18,4 @@ public class ScriptRequest
 
     public List<string> Queries { get; set; } = new();
 }
+

@@ -1,4 +1,4 @@
-// <copyright file="ProcessRunnerTests.cs" company="PlaceholderCompany">
+﻿// <copyright file="ProcessRunnerTests.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -7,6 +7,12 @@ namespace ToscaWorkspaceGuardian.Tests
     using System.Threading.Tasks;
     using ToscaWorkspaceGuardian.Common.Utilities;
     using Xunit;
+
+    /// <summary>
+
+    /// TODO: Describe ProcessRunnerTests.
+
+    /// </summary>
 
     public class ProcessRunnerTests
     {
@@ -23,3 +29,4 @@ namespace ToscaWorkspaceGuardian.Tests
         }
     }
 }
+

@@ -1,4 +1,4 @@
-// <copyright file="WorkspaceHtmlReportGenerator.cs" company="PlaceholderCompany">
+﻿// <copyright file="WorkspaceHtmlReportGenerator.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -7,6 +7,12 @@ namespace ToscaWorkspaceGuardian.Core.Reporting;
 using System.Net;
 using System.Text;
 using ToscaWorkspaceGuardian.Core.Business;
+
+/// <summary>
+
+/// TODO: Describe WorkspaceHtmlReportGenerator.
+
+/// </summary>
 
 public class WorkspaceHtmlReportGenerator
 {
@@ -167,3 +173,4 @@ public class WorkspaceHtmlReportGenerator
         }
     }
 }
+

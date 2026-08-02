@@ -1,10 +1,16 @@
-// <copyright file="OpenRouterRequest.cs" company="PlaceholderCompany">
+﻿// <copyright file="OpenRouterRequest.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.AI;
 
 using System.Text.Json.Serialization;
+
+/// <summary>
+
+/// TODO: Describe OpenRouterRequest.
+
+/// </summary>
 
 public class OpenRouterRequest
 {
@@ -21,6 +27,12 @@ public class OpenRouterRequest
     public double Temperature { get; set; } = 0.2;
 }
 
+/// <summary>
+
+/// TODO: Describe OpenRouterMessage.
+
+/// </summary>
+
 public class OpenRouterMessage
 {
     [JsonPropertyName("role")]
@@ -29,3 +41,4 @@ public class OpenRouterMessage
     [JsonPropertyName("content")]
     public string Content { get; set; } = string.Empty;
 }
+

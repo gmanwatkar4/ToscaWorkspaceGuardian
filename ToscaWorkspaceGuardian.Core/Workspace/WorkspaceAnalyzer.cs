@@ -1,4 +1,4 @@
-// <copyright file="WorkspaceAnalyzer.cs" company="PlaceholderCompany">
+﻿// <copyright file="WorkspaceAnalyzer.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -11,6 +11,12 @@ using ToscaWorkspaceGuardian.Core.Interfaces;
 using ToscaWorkspaceGuardian.Core.Models;
 using ToscaWorkspaceGuardian.Core.Reporting;
 using ToscaWorkspaceGuardian.Core.Upgrade;
+
+/// <summary>
+
+/// TODO: Describe WorkspaceAnalyzer.
+
+/// </summary>
 
 public class WorkspaceAnalyzer : IWorkspaceAnalyzer
 {
@@ -147,3 +153,4 @@ Warnings :
         };
     }
 }
+

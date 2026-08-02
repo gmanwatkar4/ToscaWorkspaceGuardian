@@ -1,4 +1,4 @@
-// <copyright file="TCShellService.cs" company="PlaceholderCompany">
+﻿// <copyright file="TCShellService.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -6,6 +6,12 @@ namespace ToscaWorkspaceGuardian.Core.TCShell;
 
 using ToscaWorkspaceGuardian.Core.Interfaces;
 using ToscaWorkspaceGuardian.Core.Models;
+
+/// <summary>
+
+/// TODO: Describe TCShellService.
+
+/// </summary>
 
 public class TCShellService : ITCShellService
 {
@@ -37,3 +43,4 @@ public class TCShellService : ITCShellService
         };
     }
 }
+

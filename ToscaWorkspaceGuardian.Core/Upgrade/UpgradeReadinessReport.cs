@@ -1,8 +1,14 @@
-// <copyright file="UpgradeReadinessReport.cs" company="PlaceholderCompany">
+﻿// <copyright file="UpgradeReadinessReport.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Upgrade;
+
+/// <summary>
+
+/// TODO: Describe UpgradeReadinessReport.
+
+/// </summary>
 
 public class UpgradeReadinessReport
 {
@@ -22,3 +28,4 @@ public class UpgradeReadinessReport
 
     public List<VersionCompatibilityRule> CompatibilityRules { get; set; } = new();
 }
+

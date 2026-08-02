@@ -1,10 +1,16 @@
-// <copyright file="ITQLService.cs" company="PlaceholderCompany">
+﻿// <copyright file="ITQLService.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Interfaces;
 
 using ToscaWorkspaceGuardian.Core.Models;
+
+/// <summary>
+
+/// TODO: Describe ITQLService.
+
+/// </summary>
 
 public interface ITQLService
 {
@@ -13,3 +19,4 @@ public interface ITQLService
         WorkspaceRequest request,
         CancellationToken cancellationToken = default);
 }
+

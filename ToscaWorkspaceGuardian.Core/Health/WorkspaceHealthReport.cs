@@ -1,8 +1,14 @@
-// <copyright file="WorkspaceHealthReport.cs" company="PlaceholderCompany">
+﻿// <copyright file="WorkspaceHealthReport.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Health;
+
+/// <summary>
+
+/// TODO: Describe WorkspaceHealthReport.
+
+/// </summary>
 
 public class WorkspaceHealthReport
 {
@@ -10,3 +16,4 @@ public class WorkspaceHealthReport
 
     public List<WorkspaceFinding> Findings { get; set; } = new();
 }
+

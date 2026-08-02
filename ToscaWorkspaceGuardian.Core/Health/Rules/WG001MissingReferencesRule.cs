@@ -1,10 +1,16 @@
-// <copyright file="WG001MissingReferencesRule.cs" company="PlaceholderCompany">
+﻿// <copyright file="WG001MissingReferencesRule.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Health.Rules;
 
 using ToscaWorkspaceGuardian.Core.Business;
+
+/// <summary>
+
+/// TODO: Describe WG001MissingReferencesRule.
+
+/// </summary>
 
 public class WG001MissingReferencesRule : IHealthRule
 {
@@ -45,3 +51,4 @@ public class WG001MissingReferencesRule : IHealthRule
         }
     }
 }
+

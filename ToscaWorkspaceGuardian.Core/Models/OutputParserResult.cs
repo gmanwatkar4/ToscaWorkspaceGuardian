@@ -1,8 +1,14 @@
-// <copyright file="OutputParserResult.cs" company="PlaceholderCompany">
+﻿// <copyright file="OutputParserResult.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Models;
+
+/// <summary>
+
+/// TODO: Describe OutputParserResult.
+
+/// </summary>
 
 public class OutputParserResult
 {
@@ -12,3 +18,4 @@ public class OutputParserResult
 
     public WorkspaceSummary WorkspaceSummary { get; set; } = new();
 }
+

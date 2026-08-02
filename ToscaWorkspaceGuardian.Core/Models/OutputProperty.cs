@@ -1,8 +1,14 @@
-// <copyright file="OutputProperty.cs" company="PlaceholderCompany">
+﻿// <copyright file="OutputProperty.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Models;
+
+/// <summary>
+
+/// TODO: Describe OutputProperty.
+
+/// </summary>
 
 public class OutputProperty
 {
@@ -12,3 +18,4 @@ public class OutputProperty
 
     public bool IsReadOnly { get; set; }
 }
+

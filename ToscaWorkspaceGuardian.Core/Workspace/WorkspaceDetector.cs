@@ -1,4 +1,4 @@
-// <copyright file="WorkspaceDetector.cs" company="PlaceholderCompany">
+﻿// <copyright file="WorkspaceDetector.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -7,6 +7,12 @@ namespace ToscaWorkspaceGuardian.Core.Workspace;
 using System.Xml.Linq;
 using ToscaWorkspaceGuardian.Core.Interfaces;
 using ToscaWorkspaceGuardian.Core.Models;
+
+/// <summary>
+
+/// TODO: Describe WorkspaceDetector.
+
+/// </summary>
 
 public class WorkspaceDetector : IWorkspaceDetector
 {
@@ -72,3 +78,4 @@ public class WorkspaceDetector : IWorkspaceDetector
         return info;
     }
 }
+

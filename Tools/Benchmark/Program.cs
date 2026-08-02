@@ -1,3 +1,8 @@
+﻿<!--
+// <copyright file="Program.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+-->
 using System.Diagnostics;
 using ToscaWorkspaceGuardian.Core.TCShell;
 
@@ -32,3 +37,4 @@ var resultFile = Path.Combine(outDir, "benchmark_result.txt");
 await File.WriteAllTextAsync(resultFile, $"Parsed={doc.Objects.Count},ms={sw.Elapsed.TotalMilliseconds:0.0}\n");
 
 Console.WriteLine($"Benchmark: result written to {resultFile}");
+

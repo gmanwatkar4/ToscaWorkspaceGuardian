@@ -1,4 +1,4 @@
-// <copyright file="WG001_MissingReferencesRule.cs" company="PlaceholderCompany">
+﻿// <copyright file="WG001_MissingReferencesRule.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -6,6 +6,12 @@ namespace ToscaWorkspaceGuardian.Core.Rules;
 
 using ToscaWorkspaceGuardian.Core.Business;
 using ToscaWorkspaceGuardian.Core.Health;
+
+/// <summary>
+
+/// TODO: Describe WG001_MissingReferencesRule.
+
+/// </summary>
 
 public class WG001_MissingReferencesRule : WorkspaceRuleBase
 {
@@ -29,3 +35,4 @@ public class WG001_MissingReferencesRule : WorkspaceRuleBase
             40);
     }
 }
+

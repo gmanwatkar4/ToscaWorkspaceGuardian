@@ -8,6 +8,12 @@ using ToscaWorkspaceGuardian.Core.Interfaces;
 using ToscaWorkspaceGuardian.Core.Models;
 using ToscaWorkspaceGuardian.Core.TCShell;
 
+/// <summary>
+
+/// TODO: Describe WorkspaceReader.
+
+/// </summary>
+
 public class WorkspaceReader : IWorkspaceReader
 {
     private readonly IScriptService scriptService;
@@ -43,7 +49,7 @@ public class WorkspaceReader : IWorkspaceReader
             "=>SUBPARTS:Module",
             "=>SUBPARTS:TestCase",
             "=>SUBPARTS:ExecutionList",
-            "=>SUBPARTS:Requirement"
+            "=>SUBPARTS:Requirement",
          },
      },
      cancellationToken);
@@ -83,3 +89,4 @@ public class WorkspaceReader : IWorkspaceReader
         };
     }
 }
+

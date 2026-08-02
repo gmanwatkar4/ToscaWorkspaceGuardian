@@ -1,4 +1,4 @@
-// <copyright file="TCShellExecutor.cs" company="PlaceholderCompany">
+﻿// <copyright file="TCShellExecutor.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -7,6 +7,12 @@ namespace ToscaWorkspaceGuardian.Core.TCShell;
 using Microsoft.Extensions.Logging;
 using ToscaWorkspaceGuardian.Common.Interfaces;
 using ToscaWorkspaceGuardian.Core.Models;
+
+/// <summary>
+
+/// TODO: Describe TCShellExecutor.
+
+/// </summary>
 
 public class TCShellExecutor
 {
@@ -73,6 +79,7 @@ public class TCShellExecutor
             Directory.CreateDirectory(Path.GetDirectoryName(debugFile)!);
             await File.WriteAllTextAsync(debugFile, installation.TCShellPath + Environment.NewLine + arguments);
         }
+
         using var activity = ToscaWorkspaceGuardian.Core.Diagnostics.TelemetrySources.Activity.StartActivity("TCShell.Execute");
         activity?.SetTag("script", scriptFile);
         var sw = System.Diagnostics.Stopwatch.StartNew();
@@ -90,7 +97,9 @@ public class TCShellExecutor
             this.telemetry?.RecordTCShellCall(sw.Elapsed, result.ExitCode);
             ToscaWorkspaceGuardian.Core.Diagnostics.TelemetrySources.TCShellCalls.Add(1);
         }
-        catch { }
+        catch
+        {
+        }
 
         this.logger?.LogDebug("TCShell executed in {Elapsed}ms with exit code {ExitCode}", sw.Elapsed.TotalMilliseconds, result.ExitCode);
 
@@ -112,3 +121,4 @@ public class TCShellExecutor
         };
     }
 }
+

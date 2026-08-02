@@ -1,7 +1,12 @@
+﻿<!--
+// <copyright file="TelemetrySources.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+-->
+namespace ToscaWorkspaceGuardian.Core.Diagnostics;
+
 using System.Diagnostics;
 using System.Diagnostics.Metrics;
-
-namespace ToscaWorkspaceGuardian.Core.Diagnostics;
 
 public static class TelemetrySources
 {
@@ -11,3 +16,4 @@ public static class TelemetrySources
     // Example instruments
     public static readonly Counter<long> TCShellCalls = Meter.CreateCounter<long>("tc_shell_calls");
 }
+

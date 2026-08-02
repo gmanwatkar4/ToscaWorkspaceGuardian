@@ -1,4 +1,4 @@
-// <copyright file="WorkspaceSnapshotWriter.cs" company="PlaceholderCompany">
+﻿// <copyright file="WorkspaceSnapshotWriter.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -7,6 +7,12 @@ namespace ToscaWorkspaceGuardian.Core.Workspace;
 using System.Text.Json;
 using ToscaWorkspaceGuardian.Core.Business;
 using ToscaWorkspaceGuardian.Core.Interfaces;
+
+/// <summary>
+
+/// TODO: Describe WorkspaceSnapshotWriter.
+
+/// </summary>
 
 public class WorkspaceSnapshotWriter : IWorkspaceSnapshotWriter
 {
@@ -29,3 +35,4 @@ public class WorkspaceSnapshotWriter : IWorkspaceSnapshotWriter
             cancellationToken);
     }
 }
+

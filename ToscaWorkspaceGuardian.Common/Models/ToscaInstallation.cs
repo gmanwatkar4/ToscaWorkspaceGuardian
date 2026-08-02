@@ -1,8 +1,14 @@
-// <copyright file="ToscaInstallation.cs" company="PlaceholderCompany">
+﻿// <copyright file="ToscaInstallation.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Common.Models;
+
+/// <summary>
+
+/// TODO: Describe ToscaInstallation.
+
+/// </summary>
 
 public class ToscaInstallation
 {
@@ -18,3 +24,4 @@ public class ToscaInstallation
 
     public string Version { get; set; } = string.Empty;
 }
+

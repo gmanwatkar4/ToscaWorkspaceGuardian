@@ -1,8 +1,14 @@
-// <copyright file="VersionCompatibilityRule.cs" company="PlaceholderCompany">
+﻿// <copyright file="VersionCompatibilityRule.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 namespace ToscaWorkspaceGuardian.Core.Upgrade;
+
+/// <summary>
+
+/// TODO: Describe VersionCompatibilityRule.
+
+/// </summary>
 
 public class VersionCompatibilityRule
 {
@@ -14,3 +20,4 @@ public class VersionCompatibilityRule
 
     public string Severity { get; set; } = "Info";
 }
+

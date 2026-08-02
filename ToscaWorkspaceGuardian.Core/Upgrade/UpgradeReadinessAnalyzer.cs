@@ -6,6 +6,12 @@ namespace ToscaWorkspaceGuardian.Core.Upgrade;
 
 using ToscaWorkspaceGuardian.Core.Business;
 
+/// <summary>
+
+/// TODO: Describe UpgradeReadinessAnalyzer.
+
+/// </summary>
+
 public class UpgradeReadinessAnalyzer
 {
     private readonly VersionCompatibilityEngine engine;
@@ -73,3 +79,4 @@ public class UpgradeReadinessAnalyzer
         return report;
     }
 }
+

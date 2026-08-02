@@ -1,4 +1,4 @@
-// <copyright file="WorkspaceCompareService.cs" company="PlaceholderCompany">
+﻿// <copyright file="WorkspaceCompareService.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -7,6 +7,12 @@ namespace ToscaWorkspaceGuardian.Core.Services;
 using System.Text.Json;
 using ToscaWorkspaceGuardian.Core.Business;
 using ToscaWorkspaceGuardian.Core.Compare;
+
+/// <summary>
+
+/// TODO: Describe WorkspaceCompareService.
+
+/// </summary>
 
 public class WorkspaceCompareService : IWorkspaceCompareService
 {
@@ -53,3 +59,4 @@ public class WorkspaceCompareService : IWorkspaceCompareService
             newSnapshot);
     }
 }
+

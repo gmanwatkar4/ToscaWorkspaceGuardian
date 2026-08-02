@@ -1,4 +1,4 @@
-// <copyright file="TcshellExecutorTests.cs" company="PlaceholderCompany">
+﻿// <copyright file="TcshellExecutorTests.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -11,6 +11,12 @@ namespace ToscaWorkspaceGuardian.Tests
     using ToscaWorkspaceGuardian.Core.Models;
     using ToscaWorkspaceGuardian.Core.TCShell;
     using Xunit;
+
+    /// <summary>
+
+    /// TODO: Describe TcshellExecutorTests.
+
+    /// </summary>
 
     public class TcshellExecutorTests
     {
@@ -58,3 +64,4 @@ namespace ToscaWorkspaceGuardian.Tests
         }
     }
 }
+

@@ -4,6 +4,12 @@
 
 namespace ToscaWorkspaceGuardian.Core.Business;
 
+/// <summary>
+
+/// TODO: Describe RepositoryObject.
+
+/// </summary>
+
 public class RepositoryObject
 {
     public string NodePath { get; set; } = string.Empty;
@@ -20,3 +26,4 @@ public class RepositoryObject
 
     public string ParentPath { get; set; } = string.Empty;
 }
+
