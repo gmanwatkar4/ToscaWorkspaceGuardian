@@ -189,7 +189,9 @@ public partial class MainViewModel : ObservableObject
                 Password = Password,
                 ClientId = ClientId,
                 ClientSecret = ClientSecret,
-                IsManagedRepository = ShowTsrAuthentication
+                IsManagedRepository = ShowTsrAuthentication,
+                SourceVersion = SourceVersion,
+                TargetVersion = TargetVersion
             };
 
             var result = await _workspaceAnalyzer.AnalyzeAsync(request);

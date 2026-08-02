@@ -43,10 +43,22 @@ public class SnapshotBuilder : ISnapshotBuilder
             //--------------------------------------------------
 
             if (repositoryObject.Properties.TryGetValue(
-                "NodePath",
-                out var nodePath))
+            "NodePath",
+            out var nodePath))
             {
                 repositoryObject.NodePath = nodePath;
+
+                int index = nodePath.LastIndexOf('/');
+
+                if (index > 0)
+                {
+                    repositoryObject.ParentPath =
+                        nodePath.Substring(0, index);
+                }
+                else
+                {
+                    repositoryObject.ParentPath = "/";
+                }
             }
 
             snapshot.Objects.Add(repositoryObject);

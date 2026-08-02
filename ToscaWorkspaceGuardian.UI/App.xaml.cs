@@ -1,19 +1,28 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Configuration;
+using System.Net.Http;
 using System.Windows;
 using ToscaWorkspaceGuardian.Common.Interfaces;
 using ToscaWorkspaceGuardian.Common.Services;
 using ToscaWorkspaceGuardian.Common.Utilities;
+using ToscaWorkspaceGuardian.Core.AI;
 using ToscaWorkspaceGuardian.Core.Business;
+using ToscaWorkspaceGuardian.Core.Compare;
+using ToscaWorkspaceGuardian.Core.Configuration;
 using ToscaWorkspaceGuardian.Core.Export;
 using ToscaWorkspaceGuardian.Core.Health;
 using ToscaWorkspaceGuardian.Core.Health.Rules;
 using ToscaWorkspaceGuardian.Core.Interfaces;
+using ToscaWorkspaceGuardian.Core.Reporting;
 using ToscaWorkspaceGuardian.Core.Rules;
 using ToscaWorkspaceGuardian.Core.Script;
+using ToscaWorkspaceGuardian.Core.Services;
 using ToscaWorkspaceGuardian.Core.TCShell;
 using ToscaWorkspaceGuardian.Core.Traversal;
+using ToscaWorkspaceGuardian.Core.Upgrade;
 using ToscaWorkspaceGuardian.Core.Workspace;
 using ToscaWorkspaceGuardian.UI.ViewModels;
 using ToscaWorkspaceGuardian.UI.Views;
@@ -37,6 +46,24 @@ namespace ToscaWorkspaceGuardian.UI
 
     .ConfigureServices((context, services) =>
     {
+        var configuration = new ConfigurationBuilder()
+    .SetBasePath(AppContext.BaseDirectory)
+    .AddJsonFile("appsettings.json", optional: false)
+    .Build();
+
+        var openRouterSettings = new OpenRouterSettings
+        {
+            ApiKey = configuration["OpenRouter:ApiKey"] ?? "",
+            Model = configuration["OpenRouter:Model"] ?? "google/gemini-2.5-flash"
+        };
+
+        services.AddSingleton(openRouterSettings);
+
+        services.AddSingleton<IConfiguration>(configuration);
+
+        services.Configure<GeminiSettings>(
+            configuration.GetSection("Gemini"));
+
         ConfigureServices(services);
     })
 
@@ -103,6 +130,31 @@ namespace ToscaWorkspaceGuardian.UI
             services.AddSingleton<IHealthRule, WG001MissingReferencesRule>();
             services.AddSingleton<HealthAnalyzer>();
             services.AddSingleton<IHealthReportExporter, HealthReportExporter>();
+            services.AddSingleton<IHealthRule, WG002EmptyFolderRule>();
+            services.AddSingleton<IHealthRule, WG003MissingDescriptionRule>();
+            services.AddSingleton<IHealthRule, WG004DuplicateNamesRule>();
+            services.AddSingleton<RepositoryStatisticsBuilder>();
+            services.AddSingleton<WorkspaceHtmlReportGenerator>();
+            services.AddSingleton<WorkspaceSnapshotComparer>();
+            services.AddSingleton<ICompareReportExporter, JsonCompareReportExporter>();
+            services.AddSingleton<CompareHtmlReportGenerator>();
+            services.AddSingleton<IWorkspaceCompareService, WorkspaceCompareService>();
+            services.AddSingleton<UpgradeReadinessAnalyzer>();
+            services.AddSingleton<VersionCompatibilityEngine>();
+            services.AddSingleton<ConfigurationLoader>();
+            services.AddTransient<GeminiProvider>();
+            services.AddSingleton(new HttpClient());
+            services.AddSingleton<IAIProvider>(provider =>
+            {
+                var settings =
+                    provider.GetRequiredService<OpenRouterSettings>();
+
+                return new OpenRouterProvider(settings);
+            });
+
+
+
+
 
         }
     }

@@ -13,4 +13,8 @@ public class WorkspaceRequest
     public string ClientSecret { get; set; } = string.Empty;
 
     public bool IsManagedRepository { get; set; }
+
+    public string SourceVersion { get; set; } = string.Empty;
+
+    public string TargetVersion { get; set; } = string.Empty;
 }

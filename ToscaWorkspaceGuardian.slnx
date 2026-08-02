@@ -1,8 +1,5 @@
 <Solution>
-  <Folder Name="/Documentation/" />
-  <Folder Name="/Rules/" />
-  <Folder Name="/Samples/" />
-  <Folder Name="/Scripts/" />
+  <Project Path="ToscaWorkspaceGuardian.CLI/ToscaWorkspaceGuardian.CLI.csproj" Id="0e85a18f-1c1c-4436-b73e-96798a2ad45c" />
   <Project Path="ToscaWorkspaceGuardian.Common/ToscaWorkspaceGuardian.Common.csproj" Id="398d8bc8-fc3f-44cd-86d1-59dda7c62ffe" />
   <Project Path="ToscaWorkspaceGuardian.Core/ToscaWorkspaceGuardian.Core.csproj" Id="3f95fd06-9011-40cf-bcce-8d7245443a57" />
   <Project Path="ToscaWorkspaceGuardian.Reporting/ToscaWorkspaceGuardian.Reporting.csproj" Id="430f31c1-5e49-4312-a485-9e903098b507" />

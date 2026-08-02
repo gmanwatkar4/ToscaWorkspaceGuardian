@@ -1,7 +1,10 @@
-﻿using ToscaWorkspaceGuardian.Core.Business;
+﻿using ToscaWorkspaceGuardian.Core.AI;
+using ToscaWorkspaceGuardian.Core.Business;
 using ToscaWorkspaceGuardian.Core.Health;
 using ToscaWorkspaceGuardian.Core.Interfaces;
 using ToscaWorkspaceGuardian.Core.Models;
+using ToscaWorkspaceGuardian.Core.Reporting;
+using ToscaWorkspaceGuardian.Core.Upgrade;
 
 namespace ToscaWorkspaceGuardian.Core.Workspace;
 
@@ -11,17 +14,30 @@ public class WorkspaceAnalyzer : IWorkspaceAnalyzer
     private readonly IWorkspaceSnapshotExporter _snapshotExporter;
     private readonly HealthAnalyzer _healthAnalyzer;
     private readonly IHealthReportExporter _healthReportExporter;
+    private readonly RepositoryStatisticsBuilder _statisticsBuilder;
+    private readonly WorkspaceHtmlReportGenerator _htmlGenerator;
+    private readonly UpgradeReadinessAnalyzer _upgradeAnalyzer;
+    private readonly IAIProvider _aiProvider;
+
 
     public WorkspaceAnalyzer(
      IWorkspaceCrawler crawler,
      IWorkspaceSnapshotExporter snapshotExporter,
      HealthAnalyzer healthAnalyzer,
-     IHealthReportExporter healthReportExporter)
+     IHealthReportExporter healthReportExporter,
+     RepositoryStatisticsBuilder statisticsBuilder,
+     WorkspaceHtmlReportGenerator htmlGenerator,
+     UpgradeReadinessAnalyzer upgradeAnalyzer,
+     IAIProvider aiProvider)
     {
         _crawler = crawler;
         _snapshotExporter = snapshotExporter;
         _healthAnalyzer = healthAnalyzer;
         _healthReportExporter = healthReportExporter;
+        _statisticsBuilder = statisticsBuilder;
+        _htmlGenerator = htmlGenerator;
+        _upgradeAnalyzer = upgradeAnalyzer;
+        _aiProvider = aiProvider;
     }
 
     public async Task<AnalysisResult> AnalyzeAsync(
@@ -64,6 +80,48 @@ public class WorkspaceAnalyzer : IWorkspaceAnalyzer
         System.Diagnostics.Debug.WriteLine(
             $"Health Issues : {issues.Count}");
 
+        var statistics =
+        _statisticsBuilder.Build(snapshot, issues);
+
+        System.Diagnostics.Debug.WriteLine(
+            $"Health Score : {statistics.HealthScore}");
+
+        System.Diagnostics.Debug.WriteLine(
+            $"Modules : {statistics.ModuleCount}");
+
+
+        string reportFile = Path.Combine(
+            outputFolder,
+            "WorkspaceReport.html");
+
+        await _htmlGenerator.GenerateAsync(
+            statistics,
+            issues,
+            reportFile);
+
+        var upgradeReport =
+    _upgradeAnalyzer.Analyze(
+        statistics,
+        issues,
+        request.SourceVersion,
+        request.TargetVersion);
+
+        var aiResponse = await _aiProvider.GenerateAsync(
+    new AIRequest
+    {
+        Prompt = """
+You are an expert Tosca repository analyzer.
+
+Reply with exactly:
+
+Workspace Guardian AI integration successful.
+"""
+    },
+    cancellationToken);
+
+        System.Diagnostics.Debug.WriteLine(aiResponse.Content);
+
+
         //------------------------------------------
         // Return Result
         //------------------------------------------
@@ -72,9 +130,23 @@ public class WorkspaceAnalyzer : IWorkspaceAnalyzer
         {
             Success = true,
             Message =
-                $"Workspace analyzed successfully.{Environment.NewLine}" +
-                $"Objects : {snapshot.Objects.Count}{Environment.NewLine}" +
-                $"Health Issues : {issues.Count}"
+
+            $"""
+
+Upgrade Readiness
+
+Status :
+{(upgradeReport.ReadyForUpgrade ? "READY" : "ATTENTION")}
+
+Blocking Issues :
+{upgradeReport.BlockingIssues}
+
+Warnings :
+{upgradeReport.Warnings}
+"""
+
         };
+
+
     }
 }

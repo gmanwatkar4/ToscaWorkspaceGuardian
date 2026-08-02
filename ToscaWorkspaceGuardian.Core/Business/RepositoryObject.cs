@@ -13,4 +13,5 @@ public class RepositoryObject
 
     public Dictionary<string, List<string>> Collections { get; }
         = new();
+    public string ParentPath { get; set; } = string.Empty;
 }
