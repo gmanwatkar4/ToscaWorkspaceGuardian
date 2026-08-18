@@ -17,6 +17,7 @@ public interface IWorkspaceCrawler
 {
     Task<WorkspaceSnapshot> CrawlAsync(
         WorkspaceRequest request,
+        IReadOnlySet<string>? knownExpandableNodePaths = null,
         CancellationToken cancellationToken = default);
 }
 

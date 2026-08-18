@@ -1,0 +1,29 @@
+{
+  "rules": [
+    {
+      "ruleId": "WG-2026-INV-001",
+      "sourceVersion": "2025.1",
+      "targetVersion": "2026.1",
+      "severity": "Warning",
+      "title": "Legacy TBox Iterate Array attribute",
+      "description": "Tosca 2026.1 changes TBox Iterate Array to support multiple buffer arrays. Legacy Array To Iterate and Target Buffer attributes must be updated to the Array ModuleAttribute.",
+      "recommendedAction": "Update the affected TBox Iterate Array module, then validate every linked test case after the upgrade.",
+      "documentationUrl": "https://docs.tricentis.com/tosca-2026.1/en-us/content/release_notes/key_features.htm",
+      "objectType": "XModuleAttribute",
+      "names": [ "Array To Iterate", "Target Buffer" ],
+      "matchMode": "ExactName"
+    },
+    {
+      "ruleId": "WG-2026-INV-002",
+      "sourceVersion": "2025.1",
+      "targetVersion": "2026.1",
+      "severity": "Advisory",
+      "title": "SeaLights integration configuration present",
+      "description": "Tosca 2026.1 adds SeaLights configuration parameters. This is not a confirmed break; review the existing integration before rollout.",
+      "recommendedAction": "Review SeaLights configuration and perform a post-upgrade connectivity validation.",
+      "documentationUrl": "https://docs.tricentis.com/tosca-2026.1/en-us/content/release_notes/key_features.htm",
+      "matchMode": "NameOrPropertyContains",
+      "contains": "SeaLights"
+    }
+  ]
+}

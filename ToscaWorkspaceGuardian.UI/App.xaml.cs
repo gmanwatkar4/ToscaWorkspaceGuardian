@@ -1,185 +1,150 @@
-﻿// <copyright file="App.xaml.cs" company="PlaceholderCompany">
-// Copyright (c) PlaceholderCompany. All rights reserved.
-// </copyright>
+namespace ToscaWorkspaceGuardian.UI;
 
-namespace ToscaWorkspaceGuardian.UI
+using System.Windows;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Trace;
+using ToscaWorkspaceGuardian.Common.Interfaces;
+using ToscaWorkspaceGuardian.Common.Services;
+using ToscaWorkspaceGuardian.Common.Utilities;
+using ToscaWorkspaceGuardian.Core.AI;
+using ToscaWorkspaceGuardian.Core.Business;
+using ToscaWorkspaceGuardian.Core.Compare;
+using ToscaWorkspaceGuardian.Core.Diagnostics;
+using ToscaWorkspaceGuardian.Core.Export;
+using ToscaWorkspaceGuardian.Core.Health;
+using ToscaWorkspaceGuardian.Core.Health.Rules;
+using ToscaWorkspaceGuardian.Core.Interfaces;
+using ToscaWorkspaceGuardian.Core.Reporting;
+using ToscaWorkspaceGuardian.Core.Repository;
+using ToscaWorkspaceGuardian.Core.Script;
+using ToscaWorkspaceGuardian.Core.Services;
+using ToscaWorkspaceGuardian.Core.Subset;
+using ToscaWorkspaceGuardian.Core.TCShell;
+using ToscaWorkspaceGuardian.Core.TQL;
+using ToscaWorkspaceGuardian.Core.Traversal;
+using ToscaWorkspaceGuardian.Core.Upgrade;
+using ToscaWorkspaceGuardian.Core.Workspace;
+using ToscaWorkspaceGuardian.UI.ViewModels;
+using ToscaWorkspaceGuardian.UI.Views;
+using ToscaWorkspaceGuardian.UI.Services;
+
+public partial class App : Application
 {
-    using System.Configuration;
-    using System.Net.Http;
-    using System.Windows;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
-    using Microsoft.Extensions.Logging;
-    using OpenTelemetry.Metrics;
-    using OpenTelemetry.Resources;
-    using OpenTelemetry.Trace;
-    using ToscaWorkspaceGuardian.Common.Interfaces;
-    using ToscaWorkspaceGuardian.Common.Services;
-    using ToscaWorkspaceGuardian.Common.Utilities;
-    using ToscaWorkspaceGuardian.Core.AI;
-    using ToscaWorkspaceGuardian.Core.Business;
-    using ToscaWorkspaceGuardian.Core.Compare;
-    using ToscaWorkspaceGuardian.Core.Configuration;
-    using ToscaWorkspaceGuardian.Core.Diagnostics;
-    using ToscaWorkspaceGuardian.Core.Export;
-    using ToscaWorkspaceGuardian.Core.Health;
-    using ToscaWorkspaceGuardian.Core.Health.Rules;
-    using ToscaWorkspaceGuardian.Core.Interfaces;
-    using ToscaWorkspaceGuardian.Core.Reporting;
-    using ToscaWorkspaceGuardian.Core.Rules;
-    using ToscaWorkspaceGuardian.Core.Script;
-    using ToscaWorkspaceGuardian.Core.Services;
-    using ToscaWorkspaceGuardian.Core.TCShell;
-    using ToscaWorkspaceGuardian.Core.Traversal;
-    using ToscaWorkspaceGuardian.Core.Upgrade;
-    using ToscaWorkspaceGuardian.Core.Workspace;
-    using ToscaWorkspaceGuardian.UI.ViewModels;
-    using ToscaWorkspaceGuardian.UI.Views;
+    public static IHost? Host { get; private set; }
 
-    /// <summary>
-
-    /// TODO: Describe App.
-
-    /// </summary>
-
-    public partial class App : Application
+    protected override async void OnStartup(StartupEventArgs e)
     {
-        public static IHost? Host { get; private set; }
+        Host = Microsoft.Extensions.Hosting.Host
+            .CreateDefaultBuilder()
+            .ConfigureLogging(logging =>
+            {
+                logging.ClearProviders();
+                logging.AddDebug();
+            })
+            .ConfigureServices((context, services) =>
+            {
+                services.AddOpenTelemetryTracing(builder =>
+                {
+                    builder.AddSource("ToscaWorkspaceGuardian");
+                    builder.AddConsoleExporter();
+                });
 
-        protected override async void OnStartup(StartupEventArgs e)
-        {
-            Host = Microsoft.Extensions.Hosting.Host
-    .CreateDefaultBuilder()
+                services.AddOpenTelemetryMetrics(builder =>
+                {
+                    builder.AddMeter("ToscaWorkspaceGuardian.Metrics");
+                    builder.AddConsoleExporter();
+                });
 
-    .ConfigureLogging(logging =>
+                ConfigureServices(services, context.Configuration["OpenRouter:ApiKey"], context.Configuration["OpenRouter:Model"]);
+            })
+            .Build();
+
+        await Host.StartAsync();
+
+        var mainWindow = Host.Services.GetRequiredService<MainWindow>();
+        mainWindow.Show();
+
+        base.OnStartup(e);
+    }
+
+    protected override async void OnExit(ExitEventArgs e)
     {
-        logging.ClearProviders();
-        logging.AddDebug();
-    })
-
-    .ConfigureServices((context, services) =>
-    {
-        // Configure OpenTelemetry tracing + metrics (console exporter for local dev)
-        services.AddOpenTelemetryTracing(builder =>
+        if (Host is not null)
         {
-            builder.AddSource("ToscaWorkspaceGuardian");
-            builder.AddConsoleExporter();
-        });
-
-        services.AddOpenTelemetryMetrics(builder =>
-        {
-            builder.AddMeter("ToscaWorkspaceGuardian.Metrics");
-            builder.AddConsoleExporter();
-        });
-
-        var configuration = new ConfigurationBuilder()
-    .SetBasePath(AppContext.BaseDirectory)
-    .AddJsonFile("appsettings.json", optional: false)
-    .Build();
-
-        var openRouterSettings = new OpenRouterSettings
-        {
-            ApiKey = configuration["OpenRouter:ApiKey"] ?? string.Empty,
-            Model = configuration["OpenRouter:Model"] ?? "google/gemini-2.5-flash",
-        };
-
-        services.AddSingleton(openRouterSettings);
-
-        services.AddSingleton<IConfiguration>(configuration);
-
-        services.Configure<GeminiSettings>(
-            configuration.GetSection("Gemini"));
-
-        ConfigureServices(services);
-    })
-
-    .Build();
-
-            await Host.StartAsync();
-
-            var mainWindow = Host.Services.GetRequiredService<MainWindow>();
-
-            mainWindow.Show();
-
-            base.OnStartup(e);
+            await Host.StopAsync();
+            Host.Dispose();
         }
 
-        protected override async void OnExit(ExitEventArgs e)
-        {
-            if (Host != null)
-            {
-                await Host.StopAsync();
-                Host.Dispose();
-            }
+        base.OnExit(e);
+    }
 
-            base.OnExit(e);
+    private static void ConfigureServices(IServiceCollection services, string? openRouterApiKey, string? openRouterModel)
+    {
+        services.AddSingleton<MainViewModel>();
+        services.AddSingleton<MainWindow>();
+        services.AddSingleton<IUserPreferencesService, UserPreferencesService>();
+
+        services.AddSingleton<IToscaInstallationService, ToscaInstallationService>();
+        services.AddSingleton<IProcessRunner, ProcessRunner>();
+        services.AddSingleton<IWorkspaceDetector, WorkspaceDetector>();
+
+        services.AddSingleton<TelemetryCollector>();
+        services.AddSingleton<OutputWriter>();
+        services.AddSingleton<TCShellExecutor>();
+        services.AddSingleton<ITCShellService, TCShellService>();
+        services.AddSingleton<ITCShellPreflightService, TCShellPreflightService>();
+        services.AddSingleton<IWorkspaceReadActivity, WorkspaceReadActivity>();
+        services.AddSingleton<IWorkspaceInventoryService, WorkspaceInventoryService>();
+        services.AddSingleton<ITqlQueryRunner, TqlQueryRunner>();
+        services.AddSingleton<IUpgradeRiskScanner, TqlUpgradeRiskScanner>();
+        services.AddSingleton<IInventoryUpgradeRuleCatalog, InventoryUpgradeRuleCatalog>();
+        services.AddSingleton<IInventoryUpgradeRiskScanner, InventoryUpgradeRiskScanner>();
+        services.AddSingleton<BatchScriptBuilder>();
+        services.AddSingleton<OutputParser>();
+        services.AddSingleton<ISnapshotBuilder, SnapshotBuilder>();
+        services.AddSingleton<IWorkspaceCrawler, WorkspaceCrawler>();
+
+        services.AddSingleton<IWorkspaceSnapshotExporter, WorkspaceSnapshotExporter>();
+        services.AddSingleton<IHealthRule, WG001MissingReferencesRule>();
+        services.AddSingleton<IHealthRule, WG002EmptyFolderRule>();
+        services.AddSingleton<IHealthRule, WG003MissingDescriptionRule>();
+        services.AddSingleton<IHealthRule, WG004DuplicateNamesRule>();
+        services.AddSingleton<HealthAnalyzer>();
+        services.AddSingleton<IHealthReportExporter, HealthReportExporter>();
+        services.AddSingleton<RepositoryStatisticsBuilder>();
+        services.AddSingleton<WorkspaceHtmlReportGenerator>();
+        services.AddSingleton<UpgradeRiskHtmlReportGenerator>();
+        services.AddSingleton<UpgradeComparisonHtmlReportGenerator>();
+        services.AddSingleton<VersionCompatibilityEngine>();
+        services.AddSingleton<UpgradeReadinessAnalyzer>();
+        services.AddSingleton<UpgradeRiskRuleCatalog>();
+
+        if (string.IsNullOrWhiteSpace(openRouterApiKey))
+        {
+            services.AddSingleton<IAIProvider, MockAIProvider>();
         }
-
-        private static void ConfigureServices(IServiceCollection services)
+        else
         {
-            // ViewModels
-            services.AddSingleton<MainViewModel>();
-
-            // Views
-            services.AddSingleton<MainWindow>();
-
-            services.AddSingleton<IWorkspaceAnalyzer, WorkspaceAnalyzer>();
-            services.AddSingleton<IWorkspaceReader, WorkspaceReader>();
-            services.AddSingleton<IProcessRunner, ProcessRunner>();
-            services.AddSingleton<IToscaInstallationService, ToscaInstallationService>();
-            services.AddSingleton<IWorkspaceDetector, WorkspaceDetector>();
-            services.AddSingleton<IScriptService, ScriptService>();
-            services.AddSingleton<TCShellExecutor>();
-            services.AddSingleton<ITCShellService, TCShellService>();
-            services.AddSingleton<ScriptTemplateRepository>();
-            services.AddSingleton<ScriptComposer>();
-            services.AddSingleton<OutputParser>();
-            services.AddSingleton<OutputWriter>();
-            services.AddSingleton<OutputDocumentExporter>();
-            services.AddSingleton<IParsedWorkspaceMapper, ParsedWorkspaceMapper>();
-            services.AddSingleton<IWorkspaceHealthAnalyzer, WorkspaceHealthAnalyzer>();
-            services.AddSingleton<IWorkspaceRule, WG001_MissingReferencesRule>();
-            services.AddSingleton<IWorkspaceRule, WG002_NoUsersRule>();
-            services.AddSingleton<IWorkspaceRule, WG003_NoGroupsRule>();
-            services.AddSingleton<IWorkspaceRule, WG004_NoRootFoldersRule>();
-            services.AddSingleton<RepositoryScanScriptBuilder>();
-            services.AddSingleton<PrintObjectScriptBuilder>();
-            services.AddSingleton<IRepositoryTreeWalker, RepositoryTreeWalker>();
-            services.AddSingleton<TelemetryCollector>();
-            services.AddSingleton<ToscaWorkspaceGuardian.Core.Caching.NodeCacheService>();
-            services.AddSingleton<NodePrintScriptBuilder>();
-            services.AddSingleton<BatchScriptBuilder>();
-            services.AddSingleton<ISnapshotBuilder, SnapshotBuilder>();
-            services.AddSingleton<IWorkspaceSnapshotWriter, WorkspaceSnapshotWriter>();
-            services.AddSingleton<IWorkspaceCrawler, WorkspaceCrawler>();
-            services.AddSingleton<INodePathResolver, NodePathResolver>();
-            services.AddSingleton<IWorkspaceSnapshotExporter, WorkspaceSnapshotExporter>();
-            services.AddSingleton<IHealthRule, WG001MissingReferencesRule>();
-            services.AddSingleton<HealthAnalyzer>();
-            services.AddSingleton<IHealthReportExporter, HealthReportExporter>();
-            services.AddSingleton<IHealthRule, WG002EmptyFolderRule>();
-            services.AddSingleton<IHealthRule, WG003MissingDescriptionRule>();
-            services.AddSingleton<IHealthRule, WG004DuplicateNamesRule>();
-            services.AddSingleton<RepositoryStatisticsBuilder>();
-            services.AddSingleton<WorkspaceHtmlReportGenerator>();
-            services.AddSingleton<WorkspaceSnapshotComparer>();
-            services.AddSingleton<ICompareReportExporter, JsonCompareReportExporter>();
-            services.AddSingleton<CompareHtmlReportGenerator>();
-            services.AddSingleton<IWorkspaceCompareService, WorkspaceCompareService>();
-            services.AddSingleton<UpgradeReadinessAnalyzer>();
-            services.AddSingleton<VersionCompatibilityEngine>();
-            services.AddSingleton<ConfigurationLoader>();
-            services.AddTransient<GeminiProvider>();
-            services.AddSingleton(new HttpClient());
-            services.AddSingleton<IAIProvider>(provider =>
+            services.AddSingleton(new OpenRouterSettings
             {
-                var settings =
-                    provider.GetRequiredService<OpenRouterSettings>();
-
-                return new OpenRouterProvider(settings);
+                ApiKey = openRouterApiKey,
+                Model = string.IsNullOrWhiteSpace(openRouterModel) ? "google/gemini-2.5-flash" : openRouterModel,
             });
+            services.AddSingleton<IAIProvider, OpenRouterProvider>();
         }
+
+        services.AddSingleton<IUpgradeCopilotService, UpgradeCopilotService>();
+        services.AddSingleton<IInventoryCopilotService, InventoryCopilotService>();
+        services.AddSingleton<IWorkspaceNavigatorService, WorkspaceNavigatorService>();
+        services.AddSingleton<IWorkspaceAnalyzer, WorkspaceAnalyzer>();
+        services.AddSingleton<IToscaSubsetAnalyzer, ToscaSubsetAnalyzer>();
+        services.AddSingleton<IToscaRepositoryDatabaseAnalyzer, ToscaRepositoryDatabaseAnalyzer>();
+        services.AddSingleton<WorkspaceSnapshotComparer>();
+        services.AddSingleton<IWorkspaceCompareService, WorkspaceCompareService>();
+        services.AddSingleton<ICompareReportExporter, JsonCompareReportExporter>();
+        services.AddSingleton<CompareHtmlReportGenerator>();
     }
 }
-

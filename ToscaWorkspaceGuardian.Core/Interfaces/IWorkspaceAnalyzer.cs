@@ -16,6 +16,7 @@ public interface IWorkspaceAnalyzer
 {
     Task<AnalysisResult> AnalyzeAsync(
         WorkspaceRequest request,
+        IProgress<AnalysisProgress>? progress = null,
         CancellationToken cancellationToken = default);
 }
 

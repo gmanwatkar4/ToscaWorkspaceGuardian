@@ -63,10 +63,21 @@ public class TCShellExecutor
             workingDirectory,
             "Error.txt");
 
-        string arguments =
-            $"-workspace \"{request.WorkspacePath}\" " +
-            $"-login {request.Username} {request.Password} " +
-            $"\"{scriptFile}\"";
+        string arguments;
+        try
+        {
+            arguments = TCShellArgumentsBuilder.Build(request, scriptFile);
+        }
+        catch (InvalidOperationException exception)
+        {
+            return new ExecutionResult
+            {
+                Success = false,
+                ExitCode = -1,
+                ScriptPath = scriptFile,
+                StandardError = exception.Message,
+            };
+        }
 
         string debugFile = Path.Combine(
     Path.GetTempPath(),
@@ -77,7 +88,7 @@ public class TCShellExecutor
         if (Environment.GetEnvironmentVariable("TWG_DEBUG_WRITE") == "1")
         {
             Directory.CreateDirectory(Path.GetDirectoryName(debugFile)!);
-            await File.WriteAllTextAsync(debugFile, installation.TCShellPath + Environment.NewLine + arguments);
+            await File.WriteAllTextAsync(debugFile, installation.TCShellPath + Environment.NewLine + "[arguments redacted]");
         }
 
         using var activity = ToscaWorkspaceGuardian.Core.Diagnostics.TelemetrySources.Activity.StartActivity("TCShell.Execute");

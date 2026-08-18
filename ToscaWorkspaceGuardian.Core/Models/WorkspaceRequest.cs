@@ -27,5 +27,7 @@ public class WorkspaceRequest
     public string SourceVersion { get; set; } = string.Empty;
 
     public string TargetVersion { get; set; } = string.Empty;
+
+    public string OutputFolder { get; set; } = string.Empty;
 }
 

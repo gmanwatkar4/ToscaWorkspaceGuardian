@@ -16,6 +16,16 @@ public class MockAIProvider : IAIProvider
         AIRequest request,
         CancellationToken cancellationToken = default)
     {
+        if (request.Prompt.Contains("translate a Tosca workspace question", StringComparison.OrdinalIgnoreCase))
+        {
+            return Task.FromResult(new AIResponse { Content = "=>SUBPARTS:TestCase" });
+        }
+
+        if (request.Prompt.Contains("Returned object count", StringComparison.OrdinalIgnoreCase))
+        {
+            return Task.FromResult(new AIResponse { Content = "Result: The read-only workspace query completed.\nEvidence: Review the returned Tosca objects below.\nNext step: Refine the question to focus on a specific module or attribute." });
+        }
+
         return Task.FromResult(
             new AIResponse
             {
